@@ -1,0 +1,5 @@
+ofxAssimpModelLoader
+ofxGui
+ofxSvg
+ofxUnitTests
+ofxVectorGraphics
