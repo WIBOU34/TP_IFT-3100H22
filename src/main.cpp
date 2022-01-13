@@ -9,8 +9,11 @@
 
 // point d'entrée de l'application
 int main() {
-	// création du contexte de rendu (OpenGL 2.1 par défaut)
-	ofSetupOpenGL(512, 512, OF_WINDOW);
+	// création du contexte de rendu (OpenGL 4.5)
+	ofGLWindowSettings settings;
+	settings.setGLVersion(4, 5);
+	settings.windowMode = OF_WINDOW;
+	ofCreateWindow(settings);
 
 	// instancier et lancer l'application (openFrameworks 0.11.0)
 	ofRunApp(new Application());
