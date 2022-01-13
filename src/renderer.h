@@ -5,15 +5,14 @@
 
 #include "ofMain.h"
 
-class Renderer
-{
+class Renderer {
 public:
 
-  float time_current;
-  float time_last;
-  float time_elapsed;
+	float time_current;
+	float time_last;
+	float time_elapsed;
 
-  void setup();
-  void update();
-  void draw();
+	void setup();
+	void update();
+	void draw();
 };

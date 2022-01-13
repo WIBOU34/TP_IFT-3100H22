@@ -6,14 +6,13 @@
 #include "ofMain.h"
 #include "renderer.h"
 
-class Application : public ofBaseApp
-{
+class Application : public ofBaseApp {
 public:
 
-  Renderer renderer;
+	Renderer renderer;
 
-  void setup();
-  void update();
-  void draw();
-  void exit();
+	void setup();
+	void update();
+	void draw();
+	void exit();
 };
