@@ -5,16 +5,19 @@
 
 #include "ofMain.h"
 #include "renderer.h"
+#include "image/imageRenderer.h"
+#include "ofxGui.h"
 
 class Application : public ofBaseApp {
 public:
 
-	Renderer renderer;
+	ImageRenderer imageRenderer;
 
 	void setup();
 	void update();
 	void draw();
 	void exit();
+	//void generateDraw();
 
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -27,4 +30,20 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+
+	void exportImage();
+
+	bool bHide;
+
+	ofParameter<float> radius;
+	ofParameter<ofColor> color;
+	ofParameter<glm::vec2> center;
+	ofParameter<int> circleResolution;
+	ofParameter<bool> filled;
+	ofxButton btnExportImg;
+	ofxButton twoCircles;
+	ofxButton ringButton;
+	ofParameter<string> screenSize;
+
+	ofxPanel gui;
 };

@@ -61,6 +61,9 @@
     <ClCompile Include="src\renderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\image\imageRenderer.cpp">
+      <Filter>src\image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -140,6 +143,9 @@
     </Filter>
     <Filter Include="addons\ofxVectorGraphics\libs">
       <UniqueIdentifier>{B341F552-35C4-7EB6-B3C9-9D96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\image">
+      <UniqueIdentifier>{63b3ad8b-0aa7-4e3b-9315-83fac6263ae0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -482,8 +488,15 @@
     <ClInclude Include="src\renderer.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\image\imageRenderer.h">
+      <Filter>src\image</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
   </ItemGroup>
 </Project>

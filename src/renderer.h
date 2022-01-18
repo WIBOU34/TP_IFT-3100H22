@@ -4,10 +4,11 @@
 #pragma once
 
 #include "ofMain.h"
+//#include "image/image.h"
 
-class Renderer {
+class RendererBase {
 public:
-
+	RendererBase();
 	float time_current;
 	float time_last;
 	float time_elapsed;
@@ -15,4 +16,12 @@ public:
 	void setup();
 	void update();
 	void draw();
+
+protected:
+	virtual void generateDraw() = 0;
+	virtual void render() = 0;
+
+private:
+	bool needsRedraw;
+	unsigned long currentFrame;
 };

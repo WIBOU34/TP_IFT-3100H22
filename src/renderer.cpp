@@ -3,29 +3,41 @@
 
 #include "renderer.h"
 
+RendererBase::RendererBase() {
+}
+
 // fonction d'initialisation
-void Renderer::setup() {
+void RendererBase::setup() {
 	// fréquence de rafraichissement du rendu de la fenêtre d'affichage par seconde
 	ofSetFrameRate(60);
 }
 
 // fonction de mise à jour
-void Renderer::update() {
+void RendererBase::update() {
 	// temps courant en secondes
-	time_current = ofGetElapsedTimef();
+	//time_current = ofGetElapsedTimef();
 
-	// le temps écoulé depuis le dernier frame en secondes
-	time_elapsed = time_current - time_last;
+	//// le temps écoulé depuis le dernier frame en secondes
+	//time_elapsed = time_current - time_last;
 
-	// le temps courant sera le temps précédent du prochain frame
-	time_last = time_current;
+	//// le temps courant sera le temps précédent du prochain frame
+	//time_last = time_current;
 
-	// trace des données temporelles dans la console
-	ofLog() << std::setprecision(2) << "<frame: " << ofGetFrameNum() << " time current: " << time_current << " time elapsed: " << time_elapsed << " fps: " << 1.0 / time_elapsed << ">";
+	//// trace des données temporelles dans la console
+	//ofLog() << std::setprecision(2) << "<frame: " << ofGetFrameNum() << " time current: " << time_current << " time elapsed: " << time_elapsed << " fps: " << 1.0 / time_elapsed << ">";
 }
 
 // fonction de rendu
-void Renderer::draw() {
+void RendererBase::draw() {
 	// couleur d'arrière-plan en niveau de gris en fonction du numéro de frame courant.
-	ofClear(ofGetFrameNum() % 255);
+	//ofClear(ofGetFrameNum() % 255);
+	// afficher l'image sur toute la surface de la fenêtre d'affichage
+	//image.draw(0, 0, image.getWidth(), image.getHeight());
+
+	if (needsRedraw) {
+		generateDraw();
+		needsRedraw = false;
+	}
+	currentFrame = ofGetFrameNum();
+	render();
 }

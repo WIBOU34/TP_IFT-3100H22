@@ -5,21 +5,36 @@
 
 // fonction d'initialisation de l'application
 void Application::setup() {
+	ofLog() << "<app::setup>";
 	ofSetWindowTitle("projet (presque) vide");
 
-	renderer.setup();
+	imageRenderer.setup();
+	ofLog() << "<app::GUISetup>";
+	ofSetVerticalSync(true);
 
-	ofLog() << "<app::setup>";
+	// we add this listener before setting up so the initial circle resolution is correct
+	btnExportImg.addListener(this, &Application::exportImage);
+
+	gui.setup("Menu"); // most of the time you don't need a name but don't forget to call setup
+	gui.add(filled.set("bFill", true));
+	gui.add(btnExportImg.setup("Exporter en image"));
+	gui.add(screenSize.set("screenSize", ""));
+
+	bHide = false;
 }
 
 // fonction de mise à jour de la logique de l'application
 void Application::update() {
-	renderer.update();
+	imageRenderer.update();
 }
 
 // fonction de mise à jour du rendu de la fenêtre d'affichage de l'application
 void Application::draw() {
-	renderer.draw();
+	imageRenderer.draw();
+
+	if (!bHide) {
+		gui.draw();
+	}
 }
 
 // fonction appelée juste avant de quitter l'application
@@ -29,7 +44,9 @@ void Application::exit() {
 
 //--------------------------------------------------------------
 void Application::keyPressed(int key) {
-
+	if (key == 'h') {
+		bHide = !bHide;
+	}
 }
 
 //--------------------------------------------------------------
@@ -69,7 +86,7 @@ void Application::mouseExited(int x, int y) {
 
 //--------------------------------------------------------------
 void Application::windowResized(int w, int h) {
-
+	screenSize = ofToString(w) + "x" + ofToString(h);
 }
 
 //--------------------------------------------------------------
@@ -77,7 +94,13 @@ void Application::gotMessage(ofMessage msg) {
 
 }
 
+void Application::exportImage() {
+	imageRenderer.exportImage("TODO");
+}
+
 //--------------------------------------------------------------
 void Application::dragEvent(ofDragInfo dragInfo) {
-
+	ofLog() << "<app::ofDragInfo file[0]: " << dragInfo.files.at(0)
+		<< " at : " << dragInfo.position << ">";
+	imageRenderer.importImage(dragInfo.files.at(0));
 }
