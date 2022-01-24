@@ -32,6 +32,7 @@ public:
 	void gotMessage(ofMessage msg);
 
 	void exportImage();
+	void importImage();
 
 	bool bHide;
 
@@ -41,6 +42,7 @@ public:
 	ofParameter<int> circleResolution;
 	ofParameter<bool> filled;
 	ofxButton btnExportImg;
+	ofxButton btnImportImg;
 	ofxButton twoCircles;
 	ofxButton ringButton;
 	ofParameter<string> screenSize;

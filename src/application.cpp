@@ -14,10 +14,12 @@ void Application::setup() {
 
 	// we add this listener before setting up so the initial circle resolution is correct
 	btnExportImg.addListener(this, &Application::exportImage);
+	btnImportImg.addListener(this, &Application::importImage);
 
 	gui.setup("Menu"); // most of the time you don't need a name but don't forget to call setup
 	gui.add(filled.set("bFill", true));
 	gui.add(btnExportImg.setup("Exporter en image"));
+	gui.add(btnImportImg.setup("Importer une image"));
 	gui.add(screenSize.set("screenSize", ""));
 
 	bHide = false;
@@ -94,8 +96,16 @@ void Application::gotMessage(ofMessage msg) {
 
 }
 
+void Application::importImage() {
+	imageRenderer.importImageDialog();
+}
+
 void Application::exportImage() {
-	imageRenderer.exportImage("TODO");
+	bool original = bHide;
+	bHide = true;
+	draw();
+	imageRenderer.exportImageDialog();
+	bHide = original;
 }
 
 //--------------------------------------------------------------
