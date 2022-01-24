@@ -1,5 +1,6 @@
 #include "imageRenderer.h"
 
+
 void ImageRenderer::importImageDialog() {
 	ofFileDialogResult dialogResult = ofSystemLoadDialog("Importer une image");
 	if (dialogResult.bSuccess) {
@@ -11,11 +12,32 @@ void ImageRenderer::importImageDialog() {
 }
 
 void ImageRenderer::importImage(const std::string& path) {
-	image.load((boost::filesystem::path)path);
+	this->importImage(path, 0, 0);
+}
+void ImageRenderer::importImage(const std::string& path, const int& x, const int& y) {
+	this->importImage(path, x, y, 0, 0);
+}
+void ImageRenderer::importImage(const std::string& path, const int& x, const int& y, const int& width, const int& height) {
+	ofImage imageTemp;
+	if (!imageTemp.load((boost::filesystem::path)path)) {
+		ofLogError() << "<import image: unable to load image: '" << path << "'>";
+		return;
+	}
+
+	int widthToUse = width;
+	int heightToUse = height;
+
+	if (width == 0) {
+		widthToUse = imageTemp.getWidth();
+	}
+	if (height == 0) {
+		heightToUse = imageTemp.getHeight();
+	}
+	lstImages.push_back(ObjectBase2D<ofImage>(x, y, widthToUse, heightToUse, imageTemp));
 	drawImage();
 }
 
-void ImageRenderer::exportImageDialog() {
+void ImageRenderer::exportImageDialog() const {
 	ofFileDialogResult dialogResult = ofSystemSaveDialog("ExportedImage.png", "Exporter image");
 	if (dialogResult.bSuccess) {
 		ofLog() << "<app::export: saving file>";
@@ -25,7 +47,7 @@ void ImageRenderer::exportImageDialog() {
 	}
 }
 
-void ImageRenderer::exportImage(const std::string& path, const std::string& fileName) {
+void ImageRenderer::exportImage(const std::string& path, const std::string& fileName) const {
 	ofImage imageToExport;
 	imageToExport.grabScreen(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
 
@@ -48,8 +70,12 @@ void ImageRenderer::generateDraw() {
 }
 
 void ImageRenderer::render() {
-	if (image.isAllocated()) {
-		image.draw(0, 0, image.getWidth(), image.getHeight());
+	for (const ObjectBase2D<ofImage>& objetBase : lstImages) {
+		const ofImage image = objetBase.getObject();
+		const Coords2D coords = objetBase.getCoords();
+		if (image.isAllocated()) {
+			image.draw(coords.origine.x, coords.origine.y, coords.width, coords.height);
+		}
 	}
 }
 void ImageRenderer::drawImage() {

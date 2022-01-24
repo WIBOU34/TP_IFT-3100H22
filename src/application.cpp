@@ -16,9 +16,9 @@ void Application::setup() {
 	btnExportImg.addListener(this, &Application::exportImage);
 	btnImportImg.addListener(this, &Application::importImage);
 
-	gui.setup("Menu"); // most of the time you don't need a name but don't forget to call setup
+	gui.setup("Menu 'h'"); // most of the time you don't need a name but don't forget to call setup
 	gui.add(filled.set("bFill", true));
-	gui.add(btnExportImg.setup("Exporter en image"));
+	gui.add(btnExportImg.setup("Exporter en image 'e'"));
 	gui.add(btnImportImg.setup("Importer une image"));
 	gui.add(screenSize.set("screenSize", ""));
 
@@ -48,6 +48,8 @@ void Application::exit() {
 void Application::keyPressed(int key) {
 	if (key == 'h') {
 		bHide = !bHide;
+	} else if (key == 'e') {
+		this->exportImage();
 	}
 }
 
@@ -101,16 +103,12 @@ void Application::importImage() {
 }
 
 void Application::exportImage() {
-	bool original = bHide;
-	bHide = true;
-	draw();
 	imageRenderer.exportImageDialog();
-	bHide = original;
 }
 
 //--------------------------------------------------------------
 void Application::dragEvent(ofDragInfo dragInfo) {
 	ofLog() << "<app::ofDragInfo file[0]: " << dragInfo.files.at(0)
 		<< " at : " << dragInfo.position << ">";
-	imageRenderer.importImage(dragInfo.files.at(0));
+	imageRenderer.importImage(dragInfo.files.at(0), dragInfo.position.x, dragInfo.position.y);
 }

@@ -200,6 +200,7 @@
     <ClCompile Include="..\..\..\addons\ofxSvg\src\ofxSvg.cpp" />
     <ClCompile Include="..\..\..\addons\ofxVectorGraphics\src\ofxVectorGraphics.cpp" />
     <ClCompile Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS.cpp" />
+    <ClCompile Include="src\objectBase.cpp" />
     <ClCompile Include="src\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -317,6 +318,7 @@
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS.hpp" />
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS_Types.hpp" />
     <ClInclude Include="src\image\imageRenderer.h" />
+    <ClInclude Include="src\objectBase.h" />
     <ClInclude Include="src\renderer.h" />
   </ItemGroup>
   <ItemGroup>

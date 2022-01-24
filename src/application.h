@@ -43,8 +43,6 @@ public:
 	ofParameter<bool> filled;
 	ofxButton btnExportImg;
 	ofxButton btnImportImg;
-	ofxButton twoCircles;
-	ofxButton ringButton;
 	ofParameter<string> screenSize;
 
 	ofxPanel gui;
