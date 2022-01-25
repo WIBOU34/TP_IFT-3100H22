@@ -51,6 +51,33 @@ void ImageRenderer::exportImageDialog() const {
 	}
 }
 
+void ImageRenderer::findImage(const int& x, const int& y) {
+	// Recherche dans la liste à l'envers pour sélectionner selon les éléments visibles
+	for (std::list< ObjectBase2D<ofImage>>::reverse_iterator rit = lstImages.rbegin(); rit != lstImages.rend(); ++rit) {
+		ObjectBase2D<ofImage>& objetBase = *rit;
+		if (objetBase.isPointInObject(x, y)) {
+			ofImage image = objetBase.getObject();
+			for (ofPixels::Pixel pixel : image.getPixels().getPixelsIter()) {
+				// RGBA
+				//pixel.getColor().r;
+				//pixel.getColor().g;
+				//pixel.getColor().b;
+				//pixel.getColor().a;
+				std::swap(pixel[0], pixel[2]); // swap les valeurs r et b
+				// HSB
+				//pixel.getColor().getHue();
+				//pixel.getColor().getSaturation();
+				//pixel.getColor().getBrightness();
+			}
+
+			//image.rotate90(2);
+			objetBase.createObject(objetBase.getCoords(), image);
+			break;
+		}
+	}
+	this->drawImage();
+}
+
 void ImageRenderer::exportImage(const std::string& path, const std::string& fileName) const {
 	ofImage imageToExport;
 	imageToExport.grabScreen(0, 0, ofGetWindowWidth(), ofGetWindowHeight());

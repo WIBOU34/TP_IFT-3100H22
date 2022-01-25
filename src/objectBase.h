@@ -61,6 +61,7 @@ public:
 	Coords2D getCoords()const;
 	void createObject(const int& x, const int& y, const int& width, const int& height, const T& object);
 	void createObject(const Coords2D& coords, const T& object);
+	bool isPointInObject(const int& x, const int& y) const;
 private:
 	std::pair<Coords2D, T> objet2D;
 	//ObjectBase2D() = default;
@@ -96,6 +97,14 @@ inline void ObjectBase2D<T>::createObject(const int& x, const int& y, const int&
 template<typename T>
 inline void ObjectBase2D<T>::createObject(const Coords2D& coords, const T& object) {
 	this->objet2D = std::make_pair(coords, object);
+}
+
+template<typename T>
+inline bool ObjectBase2D<T>::isPointInObject(const int& x, const int& y) const {
+	const Coords2D coords = this->getCoords();
+	return coords.origine.x <= x && coords.origine.y <= y
+		&& coords.width + coords.origine.x >= x
+		&& coords.height + coords.origine.y >= y;
 }
 
 //template<class T>

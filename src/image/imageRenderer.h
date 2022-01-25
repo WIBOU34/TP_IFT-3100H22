@@ -16,6 +16,7 @@ public:
 	void importImage(const std::string& path, const int& x, const int& y, const int& width, const int& height);
 	void importImageDialog();
 	void exportImageDialog() const;
+	void findImage(const int& x, const int& y);
 
 	ofParameterGroup parameters;
 protected:

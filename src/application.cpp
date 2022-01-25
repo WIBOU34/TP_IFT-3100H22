@@ -83,7 +83,7 @@ void Application::mousePressed(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void Application::mouseReleased(int x, int y, int button) {
-
+	imageRenderer.findImage(x, y);
 }
 
 //--------------------------------------------------------------
