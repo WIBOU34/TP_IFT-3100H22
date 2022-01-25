@@ -35,9 +35,11 @@ public:
 	void importImage();
 
 	bool bHide;
+	//bool bSelection;
 
 	ofxButton btnExportImg;
 	ofxButton btnImportImg;
+	ofParameter<bool> bSelection;
 	ofParameter<string> screenSize;
 	ofParameterGroup parameters;
 

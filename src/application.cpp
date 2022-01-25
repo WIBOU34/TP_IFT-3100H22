@@ -14,19 +14,25 @@ void Application::setup() {
 
 	updateGui();
 	bHide = false;
+	bSelection = false;
 }
 
 void Application::updateGui() {
+	glm::vec3 position = gui.getPosition();
 	gui.clear();
 	parameters.clear();
 	btnExportImg.removeListener(this, &Application::exportImage);
 	btnImportImg.removeListener(this, &Application::importImage);
 
+	gui.setDefaultWidth(300);
+
 	parameters.setName("Menu 'h'");
 	gui.setup(parameters);
+	gui.setPosition(position);
+	gui.add(bSelection.set("Mode Selection 's'", bSelection));
 	gui.add(btnExportImg.setup("Exporter en image 'e'"));
 	gui.add(btnImportImg.setup("Importer une image"));
-	gui.add(screenSize.set("screenSize", ""));
+	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
 	gui.add(imageRenderer.parameters);
 
 	btnExportImg.addListener(this, &Application::exportImage);
@@ -58,6 +64,8 @@ void Application::keyPressed(int key) {
 		bHide = !bHide;
 	} else if (key == 'e') {
 		this->exportImage();
+	} else if (key == 's') {
+		bSelection = !bSelection;
 	}
 }
 
@@ -83,7 +91,10 @@ void Application::mousePressed(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void Application::mouseReleased(int x, int y, int button) {
-	imageRenderer.findImage(x, y);
+	if (bSelection) {
+		imageRenderer.findImage(x, y);
+		this->updateGui();
+	}
 }
 
 //--------------------------------------------------------------

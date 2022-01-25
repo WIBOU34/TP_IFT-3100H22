@@ -12,6 +12,7 @@ void ImageRenderer::importImageDialog() {
 }
 
 void ImageRenderer::setup(const std::string& name) {
+	parameters.clear();
 	parameters.setName(name);
 }
 
@@ -37,7 +38,7 @@ void ImageRenderer::importImage(const std::string& path, const int& x, const int
 	if (height == 0) {
 		heightToUse = imageTemp.getHeight();
 	}
-	lstImages.push_back(ObjectBase2D<ofImage>(x, y, widthToUse, heightToUse, imageTemp));
+	lstImages.push_back(ObjectBase2D<ofImage>(x, y, widthToUse, heightToUse, imageTemp, ((boost::filesystem::path)path).filename().string()));
 	drawImage();
 }
 
@@ -53,7 +54,7 @@ void ImageRenderer::exportImageDialog() const {
 
 void ImageRenderer::findImage(const int& x, const int& y) {
 	// Recherche dans la liste à l'envers pour sélectionner selon les éléments visibles
-	for (std::list< ObjectBase2D<ofImage>>::reverse_iterator rit = lstImages.rbegin(); rit != lstImages.rend(); ++rit) {
+	for (std::list<ObjectBase2D<ofImage>>::reverse_iterator rit = lstImages.rbegin(); rit != lstImages.rend(); ++rit) {
 		ObjectBase2D<ofImage>& objetBase = *rit;
 		if (objetBase.isPointInObject(x, y)) {
 			ofImage image = objetBase.getObject();
@@ -71,7 +72,19 @@ void ImageRenderer::findImage(const int& x, const int& y) {
 			}
 
 			//image.rotate90(2);
-			objetBase.createObject(objetBase.getCoords(), image);
+			objetBase.createObject(objetBase.getCoords(), image, objetBase.getName());
+			ofParameter<string> positionX;
+			ofParameter<string> positionY;
+			ofParameter<string> positionWidth;
+			ofParameter<string> positionHeight;
+			string points = "x: " + to_string(objetBase.getCoords().origine.x) + " y: " + to_string(objetBase.getCoords().origine.y) + " width: " + to_string(objetBase.getCoords().width) + " height: " + to_string(objetBase.getCoords().height);
+			ofParameter<string> name;
+			this->setup(parameters.getName());
+			parameters.add(positionX.set("x: ", to_string(objetBase.getCoords().origine.x)));
+			parameters.add(positionY.set("y: ", to_string(objetBase.getCoords().origine.y)));
+			parameters.add(positionWidth.set("width: ", to_string(objetBase.getCoords().width)));
+			parameters.add(positionHeight.set("height: ", to_string(objetBase.getCoords().height)));
+			parameters.add(name.set("Nom", objetBase.getName()));
 			break;
 		}
 	}

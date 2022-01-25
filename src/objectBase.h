@@ -1,6 +1,7 @@
 #pragma once
 //#include "renderer.h"
 #include <utility>
+#include <string>
 
 class Point2D {
 public:
@@ -55,27 +56,30 @@ template<typename T>
 class ObjectBase2D {
 public:
 	ObjectBase2D() = default;
-	ObjectBase2D(const int& x, const int& y, const int& width, const int& height, const T& object);
-	ObjectBase2D(const Coords2D& coords, const T& object);
+	ObjectBase2D(const int& x, const int& y, const int& width, const int& height, const T& object, const std::string& name);
+	ObjectBase2D(const Coords2D& coords, const T& object, const std::string& name);
 	T getObject() const;
 	Coords2D getCoords()const;
-	void createObject(const int& x, const int& y, const int& width, const int& height, const T& object);
-	void createObject(const Coords2D& coords, const T& object);
+	std::string getName() const;
+	void setName(const std::string& name);
+	void createObject(const int& x, const int& y, const int& width, const int& height, const T& object, const std::string& name);
+	void createObject(const Coords2D& coords, const T& object, const std::string& name);
 	bool isPointInObject(const int& x, const int& y) const;
 private:
 	std::pair<Coords2D, T> objet2D;
+	std::string name;
 	//ObjectBase2D() = default;
 };
 
 //méthodes doivent être inline sinon ça ne compile pas :(
 template<typename T>
-inline ObjectBase2D<T>::ObjectBase2D(const int& x, const int& y, const int& width, const int& height, const T& object) {
-	this->createObject(x, y, width, height, object);
+inline ObjectBase2D<T>::ObjectBase2D(const int& x, const int& y, const int& width, const int& height, const T& object, const std::string& name) {
+	this->createObject(x, y, width, height, object, name);
 }
 
 template<typename T>
-inline ObjectBase2D<T>::ObjectBase2D(const Coords2D& coords, const T& object) {
-	this->createObject(coords, object);
+inline ObjectBase2D<T>::ObjectBase2D(const Coords2D& coords, const T& object, const std::string& name) {
+	this->createObject(coords, object, name);
 }
 
 template<typename T>
@@ -89,14 +93,36 @@ inline Coords2D ObjectBase2D<T>::getCoords() const {
 }
 
 template<typename T>
-inline void ObjectBase2D<T>::createObject(const int& x, const int& y, const int& width, const int& height, const T& object) {
-	Coords2D coords = Coords2D(x, y, width, height);
-	this->createObject(coords, object);
+inline std::string ObjectBase2D<T>::getName() const {
+	return this->name;
 }
 
 template<typename T>
-inline void ObjectBase2D<T>::createObject(const Coords2D& coords, const T& object) {
+inline void ObjectBase2D<T>::setName(const std::string& name) {
+	this->name = name;
+}
+
+//template<typename T>
+//inline void ObjectBase2D<T>::createObject(const int& x, const int& y, const int& width, const int& height, const T& object) {
+//	Coords2D coords = Coords2D(x, y, width, height);
+//	this->createObject(coords, object ,"");
+//}
+
+template<typename T>
+inline void ObjectBase2D<T>::createObject(const int& x, const int& y, const int& width, const int& height, const T& object, const std::string& name) {
+	Coords2D coords = Coords2D(x, y, width, height);
+	this->createObject(coords, object, name);
+}
+
+//template<typename T>
+//inline void ObjectBase2D<T>::createObject(const Coords2D& coords, const T& object) {
+//	this->createObject(coords, object, "");
+//}
+
+template<typename T>
+inline void ObjectBase2D<T>::createObject(const Coords2D& coords, const T& object, const std::string& name) {
 	this->objet2D = std::make_pair(coords, object);
+	this->name = name;
 }
 
 template<typename T>
