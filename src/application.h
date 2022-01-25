@@ -15,9 +15,9 @@ public:
 
 	void setup();
 	void update();
+	void updateGui();
 	void draw();
 	void exit();
-	//void generateDraw();
 
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -36,14 +36,10 @@ public:
 
 	bool bHide;
 
-	ofParameter<float> radius;
-	ofParameter<ofColor> color;
-	ofParameter<glm::vec2> center;
-	ofParameter<int> circleResolution;
-	ofParameter<bool> filled;
 	ofxButton btnExportImg;
 	ofxButton btnImportImg;
 	ofParameter<string> screenSize;
+	ofParameterGroup parameters;
 
 	ofxPanel gui;
 };

@@ -66,7 +66,7 @@ private:
 	//ObjectBase2D() = default;
 };
 
-
+//méthodes doivent être inline sinon ça ne compile pas :(
 template<typename T>
 inline ObjectBase2D<T>::ObjectBase2D(const int& x, const int& y, const int& width, const int& height, const T& object) {
 	this->createObject(x, y, width, height, object);

@@ -8,21 +8,29 @@ void Application::setup() {
 	ofLog() << "<app::setup>";
 	ofSetWindowTitle("projet (presque) vide");
 
-	imageRenderer.setup();
+	imageRenderer.setup("Images");
 	ofLog() << "<app::GUISetup>";
 	ofSetVerticalSync(true);
 
-	// we add this listener before setting up so the initial circle resolution is correct
-	btnExportImg.addListener(this, &Application::exportImage);
-	btnImportImg.addListener(this, &Application::importImage);
+	updateGui();
+	bHide = false;
+}
 
-	gui.setup("Menu 'h'"); // most of the time you don't need a name but don't forget to call setup
-	gui.add(filled.set("bFill", true));
+void Application::updateGui() {
+	gui.clear();
+	parameters.clear();
+	btnExportImg.removeListener(this, &Application::exportImage);
+	btnImportImg.removeListener(this, &Application::importImage);
+
+	parameters.setName("Menu 'h'");
+	gui.setup(parameters);
 	gui.add(btnExportImg.setup("Exporter en image 'e'"));
 	gui.add(btnImportImg.setup("Importer une image"));
 	gui.add(screenSize.set("screenSize", ""));
+	gui.add(imageRenderer.parameters);
 
-	bHide = false;
+	btnExportImg.addListener(this, &Application::exportImage);
+	btnImportImg.addListener(this, &Application::importImage);
 }
 
 // fonction de mise à jour de la logique de l'application
@@ -100,6 +108,8 @@ void Application::gotMessage(ofMessage msg) {
 
 void Application::importImage() {
 	imageRenderer.importImageDialog();
+	//gui.add(imageRenderer.parameters);
+	this->updateGui();
 }
 
 void Application::exportImage() {
@@ -111,4 +121,6 @@ void Application::dragEvent(ofDragInfo dragInfo) {
 	ofLog() << "<app::ofDragInfo file[0]: " << dragInfo.files.at(0)
 		<< " at : " << dragInfo.position << ">";
 	imageRenderer.importImage(dragInfo.files.at(0), dragInfo.position.x, dragInfo.position.y);
+	this->updateGui();
+	//gui.add(imageRenderer.parameters);
 }

@@ -11,6 +11,10 @@ void ImageRenderer::importImageDialog() {
 	}
 }
 
+void ImageRenderer::setup(const std::string& name) {
+	parameters.setName(name);
+}
+
 void ImageRenderer::importImage(const std::string& path) {
 	this->importImage(path, 0, 0);
 }
