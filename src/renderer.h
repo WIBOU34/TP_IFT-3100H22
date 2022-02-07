@@ -17,11 +17,18 @@ public:
 	void update();
 	void draw();
 
+
+	int mouse_press_x;
+	int mouse_press_y;
+	int mouse_current_x;
+	int mouse_current_y;
+	bool is_mouse_button_pressed;
+
 protected:
 	virtual void generateDraw() = 0;
 	virtual void render() = 0;
+	bool needsRedraw;
 
 private:
-	bool needsRedraw;
 	unsigned long currentFrame;
 };

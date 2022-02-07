@@ -6,12 +6,14 @@
 #include "ofMain.h"
 #include "renderer.h"
 #include "image/imageRenderer.h"
+#include "curseur/curseurRenderer.h"
 #include "ofxGui.h"
 
 class Application : public ofBaseApp {
 public:
 
 	ImageRenderer imageRenderer;
+	CurseurRenderer curseurRenderer;
 
 	void setup();
 	void update();
@@ -22,6 +24,7 @@ public:
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y);
+	void customMouseMoved(ofMouseEventArgs& mouse);
 	void mouseDragged(int x, int y, int button);
 	void mousePressed(int x, int y, int button);
 	void mouseReleased(int x, int y, int button);
@@ -40,8 +43,12 @@ public:
 	ofxButton btnExportImg;
 	ofxButton btnImportImg;
 	ofParameter<bool> bSelection;
+	ofParameter<bool> bShowCursor;
 	ofParameter<string> screenSize;
 	ofParameterGroup parameters;
 
 	ofxPanel gui;
+
+	// Pour dessiner des lignes
+	ofPolyline polyline;
 };

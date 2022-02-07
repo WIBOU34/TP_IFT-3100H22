@@ -10,6 +10,9 @@ RendererBase::RendererBase() {
 void RendererBase::setup() {
 	// fréquence de rafraichissement du rendu de la fenêtre d'affichage par seconde
 	ofSetFrameRate(60);
+
+	mouse_press_x = mouse_press_y = mouse_current_x = mouse_current_y = 0;
+	is_mouse_button_pressed = false;
 }
 
 // fonction de mise à jour
@@ -41,3 +44,5 @@ void RendererBase::draw() {
 	currentFrame = ofGetFrameNum();
 	render();
 }
+
+

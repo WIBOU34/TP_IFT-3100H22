@@ -2,10 +2,12 @@
 // Classe principale de l'application.
 
 #include "application.h"
+#include <sstream>
 
 // fonction d'initialisation de l'application
 void Application::setup() {
 	ofLog() << "<app::setup>";
+	ofAddListener(ofEvents().mouseMoved, this, &Application::customMouseMoved, OF_EVENT_ORDER_BEFORE_APP - 100);
 	ofSetWindowTitle("projet (presque) vide");
 
 	imageRenderer.setup("Images");
@@ -15,6 +17,7 @@ void Application::setup() {
 	updateGui();
 	bHide = false;
 	bSelection = false;
+	bShowCursor = false;
 }
 
 void Application::updateGui() {
@@ -32,6 +35,7 @@ void Application::updateGui() {
 	gui.add(bSelection.set("Mode Selection 's'", bSelection));
 	gui.add(btnExportImg.setup("Exporter en image 'e'"));
 	gui.add(btnImportImg.setup("Importer une image"));
+	gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
 	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
 	gui.add(imageRenderer.parameters);
 
@@ -51,6 +55,8 @@ void Application::draw() {
 	if (!bHide) {
 		gui.draw();
 	}
+
+	curseurRenderer.draw();
 }
 
 // fonction appelée juste avant de quitter l'application
@@ -66,6 +72,13 @@ void Application::keyPressed(int key) {
 		this->exportImage();
 	} else if (key == 's') {
 		bSelection = !bSelection;
+	} else if (key == 'c') {
+		bShowCursor = !bShowCursor;
+		if (bShowCursor) {
+			ofShowCursor();
+		}
+		else
+			ofHideCursor();
 	}
 }
 
@@ -76,21 +89,45 @@ void Application::keyReleased(int key) {
 
 //--------------------------------------------------------------
 void Application::mouseMoved(int x, int y) {
+	
+	//curseurRenderer.mouse_current_x = x;
+	//curseurRenderer.mouse_current_y = y;
+}
 
+void Application::customMouseMoved(ofMouseEventArgs& mouse)
+{
+	curseurRenderer.mouse_current_x = mouse.x;
+	curseurRenderer.mouse_current_y = mouse.y;
 }
 
 //--------------------------------------------------------------
 void Application::mouseDragged(int x, int y, int button) {
+	curseurRenderer.mouse_current_x = x;
+	curseurRenderer.mouse_current_y = y;
 
+	polyline.addVertex(ofPoint(x, y));
 }
 
 //--------------------------------------------------------------
 void Application::mousePressed(int x, int y, int button) {
+	curseurRenderer.is_mouse_button_pressed = true;
 
+	curseurRenderer.mouse_current_x = x;
+	curseurRenderer.mouse_current_y = y;
+
+	curseurRenderer.mouse_press_x = x;
+	curseurRenderer.mouse_press_y = y;
+
+	polyline.addVertex(ofPoint(x, y));
 }
 
 //--------------------------------------------------------------
 void Application::mouseReleased(int x, int y, int button) {
+	curseurRenderer.is_mouse_button_pressed = false;
+
+	curseurRenderer.mouse_current_x = x;
+	curseurRenderer.mouse_current_y = y;
+
 	if (bSelection) {
 		imageRenderer.findImage(x, y);
 		this->updateGui();
@@ -99,11 +136,16 @@ void Application::mouseReleased(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void Application::mouseEntered(int x, int y) {
-
+	if (!bShowCursor) {
+		ofHideCursor();
+	}
+	
 }
 
 //--------------------------------------------------------------
 void Application::mouseExited(int x, int y) {
+
+	ofShowCursor();
 
 }
 

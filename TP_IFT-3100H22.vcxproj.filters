@@ -61,11 +61,14 @@
     <ClCompile Include="src\renderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\objectBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\image\imageRenderer.cpp">
       <Filter>src\image</Filter>
     </ClCompile>
-    <ClCompile Include="src\objectBase.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="src\curseur\curseurRenderer.cpp">
+      <Filter>src\curseur</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +152,9 @@
     </Filter>
     <Filter Include="src\image">
       <UniqueIdentifier>{63b3ad8b-0aa7-4e3b-9315-83fac6263ae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\curseur">
+      <UniqueIdentifier>{b1866cc8-3f99-417d-a775-091a4f42297f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -491,12 +497,15 @@
     <ClInclude Include="src\renderer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\image\imageRenderer.h">
-      <Filter>src\image</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\objectBase.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\image\imageRenderer.h">
+      <Filter>src\image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\curseur\curseurRenderer.h">
+      <Filter>src\curseur</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
