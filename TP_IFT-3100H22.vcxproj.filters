@@ -70,6 +70,9 @@
     <ClCompile Include="src\curseur\curseurRenderer.cpp">
       <Filter>src\curseur</Filter>
     </ClCompile>
+    <ClCompile Include="src\dessin\dessinRenderer.cpp">
+      <Filter>src\dessin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -155,6 +158,9 @@
     </Filter>
     <Filter Include="src\curseur">
       <UniqueIdentifier>{b1866cc8-3f99-417d-a775-091a4f42297f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\dessin">
+      <UniqueIdentifier>{95e4ffba-03ff-4415-b0f1-c2711d2ab3cc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -506,6 +512,9 @@
     </ClInclude>
     <ClInclude Include="src\curseur\curseurRenderer.h">
       <Filter>src\curseur</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dessin\dessinRenderer.h">
+      <Filter>src\dessin</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

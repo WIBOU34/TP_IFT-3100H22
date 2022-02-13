@@ -14,10 +14,19 @@ void Application::setup() {
 	ofLog() << "<app::GUISetup>";
 	ofSetVerticalSync(true);
 
+	dessinRenderer.setup("Dessin");
+
 	updateGui();
 	bHide = false;
 	bSelection = false;
 	bShowCursor = false;
+	ofLog() << "size Object2D<ofImage>: " << sizeof(ObjectBase2D<ofImage>) <<
+		"\n size Object2D<int>: " << sizeof(ObjectBase2D<int>) <<
+		"\n size Object2D<float>: " << sizeof(ObjectBase2D<float>) <<
+		"\n size Object2D<VectorForme>: " << sizeof(ObjectBase2D<VectorForme>) <<
+		"\n size vectorForme: " << sizeof(VectorForme) <<
+		"\n size vectorPrimitive: " << sizeof(VectorPrimitive);
+	//"\n size vectorPrimitive2: " << sizeof(VectorPrimitive2);
 }
 
 void Application::updateGui() {
@@ -37,7 +46,9 @@ void Application::updateGui() {
 	gui.add(btnImportImg.setup("Importer une image"));
 	gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
 	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
+	gui.add(mousePosition.set("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
 	gui.add(imageRenderer.parameters);
+	gui.add(dessinRenderer.parameters);
 
 	btnExportImg.addListener(this, &Application::exportImage);
 	btnImportImg.addListener(this, &Application::importImage);
@@ -51,6 +62,7 @@ void Application::update() {
 // fonction de mise à jour du rendu de la fenêtre d'affichage de l'application
 void Application::draw() {
 	imageRenderer.draw();
+	dessinRenderer.draw();
 
 	if (!bHide) {
 		gui.draw();
@@ -76,8 +88,7 @@ void Application::keyPressed(int key) {
 		bShowCursor = !bShowCursor;
 		if (bShowCursor) {
 			ofShowCursor();
-		}
-		else
+		} else
 			ofHideCursor();
 	}
 }
@@ -89,48 +100,46 @@ void Application::keyReleased(int key) {
 
 //--------------------------------------------------------------
 void Application::mouseMoved(int x, int y) {
-	
-	//curseurRenderer.mouse_current_x = x;
-	//curseurRenderer.mouse_current_y = y;
+	// NOTE: utiliser la méthode Application::customMouseMoved
 }
 
-void Application::customMouseMoved(ofMouseEventArgs& mouse)
-{
-	curseurRenderer.mouse_current_x = mouse.x;
-	curseurRenderer.mouse_current_y = mouse.y;
+void Application::customMouseMoved(ofMouseEventArgs& mouse) {
+	curseurRenderer.setMousePos(mouse.x, mouse.y);
+	dessinRenderer.setMousePos(mouse.x, mouse.y);
+	imageRenderer.setMousePos(mouse.x, mouse.y);
+	mousePosition = "X:" + ofToString(mouse.x) + " Y:" + ofToString(mouse.y);
 }
 
 //--------------------------------------------------------------
 void Application::mouseDragged(int x, int y, int button) {
-	curseurRenderer.mouse_current_x = x;
-	curseurRenderer.mouse_current_y = y;
+	curseurRenderer.setMousePos(x, y);
+	dessinRenderer.setMousePos(x, y);
+	imageRenderer.setMousePos(x, y);
 
 	polyline.addVertex(ofPoint(x, y));
 }
 
 //--------------------------------------------------------------
 void Application::mousePressed(int x, int y, int button) {
-	curseurRenderer.is_mouse_button_pressed = true;
-
-	curseurRenderer.mouse_current_x = x;
-	curseurRenderer.mouse_current_y = y;
-
-	curseurRenderer.mouse_press_x = x;
-	curseurRenderer.mouse_press_y = y;
+	curseurRenderer.mousButtonPressed(x, y);
+	dessinRenderer.mousButtonPressed(x, y);
+	imageRenderer.mousButtonPressed(x, y);
 
 	polyline.addVertex(ofPoint(x, y));
 }
 
 //--------------------------------------------------------------
 void Application::mouseReleased(int x, int y, int button) {
-	curseurRenderer.is_mouse_button_pressed = false;
-
-	curseurRenderer.mouse_current_x = x;
-	curseurRenderer.mouse_current_y = y;
+	curseurRenderer.mouseButtonReleased(x, y);
+	dessinRenderer.mouseButtonReleased(x, y);
+	imageRenderer.mouseButtonReleased(x, y);
 
 	if (bSelection) {
 		imageRenderer.findImage(x, y);
+		dessinRenderer.selectPrimitive();
 		this->updateGui();
+	} else {
+		dessinRenderer.drawAtMouse();
 	}
 }
 
@@ -139,7 +148,7 @@ void Application::mouseEntered(int x, int y) {
 	if (!bShowCursor) {
 		ofHideCursor();
 	}
-	
+
 }
 
 //--------------------------------------------------------------

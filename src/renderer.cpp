@@ -3,8 +3,8 @@
 
 #include "renderer.h"
 
-RendererBase::RendererBase() {
-}
+//RendererBase::RendererBase() {
+//}
 
 // fonction d'initialisation
 void RendererBase::setup() {
@@ -43,6 +43,25 @@ void RendererBase::draw() {
 	}
 	currentFrame = ofGetFrameNum();
 	render();
+}
+
+void RendererBase::mousButtonPressed(int x, int y) {
+	is_mouse_button_pressed = true;
+	mouse_press_x = x;
+	mouse_press_y = y;
+	setMousePos(x, y);
+}
+
+void RendererBase::mouseButtonReleased(int x, int y) {
+	is_mouse_button_pressed = false;
+	mouse_released_x = x;
+	mouse_released_y = y;
+	setMousePos(x, y);
+}
+
+void RendererBase::setMousePos(int x, int y) {
+	mouse_current_x = x;
+	mouse_current_y = y;
 }
 
 

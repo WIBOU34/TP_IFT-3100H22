@@ -182,6 +182,7 @@
   <ItemGroup>
     <ClCompile Include="src\application.cpp" />
     <ClCompile Include="src\curseur\curseurRenderer.cpp" />
+    <ClCompile Include="src\dessin\dessinRenderer.cpp" />
     <ClCompile Include="src\image\imageRenderer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.cpp" />
@@ -319,6 +320,7 @@
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS.hpp" />
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS_Types.hpp" />
     <ClInclude Include="src\curseur\curseurRenderer.h" />
+    <ClInclude Include="src\dessin\dessinRenderer.h" />
     <ClInclude Include="src\image\imageRenderer.h" />
     <ClInclude Include="src\objectBase.h" />
     <ClInclude Include="src\renderer.h" />

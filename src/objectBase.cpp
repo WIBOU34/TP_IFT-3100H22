@@ -10,14 +10,31 @@ Point2D::Point2D(const int& x, const int& y) {
 	this->y = y;
 }
 
-Coords2D::Coords2D(const int& x, const int& y, const int& width, const int& height) {
-	this->origine = Point2D(x, y);
-	this->width = width;
-	this->height = height;
+//Coords2D::Coords2D(const int& x, const int& y, const int& width, const int& height) {
+//	this->origine = ofVec2f(x, y);
+//	this->end = ofVec2f(x + width, y + height);
+//}
+
+Coords2D::Coords2D(const int& x, const int& y, const int& x1, const int& y1) {
+	this->origine = ofVec2f(x, y);
+	this->end = ofVec2f(x1, y1);
 }
 
-Coords2D::Coords2D(const Point2D& origine, const int& width, const int& height) {
+//Coords2D::Coords2D(const Point2D& origine, const int& width, const int& height) {
+//	this->origine = origine;
+//	this->width = width;
+//	this->height = height;
+//}
+
+Coords2D::Coords2D(const ofVec2f& origine, const ofVec2f& end) {
 	this->origine = origine;
-	this->width = width;
-	this->height = height;
+	this->end = end;
+}
+
+int Coords2D::getWidth() const {
+	return std::abs(this->end.x - this->origine.x);
+}
+
+int Coords2D::getHeight() const {
+	return std::abs(this->end.y - this->origine.y);
 }

@@ -2,6 +2,39 @@
 //#include "renderer.h"
 #include <utility>
 #include <string>
+#include "ofColor.h"
+#include "ofVec2f.h"
+#include <vector>
+
+// énumération des différents types de primitives vectorielles
+enum class VectorPrimitiveType { none, pixel, point, line, rectangle, ellipse, circle };
+enum class VectorFormeType { primitiveGroup, primitive, triangle };
+
+// structure de primitive vectorielle générique
+struct VectorPrimitive {
+	VectorPrimitiveType type;				// 1 * 4 = 4  octets
+	ofVec2f				posStart;			// 2 * 4 = 8  octets
+	ofVec2f				posEnd;				// 2 * 4 = 8  octets
+	float				strokeWidth;		// 1 * 4 = 4  octets
+	ofColor				strokeColor;		// 4 * 1 = 4  octets
+	ofColor				fillColor;			// 4 * 1 = 4  octets
+};											//       = 32 octets
+
+// structure de groupe de primitive vectorielle générique
+struct VectorForme {
+	VectorFormeType type;
+	//std::string id;							//		= 40 octets
+	std::vector<VectorPrimitive*> primitives;	//		= 24 octets
+};
+
+//struct VectorPrimitive {
+//	VectorPrimitiveType type;				// 1 * 4 = 4  octets
+//	std::list<ofVec2f>	positions;			// 2 * 4 = 8  octets
+//	//ofVec2f				posEnd;				// 2 * 4 = 8  octets
+//	float				strokeWidth;		// 1 * 4 = 4  octets
+//	ofColor				strokeColor;		// 4 * 1 = 4  octets
+//	ofColor				fillColor;			// 4 * 1 = 4  octets
+//};											//       = 32 octets
 
 class Point2D {
 public:
@@ -14,17 +47,18 @@ public:
 class Coords2D {
 public:
 	Coords2D() = default;
-	Coords2D(const int& x, const int& y, const int& width, const int& height);
-	Coords2D(const Point2D& origine, const int& width, const int& height);
-	//Coords2D& operator=(const Coords2D& coords) const;
+	Coords2D(const int& x, const int& y, const int& x1, const int& y1);
+	Coords2D(const ofVec2f& origine, const ofVec2f& end);
 	//int getX();
 	//int getY();
-	//int getWidth();
-	//int getHeight();
-//private:
-	Point2D origine;
-	int width;
-	int height;
+	int getWidth() const;
+	int getHeight() const;
+	//private:
+	ofVec2f origine;
+	ofVec2f end;
+	//Point2D origine;
+	//int width;
+	//int height;
 };
 //class Point3D {
 //public:
@@ -56,13 +90,13 @@ template<typename T>
 class ObjectBase2D {
 public:
 	ObjectBase2D() = default;
-	ObjectBase2D(const int& x, const int& y, const int& width, const int& height, const T& object, const std::string& name);
+	ObjectBase2D(const int& x, const int& y, const int& x1, const int& y1, const T& object, const std::string& name);
 	ObjectBase2D(const Coords2D& coords, const T& object, const std::string& name);
 	T getObject() const;
 	Coords2D getCoords()const;
 	std::string getName() const;
 	void setName(const std::string& name);
-	void createObject(const int& x, const int& y, const int& width, const int& height, const T& object, const std::string& name);
+	void createObject(const int& x, const int& y, const int& x1, const int& y1, const T& object, const std::string& name);
 	void createObject(const Coords2D& coords, const T& object, const std::string& name);
 	bool isPointInObject(const int& x, const int& y) const;
 private:
@@ -73,8 +107,8 @@ private:
 
 //méthodes doivent être inline sinon ça ne compile pas :(
 template<typename T>
-inline ObjectBase2D<T>::ObjectBase2D(const int& x, const int& y, const int& width, const int& height, const T& object, const std::string& name) {
-	this->createObject(x, y, width, height, object, name);
+inline ObjectBase2D<T>::ObjectBase2D(const int& x, const int& y, const int& x1, const int& y1, const T& object, const std::string& name) {
+	this->createObject(x, y, x1, y1, object, name);
 }
 
 template<typename T>
@@ -102,22 +136,11 @@ inline void ObjectBase2D<T>::setName(const std::string& name) {
 	this->name = name;
 }
 
-//template<typename T>
-//inline void ObjectBase2D<T>::createObject(const int& x, const int& y, const int& width, const int& height, const T& object) {
-//	Coords2D coords = Coords2D(x, y, width, height);
-//	this->createObject(coords, object ,"");
-//}
-
 template<typename T>
-inline void ObjectBase2D<T>::createObject(const int& x, const int& y, const int& width, const int& height, const T& object, const std::string& name) {
-	Coords2D coords = Coords2D(x, y, width, height);
+inline void ObjectBase2D<T>::createObject(const int& x, const int& y, const int& x1, const int& y1, const T& object, const std::string& name) {
+	Coords2D coords = Coords2D(x, y, x1, y1);
 	this->createObject(coords, object, name);
 }
-
-//template<typename T>
-//inline void ObjectBase2D<T>::createObject(const Coords2D& coords, const T& object) {
-//	this->createObject(coords, object, "");
-//}
 
 template<typename T>
 inline void ObjectBase2D<T>::createObject(const Coords2D& coords, const T& object, const std::string& name) {
@@ -125,12 +148,14 @@ inline void ObjectBase2D<T>::createObject(const Coords2D& coords, const T& objec
 	this->name = name;
 }
 
+
 template<typename T>
+// Vérifie seulement la zone rectangulaire formée par les points dans Coords2D
 inline bool ObjectBase2D<T>::isPointInObject(const int& x, const int& y) const {
 	const Coords2D coords = this->getCoords();
 	return coords.origine.x <= x && coords.origine.y <= y
-		&& coords.width + coords.origine.x >= x
-		&& coords.height + coords.origine.y >= y;
+		&& coords.getWidth() + coords.origine.x >= x
+		&& coords.getHeight() + coords.origine.y >= y;
 }
 
 //template<class T>
@@ -144,3 +169,4 @@ inline bool ObjectBase2D<T>::isPointInObject(const int& x, const int& y) const {
 //	std::pair<Coords3D, T> objet3D;
 //	ObjectBase3D() = default;
 //};
+

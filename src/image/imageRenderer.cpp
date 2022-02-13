@@ -38,7 +38,7 @@ void ImageRenderer::importImage(const std::string& path, const int& x, const int
 	if (height == 0) {
 		heightToUse = imageTemp.getHeight();
 	}
-	lstImages.push_back(ObjectBase2D<ofImage>(x, y, widthToUse, heightToUse, imageTemp, ((boost::filesystem::path)path).filename().string()));
+	lstImages.push_back(ObjectBase2D<ofImage>(x, y, x + widthToUse, y + heightToUse, imageTemp, ((boost::filesystem::path)path).filename().string()));
 	drawImage();
 }
 
@@ -77,13 +77,13 @@ void ImageRenderer::findImage(const int& x, const int& y) {
 			ofParameter<string> positionY;
 			ofParameter<string> positionWidth;
 			ofParameter<string> positionHeight;
-			string points = "x: " + to_string(objetBase.getCoords().origine.x) + " y: " + to_string(objetBase.getCoords().origine.y) + " width: " + to_string(objetBase.getCoords().width) + " height: " + to_string(objetBase.getCoords().height);
+			string points = "x: " + to_string(objetBase.getCoords().origine.x) + " y: " + to_string(objetBase.getCoords().origine.y) + " width: " + to_string(objetBase.getCoords().getWidth()) + " height: " + to_string(objetBase.getCoords().getHeight());
 			ofParameter<string> name;
 			this->setup(parameters.getName());
 			parameters.add(positionX.set("x: ", to_string(objetBase.getCoords().origine.x)));
 			parameters.add(positionY.set("y: ", to_string(objetBase.getCoords().origine.y)));
-			parameters.add(positionWidth.set("width: ", to_string(objetBase.getCoords().width)));
-			parameters.add(positionHeight.set("height: ", to_string(objetBase.getCoords().height)));
+			parameters.add(positionWidth.set("width: ", to_string(objetBase.getCoords().getWidth())));
+			parameters.add(positionHeight.set("height: ", to_string(objetBase.getCoords().getHeight())));
 			parameters.add(name.set("Nom", objetBase.getName()));
 			break;
 		}
@@ -118,7 +118,7 @@ void ImageRenderer::render() {
 		const ofImage image = objetBase.getObject();
 		const Coords2D coords = objetBase.getCoords();
 		if (image.isAllocated()) {
-			image.draw(coords.origine.x, coords.origine.y, coords.width, coords.height);
+			image.draw(coords.origine.x, coords.origine.y, coords.getWidth(), coords.getHeight());
 		}
 	}
 }

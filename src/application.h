@@ -7,6 +7,7 @@
 #include "renderer.h"
 #include "image/imageRenderer.h"
 #include "curseur/curseurRenderer.h"
+#include "dessin/dessinRenderer.h"
 #include "ofxGui.h"
 
 class Application : public ofBaseApp {
@@ -14,6 +15,7 @@ public:
 
 	ImageRenderer imageRenderer;
 	CurseurRenderer curseurRenderer;
+	DessinRenderer dessinRenderer;
 
 	void setup();
 	void update();
@@ -45,6 +47,7 @@ public:
 	ofParameter<bool> bSelection;
 	ofParameter<bool> bShowCursor;
 	ofParameter<string> screenSize;
+	ofParameter<string> mousePosition;
 	ofParameterGroup parameters;
 
 	ofxPanel gui;
