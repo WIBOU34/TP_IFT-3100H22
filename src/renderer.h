@@ -24,6 +24,8 @@ public:
 	int mouse_current_y;
 	bool is_mouse_button_pressed;
 
+	const ofVec3f origin = ofVec3f(0.0f, 0.0f, 0.0f);
+
 protected:
 	virtual void generateDraw() = 0;
 	virtual void render() = 0;

@@ -1,6 +1,7 @@
 // IFT3100H21_AlmostEmptyProject/application.cpp
 // Classe principale de l'application.
 
+
 #include "application.h"
 #include <sstream>
 
@@ -13,6 +14,10 @@ void Application::setup() {
 	imageRenderer.setup("Images");
 	ofLog() << "<app::GUISetup>";
 	ofSetVerticalSync(true);
+
+	// sphere setup
+	sphereRenderer.setup("Sphere");
+	sphereRenderer.createSphere();
 
 	updateGui();
 	bHide = false;
@@ -38,14 +43,17 @@ void Application::updateGui() {
 	gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
 	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
 	gui.add(imageRenderer.parameters);
+	gui.add(sphereRenderer.sphereParameters);
 
 	btnExportImg.addListener(this, &Application::exportImage);
 	btnImportImg.addListener(this, &Application::importImage);
+
 }
 
 // fonction de mise à jour de la logique de l'application
 void Application::update() {
 	imageRenderer.update();
+	sphereRenderer.updateCustom();
 }
 
 // fonction de mise à jour du rendu de la fenêtre d'affichage de l'application
@@ -57,6 +65,7 @@ void Application::draw() {
 	}
 
 	curseurRenderer.draw();
+	sphereRenderer.draw();
 }
 
 // fonction appelée juste avant de quitter l'application

@@ -7,6 +7,7 @@
 #include "renderer.h"
 #include "image/imageRenderer.h"
 #include "curseur/curseurRenderer.h"
+#include "sphere/sphereRenderer.h"
 #include "ofxGui.h"
 
 class Application : public ofBaseApp {
@@ -14,6 +15,7 @@ public:
 
 	ImageRenderer imageRenderer;
 	CurseurRenderer curseurRenderer;
+	SphereRenderer sphereRenderer;
 
 	void setup();
 	void update();
@@ -51,4 +53,5 @@ public:
 
 	// Pour dessiner des lignes
 	ofPolyline polyline;
+
 };

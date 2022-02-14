@@ -4,6 +4,7 @@
 #include "renderer.h"
 
 RendererBase::RendererBase() {
+
 }
 
 // fonction d'initialisation
@@ -13,6 +14,8 @@ void RendererBase::setup() {
 
 	mouse_press_x = mouse_press_y = mouse_current_x = mouse_current_y = 0;
 	is_mouse_button_pressed = false;
+
+
 }
 
 // fonction de mise à jour
@@ -42,6 +45,8 @@ void RendererBase::draw() {
 		needsRedraw = false;
 	}
 	currentFrame = ofGetFrameNum();
+
+	// Note: appelle la méthode render() de la classe qui a appeler RendererBase::draw()
 	render();
 }
 
