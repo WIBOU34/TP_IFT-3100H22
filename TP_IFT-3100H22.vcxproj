@@ -202,6 +202,7 @@
     <ClCompile Include="..\..\..\addons\ofxVectorGraphics\src\ofxVectorGraphics.cpp" />
     <ClCompile Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS.cpp" />
     <ClCompile Include="src\objectBase.cpp" />
+    <ClCompile Include="src\objectBase3D.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\sphere\sphereRenderer.cpp" />
   </ItemGroup>
@@ -322,6 +323,7 @@
     <ClInclude Include="src\curseur\curseurRenderer.h" />
     <ClInclude Include="src\image\imageRenderer.h" />
     <ClInclude Include="src\objectBase.h" />
+    <ClInclude Include="src\objectBase3D.h" />
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\sphere\sphereRenderer.h" />
   </ItemGroup>

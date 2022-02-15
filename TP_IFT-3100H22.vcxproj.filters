@@ -73,6 +73,9 @@
     <ClCompile Include="src\sphere\sphereRenderer.cpp">
       <Filter>src\sphere</Filter>
     </ClCompile>
+    <ClCompile Include="src\objectBase3D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -515,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="src\sphere\sphereRenderer.h">
       <Filter>src\sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objectBase3D.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
