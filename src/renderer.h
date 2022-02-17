@@ -4,7 +4,6 @@
 #pragma once
 
 #include "ofMain.h"
-//#include "image/image.h"
 
 class RendererBase {
 public:

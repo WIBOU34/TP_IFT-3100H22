@@ -66,5 +66,3 @@ void RendererBase::setMousePos(int x, int y) {
 	mouse_current_x = x;
 	mouse_current_y = y;
 }
-
-
