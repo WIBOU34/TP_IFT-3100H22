@@ -21,6 +21,8 @@ public:
 	void mouseButtonReleased(int x, int y);
 	void setMousePos(int x, int y);
 
+	const ofVec3f origin = ofVec3f(0.0f, 0.0f, 0.0f);
+
 protected:
 	virtual void generateDraw() = 0;
 	virtual void render() = 0;

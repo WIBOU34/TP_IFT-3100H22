@@ -11,10 +11,11 @@ void Application::setup() {
 	ofSetWindowTitle("projet (presque) vide");
 
 	imageRenderer.setup("Images");
-	ofLog() << "<app::GUISetup>";
-	//ofSetVerticalSync(true);
-
+	sphereRenderer.setup("Sphere");
+	sphereRenderer.createSphere();
 	dessinRenderer.setup("Dessin");
+	ofLog() << "<app::GUISetup>";
+	ofSetVerticalSync(true);
 
 	updateGui();
 	bHide = false;
@@ -49,14 +50,17 @@ void Application::updateGui() {
 	gui.add(mousePosition.set("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
 	gui.add(imageRenderer.parameters);
 	gui.add(dessinRenderer.parameters);
+	gui.add(sphereRenderer.sphereParameters);
 
 	btnExportImg.addListener(this, &Application::exportImage);
 	btnImportImg.addListener(this, &Application::importImage);
+
 }
 
 // fonction de mise à jour de la logique de l'application
 void Application::update() {
 	imageRenderer.update();
+	sphereRenderer.updateCustom();
 }
 
 // fonction de mise à jour du rendu de la fenêtre d'affichage de l'application
@@ -69,6 +73,7 @@ void Application::draw() {
 	}
 
 	curseurRenderer.draw();
+	sphereRenderer.draw();
 }
 
 // fonction appelée juste avant de quitter l'application
@@ -148,7 +153,6 @@ void Application::mouseEntered(int x, int y) {
 	if (!bShowCursor) {
 		ofHideCursor();
 	}
-
 }
 
 //--------------------------------------------------------------

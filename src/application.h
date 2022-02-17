@@ -8,6 +8,7 @@
 #include "image/imageRenderer.h"
 #include "curseur/curseurRenderer.h"
 #include "dessin/dessinRenderer.h"
+#include "sphere/sphereRenderer.h"
 #include "ofxGui.h"
 
 class Application : public ofBaseApp {
@@ -15,6 +16,7 @@ public:
 
 	ImageRenderer imageRenderer;
 	CurseurRenderer curseurRenderer;
+	SphereRenderer sphereRenderer;
 	DessinRenderer dessinRenderer;
 
 	void setup();
