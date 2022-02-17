@@ -12,7 +12,7 @@ void Application::setup() {
 
 	imageRenderer.setup("Images");
 	ofLog() << "<app::GUISetup>";
-	ofSetVerticalSync(true);
+	//ofSetVerticalSync(true);
 
 	dessinRenderer.setup("Dessin");
 

@@ -40,7 +40,6 @@ public:
 	void importImage();
 
 	bool bHide;
-	//bool bSelection;
 
 	ofxButton btnExportImg;
 	ofxButton btnImportImg;

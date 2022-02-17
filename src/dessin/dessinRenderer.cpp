@@ -7,6 +7,7 @@ void DessinRenderer::setup(const std::string& name) {
 
 	//TODO: force one at a time
 	parameters.add(bDrawRectangle.set("Dessiner un rectangle", false));
+	parameters.add(bDrawEllipse.set("Dessiner un ellipse", false));
 	parameters.add(bDrawLine.set("Dessiner une ligne", false));
 	parameters.add(bDrawTriangle.set("Dessiner un triangle", false));
 
@@ -22,19 +23,33 @@ void DessinRenderer::update() {
 
 void DessinRenderer::selectPrimitive() {
 	bool selectedFound = false;
+	const ofVec2f find = ofVec2f(this->mouse_released_x, this->mouse_released_y);
 	for (std::vector<ObjectBase2D<VectorForme>>::reverse_iterator rit = lstFormes.rbegin(); rit != lstFormes.rend(); ++rit) {
 		ObjectBase2D<VectorForme>& forme = *rit;
 		//if (forme.isPointInObject(this->mouse_released_x, this->mouse_released_y)) {
 
 		for (const VectorPrimitive* primitive : forme.getObject().primitives) {
+			const ofVec2f topRight = ofVec2f(primitive->posEnd.x, primitive->posStart.y);
+			const ofVec2f bottomLeft = ofVec2f(primitive->posStart.x, primitive->posEnd.y);
 			switch (primitive->type) {
+				case VectorPrimitiveType::pixel:
+					break;
+				case VectorPrimitiveType::point:
+					break;
 				case VectorPrimitiveType::line:
-					selectedFound = isPointOnLine(primitive->posStart, primitive->posEnd, ofVec2f(this->mouse_released_x, this->mouse_released_y));
+					selectedFound = isPointOnLine(primitive->posStart, primitive->posEnd, find);
 					break;
 				case VectorPrimitiveType::rectangle:
+					selectedFound = isPointOnLine(primitive->posStart, topRight, find)	// topLine
+						|| isPointOnLine(primitive->posStart, bottomLeft, find)			// left
+						|| isPointOnLine(topRight, primitive->posEnd, find)				// right
+						|| isPointOnLine(bottomLeft, primitive->posEnd, find);			// bottom
+					break;
+				case VectorPrimitiveType::ellipse:
+				case VectorPrimitiveType::circle:
 					break;
 				default:
-					ofLog() << "<DessinRenderer::SelectPrimitive Primitive not found>";
+					ofLog(ofLogLevel::OF_LOG_WARNING) << "<DessinRenderer::SelectPrimitive Primitive not found>";
 					break;
 			}
 			if (selectedFound) {
@@ -54,6 +69,8 @@ void DessinRenderer::drawAtMouse() {
 		this->line(this->mouse_press_x, this->mouse_press_y, this->mouse_released_x, this->mouse_released_y);
 	} else if (bDrawRectangle.get()) {
 		this->rect(this->mouse_press_x, this->mouse_press_y, this->mouse_released_x, this->mouse_released_y);
+	} else if (bDrawEllipse.get()) {
+		this->ellipse(this->mouse_press_x, this->mouse_press_y, this->mouse_released_x, this->mouse_released_y);
 	} else if (bDrawTriangle.get()) {
 		ofLog() << "DessinRenderer::drawTriangle: not implemented yet>";
 	}
@@ -81,8 +98,8 @@ void DessinRenderer::render() {
 					graphics.rect(
 						primitive->posStart.x,
 						primitive->posStart.y,
-						std::abs(primitive->posEnd.x - primitive->posStart.x),
-						std::abs(primitive->posEnd.y - primitive->posStart.y));
+						primitive->posEnd.x - primitive->posStart.x,
+						primitive->posEnd.y - primitive->posStart.y);
 
 					graphics.noFill();
 					graphics.setLineWidth(primitive->strokeWidth);
@@ -91,8 +108,8 @@ void DessinRenderer::render() {
 					graphics.rect(
 						primitive->posStart.x,
 						primitive->posStart.y,
-						std::abs(primitive->posEnd.x - primitive->posStart.x),
-						std::abs(primitive->posEnd.y - primitive->posStart.y));
+						primitive->posEnd.x - primitive->posStart.x,
+						primitive->posEnd.y - primitive->posStart.y);
 					break;
 
 				case VectorPrimitiveType::ellipse:
@@ -103,8 +120,8 @@ void DessinRenderer::render() {
 					graphics.ellipse(
 						primitive->posStart.x,
 						primitive->posStart.y,
-						std::abs(primitive->posEnd.x - primitive->posStart.x),
-						std::abs(primitive->posEnd.y - primitive->posStart.y));
+						(primitive->posEnd.x - primitive->posStart.x) * 2,
+						(primitive->posEnd.y - primitive->posStart.y) * 2);
 
 					graphics.noFill();
 					graphics.setLineWidth(primitive->strokeWidth);
@@ -113,8 +130,8 @@ void DessinRenderer::render() {
 					graphics.ellipse(
 						primitive->posStart.x,
 						primitive->posStart.y,
-						std::abs(primitive->posEnd.x - primitive->posStart.x),
-						std::abs(primitive->posEnd.y - primitive->posStart.y));
+						(primitive->posEnd.x - primitive->posStart.x) * 2,
+						(primitive->posEnd.y - primitive->posStart.y) * 2);
 					break;
 				default:
 					break;
@@ -135,6 +152,20 @@ void DessinRenderer::rect(float x1, float y1, float x2, float y2) {
 	forme.type = VectorFormeType::primitive;
 	lstFormes.push_back(ObjectBase2D<VectorForme>(primitive->posStart.x, primitive->posStart.y, primitive->posEnd.x, primitive->posEnd.y, forme, "FormePrimitive Rectangle " + ofToString(lstFormes.size())));
 	graphics.rect(x1, y1, x1, y2);
+}
+
+// x2 et y2 sont les coordonnées du centre
+void DessinRenderer::ellipse(float x1, float y1, float x2, float y2) {
+	const float width = (x2 - x1) * 2;
+	const float height = (y2 - y1) * 2;
+	lstPrimitives.push_back(createEllipse(x1, y1, x2, y2));
+	VectorPrimitive* primitive = &lstPrimitives.back();
+
+	VectorForme forme;
+	forme.primitives.push_back(primitive);
+	forme.type = VectorFormeType::primitive;
+	lstFormes.push_back(ObjectBase2D<VectorForme>(primitive->posStart.x, primitive->posStart.y, primitive->posEnd.x, primitive->posEnd.y, forme, "FormePrimitive Ellipse " + ofToString(lstFormes.size())));
+	graphics.ellipse(x1, y1, width, height);
 }
 
 void DessinRenderer::line(float x1, float y1, float x2, float y2) {

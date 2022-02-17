@@ -157,7 +157,6 @@ inline bool ObjectBase2D<T>::isPointInObject(const int& x, const int& y) const {
 		&& coords.getWidth() + coords.origine.x >= x
 		&& coords.getHeight() + coords.origine.y >= y;
 }
-
 //template<class T>
 //class ObjectBase3D {
 //public:

@@ -21,6 +21,7 @@ public:
 	ofParameter<ofColor> strokeColor;
 	ofParameter<ofColor> fillColor;
 	ofParameter<bool> bDrawRectangle;
+	ofParameter<bool> bDrawEllipse;
 	ofParameter<bool> bDrawLine;
 	ofParameter<bool> bDrawTriangle;
 
@@ -54,7 +55,7 @@ private:
 	VectorPrimitive createPrimitive();
 	VectorPrimitive createRectangle(float x1, float y1, float x2, float y2);
 	VectorPrimitive createLine(float x1, float y1, float x2, float y2);
-	VectorPrimitive createEllipse(float x1, float y1, float x2, float y2);
+	VectorPrimitive createEllipse(float x1, float y1, float w, float h);
 
 	bool isPointOnLine(const ofVec2f& start, const ofVec2f& end, const ofVec2f& find) const;
 };
