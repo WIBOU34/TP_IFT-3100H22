@@ -148,14 +148,12 @@ inline void ObjectBase2D<T>::createObject(const Coords2D& coords, const T& objec
 	this->name = name;
 }
 
-
 template<typename T>
 // Vérifie seulement la zone rectangulaire formée par les points dans Coords2D
 inline bool ObjectBase2D<T>::isPointInObject(const int& x, const int& y) const {
 	const Coords2D coords = this->getCoords();
 	return coords.origine.x <= x && coords.origine.y <= y
-		&& coords.getWidth() + coords.origine.x >= x
-		&& coords.getHeight() + coords.origine.y >= y;
+		&& coords.end.x >= x && coords.end.y >= y;
 }
 //template<class T>
 //class ObjectBase3D {

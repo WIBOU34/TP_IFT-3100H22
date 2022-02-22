@@ -44,7 +44,9 @@ public:
 	bool bHide;
 
 	ofxButton btnExportImg;
+	ofxButton* btnExportImgSetup;
 	ofxButton btnImportImg;
+	ofxButton* btnImportImgSetup;
 	ofParameter<bool> bSelection;
 	ofParameter<bool> bShowCursor;
 	ofParameter<string> screenSize;
@@ -54,5 +56,5 @@ public:
 	ofxPanel gui;
 
 	// Pour dessiner des lignes
-	ofPolyline polyline;
+	//ofPolyline polyline;
 };

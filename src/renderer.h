@@ -28,6 +28,8 @@ protected:
 	bool needsRedraw;
 	int mouse_press_x;
 	int mouse_press_y;
+	int mouse_press_x_updated;
+	int mouse_press_y_updated;
 	int mouse_current_x;
 	int mouse_current_y;
 	int mouse_released_x;

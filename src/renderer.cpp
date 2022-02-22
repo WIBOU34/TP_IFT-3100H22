@@ -52,6 +52,8 @@ void RendererBase::mousButtonPressed(int x, int y) {
 	is_mouse_button_pressed = true;
 	mouse_press_x = x;
 	mouse_press_y = y;
+	mouse_press_x_updated = x;
+	mouse_press_y_updated = y;
 	setMousePos(x, y);
 }
 

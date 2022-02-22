@@ -8,7 +8,7 @@
 void Application::setup() {
 	ofLog() << "<app::setup>";
 	ofAddListener(ofEvents().mouseMoved, this, &Application::customMouseMoved, OF_EVENT_ORDER_BEFORE_APP - 100);
-	ofSetWindowTitle("projet (presque) vide");
+	ofSetWindowTitle("Travail Pratique");
 
 	imageRenderer.setup("Images");
 	sphereRenderer.setup("Sphere");
@@ -17,6 +17,16 @@ void Application::setup() {
 	ofLog() << "<app::GUISetup>";
 	ofSetVerticalSync(true);
 
+	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
+	btnExportImgSetup = btnExportImg.setup("Exporter en image 'e'");
+	btnImportImgSetup = btnImportImg.setup("Importer une image");
+
+	btnExportImg.addListener(this, &Application::exportImage);
+	btnImportImg.addListener(this, &Application::importImage);
+
+	gui.setDefaultWidth(300);
+	parameters.setName("Menu 'h'");
+	gui.setup(parameters);
 	updateGui();
 	bHide = false;
 	bSelection = false;
@@ -31,20 +41,14 @@ void Application::setup() {
 }
 
 void Application::updateGui() {
-	glm::vec3 position = gui.getPosition();
+	// =========== Méthode modifiée ===========
+	// ajout de "ownedCollection.clear();" dans ofxGuiGroup.cpp ligne 215
+	// pour corriger une fuite de mémoire
 	gui.clear();
-	parameters.clear();
-	btnExportImg.removeListener(this, &Application::exportImage);
-	btnImportImg.removeListener(this, &Application::importImage);
-
-	gui.setDefaultWidth(300);
-
-	parameters.setName("Menu 'h'");
-	gui.setup(parameters);
-	gui.setPosition(position);
+	
 	gui.add(bSelection.set("Mode Selection 's'", bSelection));
-	gui.add(btnExportImg.setup("Exporter en image 'e'"));
-	gui.add(btnImportImg.setup("Importer une image"));
+	gui.add(btnExportImgSetup);
+	gui.add(btnImportImgSetup);
 	gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
 	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
 	gui.add(mousePosition.set("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
@@ -52,15 +56,13 @@ void Application::updateGui() {
 	gui.add(dessinRenderer.parameters);
 	gui.add(sphereRenderer.sphereParameters);
 
-	btnExportImg.addListener(this, &Application::exportImage);
-	btnImportImg.addListener(this, &Application::importImage);
-
 }
 
 // fonction de mise à jour de la logique de l'application
 void Application::update() {
 	imageRenderer.update();
 	sphereRenderer.updateCustom();
+	dessinRenderer.updateCustom();
 }
 
 // fonction de mise à jour du rendu de la fenêtre d'affichage de l'application
@@ -120,8 +122,9 @@ void Application::mouseDragged(int x, int y, int button) {
 	curseurRenderer.setMousePos(x, y);
 	dessinRenderer.setMousePos(x, y);
 	imageRenderer.setMousePos(x, y);
+	mousePosition = "X:" + ofToString(x) + " Y:" + ofToString(y);
 
-	polyline.addVertex(ofPoint(x, y));
+	//polyline.addVertex(ofPoint(x, y));
 }
 
 //--------------------------------------------------------------
@@ -130,7 +133,14 @@ void Application::mousePressed(int x, int y, int button) {
 	dessinRenderer.mousButtonPressed(x, y);
 	imageRenderer.mousButtonPressed(x, y);
 
-	polyline.addVertex(ofPoint(x, y));
+	//polyline.addVertex(ofPoint(x, y));
+	if (bSelection) {
+		imageRenderer.findImage(x, y);
+		dessinRenderer.selectPrimitive();
+		this->updateGui();
+	} else {
+		dessinRenderer.beginShapeDraw();
+	}
 }
 
 //--------------------------------------------------------------
@@ -139,12 +149,8 @@ void Application::mouseReleased(int x, int y, int button) {
 	dessinRenderer.mouseButtonReleased(x, y);
 	imageRenderer.mouseButtonReleased(x, y);
 
-	if (bSelection) {
-		imageRenderer.findImage(x, y);
-		dessinRenderer.selectPrimitive();
-		this->updateGui();
-	} else {
-		dessinRenderer.drawAtMouse();
+	if (!bSelection) {
+		dessinRenderer.completeShapeDrawn();
 	}
 }
 
