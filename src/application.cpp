@@ -27,6 +27,17 @@ void Application::setup() {
 	gui.setDefaultWidth(300);
 	parameters.setName("Menu 'h'");
 	gui.setup(parameters);
+
+	gui.add(bSelection.set("Mode Selection 's'", bSelection));
+	gui.add(btnExportImgSetup);
+	gui.add(btnImportImgSetup);
+	gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
+	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
+	gui.add(mousePosition.set("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
+	gui.add(imageRenderer.parameters);
+	gui.add(dessinRenderer.parameters);
+	gui.add(sphereRenderer.sphereParameters);
+
 	updateGui();
 	bHide = false;
 	bSelection = false;
@@ -44,17 +55,8 @@ void Application::updateGui() {
 	// =========== Méthode modifiée ===========
 	// ajout de "ownedCollection.clear();" dans ofxGuiGroup.cpp ligne 215
 	// pour corriger une fuite de mémoire
-	gui.clear();
+	//gui.clear();
 	
-	gui.add(bSelection.set("Mode Selection 's'", bSelection));
-	gui.add(btnExportImgSetup);
-	gui.add(btnImportImgSetup);
-	gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
-	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
-	gui.add(mousePosition.set("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
-	gui.add(imageRenderer.parameters);
-	gui.add(dessinRenderer.parameters);
-	gui.add(sphereRenderer.sphereParameters);
 
 }
 
@@ -137,7 +139,7 @@ void Application::mousePressed(int x, int y, int button) {
 	if (bSelection) {
 		imageRenderer.findImage(x, y);
 		dessinRenderer.selectPrimitive();
-		this->updateGui();
+		//this->updateGui();
 	} else {
 		dessinRenderer.beginShapeDraw();
 	}
@@ -181,7 +183,7 @@ void Application::gotMessage(ofMessage msg) {
 void Application::importImage() {
 	imageRenderer.importImageDialog();
 	//gui.add(imageRenderer.parameters);
-	this->updateGui();
+	//this->updateGui();
 }
 
 void Application::exportImage() {
@@ -193,6 +195,6 @@ void Application::dragEvent(ofDragInfo dragInfo) {
 	ofLog() << "<app::ofDragInfo file[0]: " << dragInfo.files.at(0)
 		<< " at : " << dragInfo.position << ">";
 	imageRenderer.importImage(dragInfo.files.at(0), dragInfo.position.x, dragInfo.position.y);
-	this->updateGui();
+	//this->updateGui();
 	//gui.add(imageRenderer.parameters);
 }

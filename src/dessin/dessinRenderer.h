@@ -10,7 +10,7 @@
 
 class DessinRenderer : public RendererBase {
 public:
-	std::vector<ObjectBase2D<VectorForme>> lstFormes;
+	std::list<ObjectBase2D<VectorForme>> lstFormes;
 	ObjectBase2D<VectorForme> formeTemporaire;
 	ObjectBase2D<VectorForme>* selectedForme;
 

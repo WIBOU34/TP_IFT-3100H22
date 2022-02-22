@@ -44,6 +44,7 @@ void DessinRenderer::updateCustom() {
 			newForme,
 			selectedForme->getName()
 		);
+		idSelected.set(selectedForme->getName());
 		if (is_mouse_button_pressed) {
 			this->mouse_press_x_updated = this->mouse_current_x;
 			this->mouse_press_y_updated = this->mouse_current_y;
@@ -59,7 +60,7 @@ void DessinRenderer::updateCustom() {
 void DessinRenderer::selectPrimitive() {
 	bool selectedFound = false;
 	const ofVec2f find = ofVec2f(this->mouse_press_x, this->mouse_press_y);
-	for (std::vector<ObjectBase2D<VectorForme>>::reverse_iterator rit = lstFormes.rbegin(); rit != lstFormes.rend(); ++rit) {
+	for (std::list<ObjectBase2D<VectorForme>>::reverse_iterator rit = lstFormes.rbegin(); rit != lstFormes.rend(); ++rit) {
 		ObjectBase2D<VectorForme>& forme = *rit;
 
 		for (const VectorPrimitive* primitive : forme.getObject().primitives) {
@@ -107,11 +108,12 @@ void DessinRenderer::selectPrimitive() {
 }
 
 void DessinRenderer::beginShapeDraw() {
-	updateShape = false;
-	saveShape = false;
-	this->drawAtMouse();
-	updateShape = true;
-	this->render();
+	if (bDrawLine || bDrawRectangle || bDrawEllipse || bDrawTriangle) {
+		updateShape = false;
+		saveShape = false;
+		this->drawAtMouse();
+		updateShape = true;
+	}
 }
 
 void DessinRenderer::drawAtMouse() {
@@ -141,7 +143,6 @@ void DessinRenderer::completeShapeDrawn() {
 		ofLog() << "DessinRenderer::drawTriangle: not implemented yet>";
 	}
 	updateShape = false;
-	this->render();
 }
 
 void DessinRenderer::generateDraw() {

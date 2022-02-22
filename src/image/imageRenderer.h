@@ -18,11 +18,17 @@ public:
 	void exportImageDialog() const;
 	void findImage(const int& x, const int& y);
 
+	ofParameter<string> positionX;
+	ofParameter<string> positionY;
+	ofParameter<string> positionWidth;
+	ofParameter<string> positionHeight;
+	ofParameter<string> name;
 	ofParameterGroup parameters;
 protected:
 	void generateDraw();
 	void render();
 private:
+	const std::string NO_ITEM_SELECTED = "NULL";
 	void drawImage();
 	void exportImage(const std::string& path, const std::string& fileName) const;
 };

@@ -11,9 +11,14 @@ void ImageRenderer::importImageDialog() {
 	}
 }
 
-void ImageRenderer::setup(const std::string& name) {
+void ImageRenderer::setup(const std::string& pName) {
 	parameters.clear();
-	parameters.setName(name);
+	parameters.setName(pName);
+	parameters.add(positionX.set("x: ", NO_ITEM_SELECTED));
+	parameters.add(positionY.set("y: ", NO_ITEM_SELECTED));
+	parameters.add(positionWidth.set("width: ", NO_ITEM_SELECTED));
+	parameters.add(positionHeight.set("height: ", NO_ITEM_SELECTED));
+	parameters.add(name.set("Nom", NO_ITEM_SELECTED));
 }
 
 void ImageRenderer::importImage(const std::string& path) {
@@ -24,7 +29,7 @@ void ImageRenderer::importImage(const std::string& path, const int& x, const int
 }
 void ImageRenderer::importImage(const std::string& path, const int& x, const int& y, const int& width, const int& height) {
 	ofImage imageTemp;
-	if (!imageTemp.load((boost::filesystem::path)path)) {
+	if (!imageTemp.load((boost::filesystem::path) path)) {
 		ofLogError() << "<import image: unable to load image: '" << path << "'>";
 		return;
 	}
@@ -38,7 +43,7 @@ void ImageRenderer::importImage(const std::string& path, const int& x, const int
 	if (height == 0) {
 		heightToUse = imageTemp.getHeight();
 	}
-	lstImages.push_back(ObjectBase2D<ofImage>(x, y, x + widthToUse, y + heightToUse, imageTemp, ((boost::filesystem::path)path).filename().string()));
+	lstImages.push_back(ObjectBase2D<ofImage>(x, y, x + widthToUse, y + heightToUse, imageTemp, ((boost::filesystem::path) path).filename().string()));
 	drawImage();
 }
 
@@ -73,18 +78,12 @@ void ImageRenderer::findImage(const int& x, const int& y) {
 
 			//image.rotate90(2);
 			objetBase.createObject(objetBase.getCoords(), image, objetBase.getName());
-			ofParameter<string> positionX;
-			ofParameter<string> positionY;
-			ofParameter<string> positionWidth;
-			ofParameter<string> positionHeight;
 			string points = "x: " + to_string(objetBase.getCoords().origine.x) + " y: " + to_string(objetBase.getCoords().origine.y) + " width: " + to_string(objetBase.getCoords().getWidth()) + " height: " + to_string(objetBase.getCoords().getHeight());
-			ofParameter<string> name;
-			this->setup(parameters.getName());
-			parameters.add(positionX.set("x: ", to_string(objetBase.getCoords().origine.x)));
-			parameters.add(positionY.set("y: ", to_string(objetBase.getCoords().origine.y)));
-			parameters.add(positionWidth.set("width: ", to_string(objetBase.getCoords().getWidth())));
-			parameters.add(positionHeight.set("height: ", to_string(objetBase.getCoords().getHeight())));
-			parameters.add(name.set("Nom", objetBase.getName()));
+			positionX.set(to_string(objetBase.getCoords().origine.x));
+			positionY.set(to_string(objetBase.getCoords().origine.y));
+			positionWidth.set(to_string(objetBase.getCoords().getWidth()));
+			positionHeight.set(to_string(objetBase.getCoords().getHeight()));
+			name.set(objetBase.getName());
 			break;
 		}
 	}
