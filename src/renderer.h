@@ -21,6 +21,7 @@ public:
 	void setMousePos(int x, int y);
 
 	const ofVec3f origin = ofVec3f(0.0f, 0.0f, 0.0f);
+	const ofVec3f centerScreen = ofVec3f(ofGetWidth()/2.0f, ofGetHeight()/2.0f, 0.0f);
 
 protected:
 	virtual void generateDraw() = 0;

@@ -14,6 +14,7 @@ void Application::setup() {
 	sphereRenderer.setup("Sphere");
 	sphereRenderer.createSphere();
 	dessinRenderer.setup("Dessin");
+	objects3DRenderer.setup("Objets 3D");
 	ofLog() << "<app::GUISetup>";
 	ofSetVerticalSync(true);
 
@@ -37,6 +38,7 @@ void Application::setup() {
 	gui.add(imageRenderer.parameters);
 	gui.add(dessinRenderer.parameters);
 	gui.add(sphereRenderer.sphereParameters);
+	gui.add(&objects3DRenderer.parameters3D);
 
 	updateGui();
 	bHide = false;
@@ -78,6 +80,7 @@ void Application::draw() {
 
 	curseurRenderer.draw();
 	sphereRenderer.draw();
+	objects3DRenderer.draw();
 }
 
 // fonction appelée juste avant de quitter l'application

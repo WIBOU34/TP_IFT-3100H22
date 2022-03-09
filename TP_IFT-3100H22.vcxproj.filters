@@ -79,6 +79,9 @@
     <ClCompile Include="src\dessin\dessinRenderer.cpp">
       <Filter>src\dessin</Filter>
     </ClCompile>
+    <ClCompile Include="src\objects3D\objects3DRenderer.cpp">
+      <Filter>src\objects3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -170,6 +173,9 @@
     </Filter>
     <Filter Include="src\dessin">
       <UniqueIdentifier>{95e4ffba-03ff-4415-b0f1-c2711d2ab3cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\objects3D">
+      <UniqueIdentifier>{97180c7b-add9-465d-a253-4ab0043d91b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -530,6 +536,9 @@
     </ClInclude>
     <ClInclude Include="src\dessin\dessinRenderer.h">
       <Filter>src\dessin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objects3D\objects3DRenderer.h">
+      <Filter>src\objects3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

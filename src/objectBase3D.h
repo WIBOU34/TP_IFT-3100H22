@@ -1,6 +1,29 @@
 #pragma once
 
+#include "ofColor.h"
+#include "ofVec3f.h"
 #include <string>
+
+// énumération des différents types de primitives vectorielles
+enum class VectorObject3DType { none, cube, sphere, cone, cylinder };
+enum class MeshRenderMode { fill, wireframe, vertex };
+
+// structure d'un objet 3D
+struct VectorObjectSettings {
+	VectorObject3DType   type;				// 1 * 4 = 4  octets
+	ofVec3f				posStart;			// 3 * 4 = 12  octets
+	float				width;				// 1 * 4 = 4  octets	x
+	float				height;				// 1 * 4 = 4  octets	y
+	float				length;				// 1 * 4 = 4  octets	z
+	float				radius = 0.0f;		// 1 * 4 = 4  octets	r
+	ofColor				fillColor = 200;	// 4 * 1 = 4  octets
+};											//       = 36 octets
+
+// structure d'un objet et son mode de rendu
+struct VectorObjs3D {
+	MeshRenderMode renderMode;					// 1 * 1 =  1 octet
+	std::vector<VectorObjectSettings*> object3D;		//		 = 36 octets
+};												//		 = 37 octets
 
 class Point3D {
 public:
