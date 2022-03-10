@@ -54,7 +54,7 @@ void Objects3DRenderer::generateDraw()
 
 void Objects3DRenderer::render()
 {
-	ofLog() << "<objects3DRenderer::render>";
+	//ofLog() << "<objects3DRenderer::render>";
 	for (const ObjectBase3D<VectorObjs3D>& obj : lstObj) {
 		this->drawObjects(obj);
 	}
@@ -116,7 +116,7 @@ VectorObjectSettings Objects3DRenderer::createCube(float x, float y, float z, fl
 	obj.type = VectorObject3DType::cube;
 	this->updateCube(obj, x, y, z, width, height, length);
 	ofLog() << "<objects3DRenderer::cube created>";
-	return VectorObjectSettings();
+	return obj;
 }
 
 void Objects3DRenderer::updateCube(VectorObjectSettings& obj, float x, float y, float z, float width, float height, float length)
@@ -133,7 +133,7 @@ VectorObjectSettings Objects3DRenderer::createSphere(float x = 0.0f, float y = 0
 	VectorObjectSettings obj = createNewObj();
 	obj.type = VectorObject3DType::sphere;
 	this->updateSphere(obj, x, y, z, r);
-	return VectorObjectSettings();
+	return obj;
 }
 
 void Objects3DRenderer::updateSphere(VectorObjectSettings& obj, float x, float y, float z, float r)
@@ -164,7 +164,7 @@ void Objects3DRenderer::updateCylinder(VectorObjectSettings& obj, float x, float
 void Objects3DRenderer::buttonCubePressed()
 {
 	ofLog() << "<objects3DRenderer::buttonCubePressed>";
-	createCube(centerScreen[0], centerScreen[1], centerScreen[2], 10.0f, 10.0f, 10.0f);
+	cube(centerScreen[0], centerScreen[1], centerScreen[2], 10.0f, 10.0f, 10.0f);
 }
 
 // Crée une sphere de base en 0,0

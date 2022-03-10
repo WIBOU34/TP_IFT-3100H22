@@ -43,7 +43,7 @@ private:
 
 	std::list<VectorObjectSettings> lstObjSettings;
 	bool updateShapeObj3D = false;
-	bool saveShape = false;
+	bool saveShape = true;
 
 	void drawObjects(const ObjectBase3D<VectorObjs3D>& forme);
 
