@@ -25,11 +25,21 @@ public:
 	ofxButton bDrawCone;
 	ofxButton bDrawCylinder;
 
+	ofxGuiGroup selectedObjParams;
+	ofParameter<float> sliderXpos;
+	ofParameter<float> sliderYpos;
+	ofParameter<float> sliderZpos;
+	ofParameter<float> sliderRadiusPos;
+	ofParameter<float> sliderWidthPos;
+	ofParameter<float> sliderHeightPos;
+	ofParameter<float> sliderLengthPos;
+
 	ofParameter<string> idSelected;
 	ofParameter<string> typeSelected;
 	ofParameter<ofColor> fillColorSelected;
 
 	void cube(float x, float y, float z, float width, float height, float length);
+	void sphere(float x, float y, float z, float r);
 
 	void selectObject();
 

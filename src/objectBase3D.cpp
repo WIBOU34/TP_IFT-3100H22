@@ -12,6 +12,13 @@ Point3D::Point3D(const int& x, const int& y, const int& z) {
 	this->z = z;
 }
 
+Point3D::Point3D(const ofVec3f& coords)
+{
+	this->x = coords[0];
+	this->y = coords[1];
+	this->z = coords[2];
+}
+
 Coords3D::Coords3D(const int& x, const int& y, const int& z, const int& width, const int& height, const int& length) {
 	this->origine = Point3D(x, y, z);
 	this->width = width;
