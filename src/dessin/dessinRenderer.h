@@ -14,8 +14,6 @@ public:
 	ObjectBase2D<VectorForme> formeTemporaire;
 	ObjectBase2D<VectorForme>* selectedForme;
 
-	void setup(const std::string& name);
-	void updateCustom();
 
 	ofParameterGroup parameters;
 	ofParameter<int> strokeWidth;
@@ -62,6 +60,8 @@ public:
 	void completeShapeDrawn();
 
 protected:
+	void setupRenderer(const std::string& name);
+	void updateRenderer();
 	void generateDraw();
 	void render();
 private:

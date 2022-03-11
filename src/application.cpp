@@ -63,8 +63,8 @@ void Application::updateGui() {
 // fonction de mise à jour de la logique de l'application
 void Application::update() {
 	imageRenderer.update();
-	sphereRenderer.updateCustom();
-	dessinRenderer.updateCustom();
+	sphereRenderer.update();
+	dessinRenderer.update();
 }
 
 // fonction de mise à jour du rendu de la fenêtre d'affichage de l'application

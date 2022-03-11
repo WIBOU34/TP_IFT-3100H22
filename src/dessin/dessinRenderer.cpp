@@ -1,7 +1,7 @@
 #include "dessinRenderer.h"
 
 
-void DessinRenderer::setup(const std::string& name) {
+void DessinRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
 	parameters.setName(name);
 
@@ -34,7 +34,7 @@ void DessinRenderer::setup(const std::string& name) {
 	btnDrawTriangle.addListener(this, &DessinRenderer::deselectButtonsTriangle);
 }
 
-void DessinRenderer::updateCustom() {
+void DessinRenderer::updateRenderer() {
 	if (selectedForme != nullptr && !updateShape && saveShape) {
 		VectorForme newForme = selectedForme->getObject();
 		const float differenceX = is_mouse_button_pressed ? this->mouse_current_x - this->mouse_press_x_updated : 0;

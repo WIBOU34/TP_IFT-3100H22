@@ -79,6 +79,9 @@
     <ClCompile Include="src\dessin\dessinRenderer.cpp">
       <Filter>src\dessin</Filter>
     </ClCompile>
+    <ClCompile Include="src\camera\cameraRenderer.cpp">
+      <Filter>src\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -170,6 +173,9 @@
     </Filter>
     <Filter Include="src\dessin">
       <UniqueIdentifier>{95e4ffba-03ff-4415-b0f1-c2711d2ab3cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\camera">
+      <UniqueIdentifier>{ea9edbf1-e1eb-4266-9e46-f95ea3cc64a2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -530,6 +536,9 @@
     </ClInclude>
     <ClInclude Include="src\dessin\dessinRenderer.h">
       <Filter>src\dessin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\cameraRenderer.h">
+      <Filter>src\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

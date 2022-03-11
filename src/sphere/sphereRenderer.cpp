@@ -1,13 +1,13 @@
 #include "sphereRenderer.h"
 
-void SphereRenderer::setup(const std::string& name) {
+void SphereRenderer::setupRenderer(const std::string& name) {
 	sphereParameters.clear();
 	sphereParameters.setName(name);
 	radiusSphereSlider.set("Rayon de la sphere", 10.0f, 1.0f, 100.0f);
 	sphereParameters.add(radiusSphereSlider);
 }
 
-void SphereRenderer::updateCustom()
+void SphereRenderer::updateRenderer()
 {
 	sphere1.setRadius(radiusSphereSlider);
 }

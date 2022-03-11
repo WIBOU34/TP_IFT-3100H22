@@ -3,7 +3,10 @@
 
 
 
-void CurseurRenderer::update() {}
+void CurseurRenderer::setupRenderer(const std::string& name) {
+}
+
+void CurseurRenderer::updateRenderer() {}
 
 void CurseurRenderer::generateDraw()
 {

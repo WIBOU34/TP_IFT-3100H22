@@ -11,7 +11,7 @@ void ImageRenderer::importImageDialog() {
 	}
 }
 
-void ImageRenderer::setup(const std::string& pName) {
+void ImageRenderer::setupRenderer(const std::string& pName) {
 	parameters.clear();
 	parameters.setName(pName);
 	parameters.add(positionX.set("x: ", NO_ITEM_SELECTED));
@@ -19,6 +19,9 @@ void ImageRenderer::setup(const std::string& pName) {
 	parameters.add(positionWidth.set("width: ", NO_ITEM_SELECTED));
 	parameters.add(positionHeight.set("height: ", NO_ITEM_SELECTED));
 	parameters.add(name.set("Nom", NO_ITEM_SELECTED));
+}
+
+void ImageRenderer::updateRenderer() {
 }
 
 void ImageRenderer::importImage(const std::string& path) {

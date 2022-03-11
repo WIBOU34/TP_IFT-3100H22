@@ -7,12 +7,14 @@
 //}
 
 // fonction d'initialisation
-void RendererBase::setup() {
+void RendererBase::setup(const std::string& name) {
 	// fréquence de rafraichissement du rendu de la fenêtre d'affichage par seconde
 	ofSetFrameRate(60);
+	ofLog() << "<RendererBase::setup>";
 
 	mouse_press_x = mouse_press_y = mouse_current_x = mouse_current_y = 0;
 	is_mouse_button_pressed = false;
+	this->setupRenderer(name);
 }
 
 // fonction de mise à jour
@@ -28,6 +30,7 @@ void RendererBase::update() {
 
 	//// trace des données temporelles dans la console
 	//ofLog() << std::setprecision(2) << "<frame: " << ofGetFrameNum() << " time current: " << time_current << " time elapsed: " << time_elapsed << " fps: " << 1.0 / time_elapsed << ">";
+	this->updateRenderer();
 }
 
 // fonction de rendu

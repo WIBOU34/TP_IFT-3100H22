@@ -181,6 +181,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\application.cpp" />
+    <ClCompile Include="src\camera\cameraRenderer.cpp" />
     <ClCompile Include="src\curseur\curseurRenderer.cpp" />
     <ClCompile Include="src\dessin\dessinRenderer.cpp" />
     <ClCompile Include="src\image\imageRenderer.cpp" />
@@ -321,6 +322,7 @@
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\src\ofxVectorGraphics.h" />
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS.hpp" />
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS_Types.hpp" />
+    <ClInclude Include="src\camera\cameraRenderer.h" />
     <ClInclude Include="src\curseur\curseurRenderer.h" />
     <ClInclude Include="src\dessin\dessinRenderer.h" />
     <ClInclude Include="src\image\imageRenderer.h" />
