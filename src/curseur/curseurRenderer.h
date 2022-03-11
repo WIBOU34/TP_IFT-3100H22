@@ -6,10 +6,9 @@
 class CurseurRenderer : public RendererBase
 {
 public:
+	void update();
 
 protected:
-	void setupRenderer(const std::string& name);
-	void updateRenderer();
 	void generateDraw();
 	void render();
 

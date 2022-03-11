@@ -10,7 +10,6 @@
 #include "dessin/dessinRenderer.h"
 #include "sphere/sphereRenderer.h"
 #include "objects3D/objects3DRenderer.h"
-#include "camera/cameraRenderer.h"
 #include "ofxGui.h"
 
 class Application : public ofBaseApp {
@@ -20,10 +19,7 @@ public:
 	CurseurRenderer curseurRenderer;
 	SphereRenderer sphereRenderer;
 	DessinRenderer dessinRenderer;
-
 	Objects3DRenderer objects3DRenderer;
-
-	CameraRenderer cameraRenderer;
 
 	void setup();
 	void update();

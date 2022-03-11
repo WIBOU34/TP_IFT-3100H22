@@ -9,6 +9,8 @@
 // Tests de rendu des spheres
 class SphereRenderer : public RendererBase {
 public:
+	void setup(const std::string& name);
+	void updateCustom();
 	void createSphere();
 
 	//vec3 v = vec3(1.0, 2.0, 3.0);
@@ -27,8 +29,6 @@ public:
 	ofSpherePrimitive sphere2;
 
 protected:
-	void setupRenderer(const std::string& name);
-	void updateRenderer();
 	void generateDraw();
 	void render();
 };

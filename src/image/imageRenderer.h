@@ -10,6 +10,7 @@ class ImageRenderer : public RendererBase {
 public:
 	std::list<ObjectBase2D<ofImage>> lstImages;
 
+	void setup(const std::string& name);
 	void importImage(const std::string& path);
 	void importImage(const std::string& path, const int& x, const int& y);
 	void importImage(const std::string& path, const int& x, const int& y, const int& width, const int& height);
@@ -24,8 +25,6 @@ public:
 	ofParameter<string> name;
 	ofParameterGroup parameters;
 protected:
-	void setupRenderer(const std::string& name);
-	void updateRenderer();
 	void generateDraw();
 	void render();
 private:
