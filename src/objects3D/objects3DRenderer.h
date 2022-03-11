@@ -11,9 +11,9 @@
 
 class Objects3DRenderer : public RendererBase {
 public:
-	std::list<ObjectBase3D<VectorObjs3D>> lstObj;
-	ObjectBase3D<VectorObjs3D> objTemporaire;
-	ObjectBase3D<VectorObjs3D>* selectedObj;
+	std::list<ObjectBase3D<VectorObjSettings>> lstObjSettings;
+	ObjectBase3D<VectorObjSettings> objTemporaire;
+	ObjectBase3D<VectorObjSettings>* selectedObj;
 
 	void setup(const std::string& name);
 	void updateCustom();
@@ -51,21 +51,21 @@ private:
 
 	ofxVectorGraphics graphics;
 
-	std::list<VectorObjectSettings> lstObjSettings;
+	std::list<VectorObj> lstObjs;
 	bool updateShapeObj3D = false;
 	bool saveShape = true;
 
-	void drawObjects(const ObjectBase3D<VectorObjs3D>& forme);
+	void drawObjects(const ObjectBase3D<VectorObjSettings>& forme);
 
-	VectorObjectSettings createNewObj();
-	VectorObjectSettings createCube(float x, float y, float z, float width, float height, float length);
-	void updateCube(VectorObjectSettings& obj, float x, float y, float z, float width, float height, float length);
-	VectorObjectSettings createSphere(float x, float y, float z, float r);
-	void updateSphere(VectorObjectSettings& obj, float x, float y, float z, float r);
-	VectorObjectSettings createCone(float x, float y, float z, float r, float height);
-	void updateCone(VectorObjectSettings& obj, float x, float y, float z, float r, float height);
-	VectorObjectSettings createCylinder(float x, float y, float z, float r, float height);
-	void updateCylinder(VectorObjectSettings& obj, float x, float y, float z, float r, float height);
+	VectorObj createNewObj();
+	VectorObj createCube(float x, float y, float z, float width, float height, float length);
+	void updateCube(VectorObj& obj, float x, float y, float z, float width, float height, float length);
+	VectorObj createSphere(float x, float y, float z, float r);
+	void updateSphere(VectorObj& obj, float x, float y, float z, float r);
+	VectorObj createCone(float x, float y, float z, float r, float height);
+	void updateCone(VectorObj& obj, float x, float y, float z, float r, float height);
+	VectorObj createCylinder(float x, float y, float z, float r, float height);
+	void updateCylinder(VectorObj& obj, float x, float y, float z, float r, float height);
 
 	void buttonCubePressed();
 	void buttonSpherePressed();

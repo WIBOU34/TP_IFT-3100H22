@@ -9,7 +9,7 @@ enum class VectorObject3DType { none, cube, sphere, cone, cylinder };
 enum class MeshRenderMode { fill, wireframe, vertex };
 
 // structure d'un objet 3D
-struct VectorObjectSettings {
+struct VectorObj {
 	VectorObject3DType   type;				// 1 * 4 = 4  octets
 	ofVec3f				posStart;			// 3 * 4 = 12  octets
 	float				width;				// 1 * 4 = 4  octets	x
@@ -19,15 +19,8 @@ struct VectorObjectSettings {
 	ofColor				fillColor = 200;	// 4 * 1 = 4  octets
 };											//       = 36 octets
 
-// structure d'un objet et son mode de rendu
-struct VectorObjs3D {
-	MeshRenderMode renderMode;					// 1 * 1 =  1 octet
-	std::vector<VectorObjectSettings*> object3D;//		 = 36 octets
-	std::vector<VectorOutlineSettings*> outline;//		 = 40 octets
-};												//		 = 77 octets
-
 // structure d'un contour
-struct VectorOutlineSettings {
+struct VectorOutline {
 	ofVec3f		posStart;					// 3 * 4 = 12  octets
 	float		width;						// 1 * 4 =  4  octets	x
 	float		height;						// 1 * 4 =  4  octets	y
@@ -35,6 +28,13 @@ struct VectorOutlineSettings {
 	float		radius = 0.0f;				// 1 * 4 =  4  octets	r
 	ofVec3f		fillColor = ofVec3f(255);	// 3 * 4 = 12  octets	white
 };											//       = 40  octets
+
+// structure d'un objet et son mode de rendu
+struct VectorObjSettings {
+	MeshRenderMode renderMode;					// 1 * 1 =  1 octet
+	std::vector<VectorObj*> object3D;			//		 = 36 octets
+	std::vector<VectorOutline*> outline;//		 = 40 octets
+};												//		 = 77 octets
 
 class Point3D {
 public:
@@ -50,10 +50,10 @@ class Coords3D {
 public:
 	Coords3D() = default;
 	Coords3D(const int& x, const int& y, const int& z, const int& width, const int& height, const int& length);
-	Coords3D(const Point3D& origine, const int& width, const int& height, const int& length);
+	Coords3D(const Point3D& start, const int& width, const int& height, const int& length);
 
 //private:
-	Point3D origine;
+	Point3D start;
 	int width;
 	int height;
 	int length; // pour 3D (valeur z)
@@ -140,7 +140,7 @@ public:
 	void createOutline(const int& x, const int& y, const int& z, const int& width, const int& height, const int& length, const T& outline);
 	void createOutline(const Coords3D& coords, const T& outline);
 private:
-	std::pair<Coords3D, T> objet3D;
+	std::pair<Coords3D, T> objetOutline;
 };
 
 template<typename T>
@@ -155,12 +155,12 @@ inline Outline<T>::Outline(const Coords3D& coords, const T& outline) {
 
 template<typename T>
 inline T Outline<T>::getOutline() const {
-	return this->objet3D.second;
+	return this->objetOutline.second;
 }
 
 template<typename T>
 inline Coords3D Outline<T>::getCoords() const {
-	return this->objet3D.first;
+	return this->objetOutline.first;
 }
 
 template<typename T>
@@ -171,5 +171,5 @@ inline void Outline<T>::createOutline(const int& x, const int& y, const int& z, 
 
 template<typename T>
 inline void Outline<T>::createOutline(const Coords3D& coords, const T& outline) {
-	this->objet3D = std::make_pair(coords, outline);
+	this->objetOutline = std::make_pair(coords, outline);
 }
