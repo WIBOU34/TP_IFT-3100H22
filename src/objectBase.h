@@ -7,7 +7,7 @@
 #include <vector>
 
 // énumération des différents types de primitives vectorielles
-enum class VectorPrimitiveType { none, pixel, point, line, rectangle, ellipse, circle };
+enum class VectorPrimitiveType { none, pixel, point, line, square, rectangle, circle, ellipse };
 enum class VectorFormeType { primitiveGroup, primitive, triangle };
 
 // structure de primitive vectorielle générique
@@ -18,13 +18,35 @@ struct VectorPrimitive {
 	float				strokeWidth;		// 1 * 4 = 4  octets
 	ofColor				strokeColor;		// 4 * 1 = 4  octets
 	ofColor				fillColor;			// 4 * 1 = 4  octets
+
+	bool operator==(const VectorPrimitive& primitive) const {
+		return primitive.type == this->type
+			&& primitive.posStart == this->posStart && primitive.posEnd == this->posEnd;
+	}
 };											//       = 32 octets
 
 // structure de groupe de primitive vectorielle générique
 struct VectorForme {
-	VectorFormeType type;
-	//std::string id;							//		= 40 octets
-	std::vector<VectorPrimitive*> primitives;	//		= 24 octets
+	VectorFormeType type;						//			= 40 octets
+	std::vector<VectorPrimitive*> primitives;	//	32 * n	>= 32 octets
+
+	bool operator==(const VectorForme& forme) const {
+		const int size = forme.primitives.size();
+		if (size != this->primitives.size()) {
+			return false;
+		}
+		if (forme.type != this->type) {
+			return false;
+		}
+		for (int i = 0; i < size; i++) {
+			const VectorPrimitive& primitiveCompare = *forme.primitives.at(i);
+			const VectorPrimitive& primitiveThis = *this->primitives.at(i);
+			if (!(primitiveCompare == primitiveThis)) {
+				return false;
+			}
+		}
+		return true;
+	}
 };
 
 //struct VectorPrimitive {
@@ -49,16 +71,13 @@ public:
 	Coords2D() = default;
 	Coords2D(const int& x, const int& y, const int& x1, const int& y1);
 	Coords2D(const ofVec2f& origine, const ofVec2f& end);
-	//int getX();
-	//int getY();
 	int getWidth() const;
 	int getHeight() const;
-	//private:
 	ofVec2f origine;
 	ofVec2f end;
-	//Point2D origine;
-	//int width;
-	//int height;
+	bool operator==(const Coords2D& coords) const {
+		return coords.origine == this->origine && coords.end == this->end;
+	}
 };
 //class Point3D {
 //public:
@@ -99,6 +118,13 @@ public:
 	void createObject(const int& x, const int& y, const int& x1, const int& y1, const T& object, const std::string& name);
 	void createObject(const Coords2D& coords, const T& object, const std::string& name);
 	bool isPointInObject(const int& x, const int& y) const;
+	bool operator==(const ObjectBase2D& objetBase2D) const {
+
+		if (objetBase2D.name != this->name) {
+			return false;
+		}
+		return objetBase2D.objet2D == this->objet2D;
+	}
 private:
 	std::pair<Coords2D, T> objet2D;
 	std::string name;
