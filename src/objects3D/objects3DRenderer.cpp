@@ -45,14 +45,10 @@ void Objects3DRenderer::cube(float x, float y, float z, float width, float heigh
 	updateCube(*obj, x, y, z, width, height, length);
 
 	VectorObjSettings objSet;
-	//VectorOutline outline;
-	//ObjectBase3D<VectorObjSettings> objSet2;
-	//objSet2.getCoords();
-	//VectorOutline outlineSet = Outline<VectorOutline>(x, y, z, width, height, length, this);
+	VectorOutline outlineSet = createOutline(x, y, z, width, height, length);
 	objSet.object3D.push_back(obj);
 	objSet.renderMode = MeshRenderMode::fill;
-	//objSet.outline.push_back(x, y, z, width, height, length);
-	//objSet.outline = objSet2.getCoords();
+	objSet.outline.push_back(outlineSet);
 	objTemporaire = ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cube " + ofToString(lstObjSettings.size()));
 
 	lstObjSettings.push_back(objTemporaire);
@@ -67,8 +63,10 @@ void Objects3DRenderer::sphere(float x, float y, float z, float r)
 	updateSphere(*obj, x, y, z, r);
 
 	VectorObjSettings objSet;
+	VectorOutline outlineSet = createOutline(x, y, z, r);
 	objSet.object3D.push_back(obj);
 	objSet.renderMode = MeshRenderMode::fill;
+	objSet.outline.push_back(outlineSet);
 	objTemporaire = ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Sphere " + ofToString(lstObjSettings.size()));
 	lstObjSettings.push_back(objTemporaire);
 }
@@ -201,6 +199,40 @@ void Objects3DRenderer::updateCylinder(VectorObj& obj, float x, float y, float z
 	obj.width = obj.length = r;
 	obj.radius = r;
 	obj.height = height;
+}
+
+VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float width, float height, float length)
+{
+	VectorOutline outline;
+	this->updateOutline(outline, x, y, z, width, height, length);
+	return outline;
+}
+
+VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float r, float length)
+{
+	VectorOutline outline;
+	float width = r;
+	float height = r;
+	this->updateOutline(outline, x, y, z, width, height, length);
+	return outline;
+}
+
+VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float r)
+{
+	VectorOutline outline;
+	float width = r;
+	float height = r;
+	float length = r;
+	this->updateOutline(outline, x, y, z, width, height, length);
+	return outline;
+}
+
+void Objects3DRenderer::updateOutline(VectorOutline& outline, float x, float y, float z, float width, float height, float length)
+{
+	outline.posStart.set(x, y, z);
+	outline.width = width;
+	outline.height = height;
+	outline.length = length;
 }
 
 // Crée un cube de base en 0,0

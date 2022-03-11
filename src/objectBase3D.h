@@ -33,7 +33,7 @@ struct VectorOutline {
 struct VectorObjSettings {
 	MeshRenderMode renderMode;					// 1 * 1 =  1 octet
 	std::vector<VectorObj*> object3D;			//		 = 36 octets
-	std::vector<VectorOutline*> outline;//		 = 40 octets
+	std::vector<VectorOutline> outline;//		 = 40 octets
 };												//		 = 77 octets
 
 class Point3D {

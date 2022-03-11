@@ -66,6 +66,10 @@ private:
 	void updateCone(VectorObj& obj, float x, float y, float z, float r, float height);
 	VectorObj createCylinder(float x, float y, float z, float r, float height);
 	void updateCylinder(VectorObj& obj, float x, float y, float z, float r, float height);
+	VectorOutline createOutline(float x, float y, float z, float width, float height, float length);
+	VectorOutline createOutline(float x, float y, float z, float r, float length);
+	VectorOutline createOutline(float x, float y, float z, float r);
+	void updateOutline(VectorOutline& outline, float x, float y, float z, float width, float height, float length);
 
 	void buttonCubePressed();
 	void buttonSpherePressed();
