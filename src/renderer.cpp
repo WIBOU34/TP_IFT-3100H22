@@ -39,7 +39,7 @@ void RendererBase::draw() {
 	//ofClear(ofGetFrameNum() % 255);
 	// afficher l'image sur toute la surface de la fenêtre d'affichage
 	//image.draw(0, 0, image.getWidth(), image.getHeight());
-
+	ofDisableDepthTest();
 	ofNoFill();
 	ofSetColor(ofColor::limit());
 

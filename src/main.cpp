@@ -15,9 +15,13 @@ int main() {
 	//settings.setGLVersion(4, 5);
 	settings.setGLVersion(2, 1);
 	settings.windowMode = OF_WINDOW;
-	ofCreateWindow(settings);
+	shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
 	//ofSetupOpenGL(1024, 768, OF_WINDOW);
 
 	// instancier et lancer l'application (openFrameworks 0.11.0)
-	ofRunApp(new Application());
+	shared_ptr<Application> mainApp(new Application());
+
+	ofRunApp(mainWindow, mainApp);
+	mainApp->setupGui();
+	ofRunMainLoop();
 }

@@ -22,9 +22,11 @@ public:
 	CameraRenderer cameraRenderer;
 
 	void setup();
+	void setupGui();
 	void update();
 	void updateGui();
 	void draw();
+	void drawCamera();
 	void exit();
 
 	void keyPressed(int key);
@@ -59,4 +61,14 @@ public:
 
 	// Pour dessiner des lignes
 	//ofPolyline polyline;
+
+private:
+	void createNewWindow(const Camera& type);
+	void drawFront(ofEventArgs& args);
+	void drawBack(ofEventArgs& args);
+	void drawLeft(ofEventArgs& args);
+	void drawRight(ofEventArgs& args);
+	void drawTop(ofEventArgs& args);
+	void drawDown(ofEventArgs& args);
+	void drawCamera(const Camera& camera);
 };

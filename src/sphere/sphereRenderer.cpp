@@ -25,5 +25,7 @@ void SphereRenderer::generateDraw()
 
 void SphereRenderer::render()
 {
+	ofEnableDepthTest();
 	ofSphere(origin, sphere1.getRadius());
+	ofDisableDepthTest();
 }
