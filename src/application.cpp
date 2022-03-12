@@ -14,7 +14,7 @@ void Application::setup() {
 	sphereRenderer.createSphere();
 	dessinRenderer.setup("Dessin");
 	cameraRenderer.setup("Camera - Frustum de vision");
-	// initialise les éléments et les enlèves pour avoir des objets vide
+	// initialise les éléments et les enlèves pour avoir des objets vide pour la caméra
 	createNewWindow(Camera::front);
 	createNewWindow(Camera::back);
 	createNewWindow(Camera::left);
@@ -43,7 +43,8 @@ void Application::setup() {
 
 }
 
-void Application::setupGui() {
+void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
+	mainWindow = window;
 	btnExportImgSetup = btnExportImg.setup("Exporter en image 'e'");
 	btnImportImgSetup = btnImportImg.setup("Importer une image");
 
@@ -60,10 +61,10 @@ void Application::setupGui() {
 	gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
 	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
 	gui.add(mousePosition.set("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
+	gui.add(cameraRenderer.parameters);
 	gui.add(imageRenderer.parameters);
 	gui.add(dessinRenderer.parameters);
 	gui.add(sphereRenderer.sphereParameters);
-	gui.add(cameraRenderer.parameters);
 	gui.minimizeAll();
 	bHide = false;
 }
@@ -92,6 +93,7 @@ void Application::draw() {
 	drawCamera();
 
 	if (!bHide) {
+		ofDisableDepthTest();
 		gui.draw();
 	}
 
@@ -111,7 +113,9 @@ void Application::exit() {
 	ofLog() << "<app::exit>";
 
 	for (auto& window : cameraRenderer.vecWindow) {
-		window->setWindowShouldClose();
+		if (window != nullptr && window->renderer() != nullptr) {
+			window->setWindowShouldClose();
+		}
 	}
 }
 
@@ -188,8 +192,6 @@ void Application::mouseDragged(int x, int y, int button) {
 	dessinRenderer.setMousePos(x, y);
 	imageRenderer.setMousePos(x, y);
 	mousePosition = "X:" + ofToString(x) + " Y:" + ofToString(y);
-
-	//polyline.addVertex(ofPoint(x, y));
 }
 
 //--------------------------------------------------------------
@@ -198,11 +200,9 @@ void Application::mousePressed(int x, int y, int button) {
 	dessinRenderer.mousButtonPressed(x, y);
 	imageRenderer.mousButtonPressed(x, y);
 
-	//polyline.addVertex(ofPoint(x, y));
 	if (bSelection) {
 		imageRenderer.findImage(x, y);
 		dessinRenderer.selectPrimitive();
-		//this->updateGui();
 	} else {
 		dessinRenderer.beginShapeDraw();
 	}
@@ -245,8 +245,6 @@ void Application::gotMessage(ofMessage msg) {
 
 void Application::importImage() {
 	imageRenderer.importImageDialog();
-	//gui.add(imageRenderer.parameters);
-	//this->updateGui();
 }
 
 void Application::exportImage() {
@@ -307,13 +305,16 @@ void Application::createNewWindow(const Camera& type) {
 		return;
 	}
 	if (cameraRenderer.vecWindow.at(index) == nullptr || cameraRenderer.vecWindow.at(index).get()->renderer().get() == nullptr) {
-		ofGLWindowSettings  settings;
+		ofGLFWWindowSettings settings;
 		settings.setGLVersion(2, 1);
 		settings.windowMode = OF_WINDOW;
+		settings.shareContextWith = this->mainWindow;
 		cameraRenderer.vecWindow.at(index) = ofCreateWindow(settings);
 		cameraRenderer.vecWindow.at(index)->setWindowTitle(cameraRenderer.getCameraName(type));
+		cameraRenderer.vecWindow.at(index)->setVerticalSync(true);
+		cameraRenderer.vecWindow.at(index)->events().setFrameRate(ofGetFrameRate());
+
 		ofAddListener(cameraRenderer.vecWindow.at(index)->events().draw, this, method);
-		ofAddListener(cameraRenderer.vecWindow.at(index)->events().exit, &cameraRenderer, &CameraRenderer::clearWindows, OF_EVENT_ORDER_BEFORE_APP - 100);
 	} else {
 		ofLog(ofLogLevel::OF_LOG_WARNING) << "<CameraRenderer::CreateNewWindow: window already exists>";
 	}
@@ -347,8 +348,8 @@ void Application::drawCamera(const Camera& camera) {
 	const Camera old = cameraRenderer.camera_active;
 	cameraRenderer.camera_active = camera;
 	cameraRenderer.setupCamera();
-	cameraRenderer.update();
-	sphereRenderer.update();
+	//cameraRenderer.update();
+	//sphereRenderer.update();
 	this->drawCamera();
 	cameraRenderer.camera_active = old;
 	cameraRenderer.setupCamera();

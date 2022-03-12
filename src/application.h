@@ -20,9 +20,10 @@ public:
 	SphereRenderer sphereRenderer;
 	DessinRenderer dessinRenderer;
 	CameraRenderer cameraRenderer;
+	shared_ptr<ofAppBaseWindow> mainWindow;
 
 	void setup();
-	void setupGui();
+	void setupGui(const shared_ptr<ofAppBaseWindow>& window);
 	void update();
 	void updateGui();
 	void draw();
@@ -71,4 +72,5 @@ private:
 	void drawTop(ofEventArgs& args);
 	void drawDown(ofEventArgs& args);
 	void drawCamera(const Camera& camera);
+	//void clearWindows(ofEventArgs& args);
 };

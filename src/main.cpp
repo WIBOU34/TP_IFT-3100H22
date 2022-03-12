@@ -22,6 +22,6 @@ int main() {
 	shared_ptr<Application> mainApp(new Application());
 
 	ofRunApp(mainWindow, mainApp);
-	mainApp->setupGui();
+	mainApp->setupGui(mainWindow);
 	ofRunMainLoop();
 }

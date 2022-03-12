@@ -19,29 +19,15 @@ void RendererBase::setup(const std::string& name) {
 
 // fonction de mise à jour
 void RendererBase::update() {
-	// temps courant en secondes
-	//time_current = ofGetElapsedTimef();
-
-	//// le temps écoulé depuis le dernier frame en secondes
-	//time_elapsed = time_current - time_last;
-
-	//// le temps courant sera le temps précédent du prochain frame
-	//time_last = time_current;
-
-	//// trace des données temporelles dans la console
-	//ofLog() << std::setprecision(2) << "<frame: " << ofGetFrameNum() << " time current: " << time_current << " time elapsed: " << time_elapsed << " fps: " << 1.0 / time_elapsed << ">";
 	this->updateRenderer();
 }
 
 // fonction de rendu
 void RendererBase::draw() {
-	// couleur d'arrière-plan en niveau de gris en fonction du numéro de frame courant.
-	//ofClear(ofGetFrameNum() % 255);
-	// afficher l'image sur toute la surface de la fenêtre d'affichage
-	//image.draw(0, 0, image.getWidth(), image.getHeight());
 	ofDisableDepthTest();
 	ofNoFill();
 	ofSetColor(ofColor::limit());
+	ofSetLineWidth(1);
 
 	if (needsRedraw) {
 		generateDraw();
