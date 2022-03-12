@@ -12,7 +12,7 @@ public:
 	float time_last;
 	float time_elapsed;
 
-	void setup();
+	void setup(const std::string& name);
 	void update();
 	void draw();
 
@@ -24,6 +24,8 @@ public:
 	const ofVec3f centerScreen = ofVec3f(ofGetWidth()/2.0f, ofGetHeight()/2.0f, 0.0f);
 
 protected:
+	virtual void setupRenderer(const std::string& name) = 0;
+	virtual void updateRenderer() = 0;
 	virtual void generateDraw() = 0;
 	virtual void render() = 0;
 	bool needsRedraw;

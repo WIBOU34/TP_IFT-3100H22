@@ -1,6 +1,6 @@
 #include "sphereRenderer.h"
 
-void SphereRenderer::setup(const std::string& name) {
+void SphereRenderer::setupRenderer(const std::string& name) {
 	sphereParameters.clear();
 	sphereParameters.setName(name);
 	radiusSphereSlider.set("Rayon de la sphere", 10.0f, 1.0f, 300.0f);
@@ -10,25 +10,23 @@ void SphereRenderer::setup(const std::string& name) {
 	sphereParameters.add(radiusSphereSlider, xSphereSlider, ySphereSlider, zSphereSlider);
 }
 
-void SphereRenderer::updateCustom()
-{
+void SphereRenderer::updateRenderer() {
 	sphere1.setRadius(radiusSphereSlider);
 	sphere2.setRadius(radiusSphereSlider);
 }
 
-void SphereRenderer::createSphere()
-{
+void SphereRenderer::createSphere() {
 
 	sphere1.set(radiusSphereSlider, 25);
 	sphere2.set(radiusSphereSlider, 25);
 }
 
-void SphereRenderer::generateDraw()
-{
+void SphereRenderer::generateDraw() {
 }
 
-void SphereRenderer::render()
-{
+void SphereRenderer::render() {
+	ofEnableDepthTest();
 	ofSphere(ofVec3f(xSphereSlider, ySphereSlider, zSphereSlider), sphere1.getRadius());
 	ofSphere(centerScreen, sphere2.getRadius());
+	ofDisableDepthTest();
 }

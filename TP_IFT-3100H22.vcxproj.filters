@@ -82,6 +82,9 @@
     <ClCompile Include="src\objects3D\objects3DRenderer.cpp">
       <Filter>src\objects3D</Filter>
     </ClCompile>
+    <ClCompile Include="src\camera\cameraRenderer.cpp">
+      <Filter>src\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -176,6 +179,9 @@
     </Filter>
     <Filter Include="src\objects3D">
       <UniqueIdentifier>{97180c7b-add9-465d-a253-4ab0043d91b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\camera">
+      <UniqueIdentifier>{cbdbee0c-d8cd-485b-b75a-803bf8ddecc3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -539,6 +545,9 @@
     </ClInclude>
     <ClInclude Include="src\objects3D\objects3DRenderer.h">
       <Filter>src\objects3D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\cameraRenderer.h">
+      <Filter>src\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

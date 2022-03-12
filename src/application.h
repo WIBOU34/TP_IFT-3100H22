@@ -10,6 +10,7 @@
 #include "dessin/dessinRenderer.h"
 #include "sphere/sphereRenderer.h"
 #include "objects3D/objects3DRenderer.h"
+#include "camera/cameraRenderer.h"
 #include "ofxGui.h"
 
 class Application : public ofBaseApp {
@@ -19,12 +20,16 @@ public:
 	CurseurRenderer curseurRenderer;
 	SphereRenderer sphereRenderer;
 	DessinRenderer dessinRenderer;
+	CameraRenderer cameraRenderer;
+	shared_ptr<ofAppBaseWindow> mainWindow;
 	Objects3DRenderer objects3DRenderer;
 
 	void setup();
+	void setupGui(const shared_ptr<ofAppBaseWindow>& window);
 	void update();
 	void updateGui();
 	void draw();
+	void drawCamera();
 	void exit();
 
 	void keyPressed(int key);
@@ -59,4 +64,15 @@ public:
 
 	// Pour dessiner des lignes
 	//ofPolyline polyline;
+
+private:
+	void createNewWindow(const Camera& type);
+	void drawFront(ofEventArgs& args);
+	void drawBack(ofEventArgs& args);
+	void drawLeft(ofEventArgs& args);
+	void drawRight(ofEventArgs& args);
+	void drawTop(ofEventArgs& args);
+	void drawDown(ofEventArgs& args);
+	void drawCamera(const Camera& camera);
+	//void clearWindows(ofEventArgs& args);
 };

@@ -2,8 +2,7 @@
 #include "of3dGraphics.h"
 
 
-void Objects3DRenderer::setup(const std::string& name)
-{
+void Objects3DRenderer::setupRenderer(const std::string& name) {
 	parameters3D.clear();
 	parameters3D.setName(name);
 
@@ -33,12 +32,10 @@ void Objects3DRenderer::setup(const std::string& name)
 	graphics.enableDraw();
 }
 
-void Objects3DRenderer::updateCustom()
-{
+void Objects3DRenderer::updateRenderer() {
 }
 
-void Objects3DRenderer::cube(float x, float y, float z, float width, float height, float length)
-{
+void Objects3DRenderer::cube(float x, float y, float z, float width, float height, float length) {
 	lstObjs.push_back(createCube(x, y, z, width, height, length));
 
 	VectorObj* obj = &lstObjs.back();
@@ -55,8 +52,7 @@ void Objects3DRenderer::cube(float x, float y, float z, float width, float heigh
 
 }
 
-void Objects3DRenderer::sphere(float x, float y, float z, float r)
-{
+void Objects3DRenderer::sphere(float x, float y, float z, float r) {
 	lstObjs.push_back(createSphere(x, y, z, r));
 
 	VectorObj* obj = &lstObjs.back();
@@ -71,61 +67,59 @@ void Objects3DRenderer::sphere(float x, float y, float z, float r)
 	lstObjSettings.push_back(objTemporaire);
 }
 
-void Objects3DRenderer::selectObject()
-{
+void Objects3DRenderer::selectObject() {
 }
 
-void Objects3DRenderer::generateDraw()
-{
+void Objects3DRenderer::generateDraw() {
 }
 
-void Objects3DRenderer::render()
-{
+void Objects3DRenderer::render() {
+	ofEnableDepthTest();
 	//ofLog() << "<objects3DRenderer::render>";
 	for (const ObjectBase3D<VectorObjSettings>& obj : lstObjSettings) {
 		this->drawObjects(obj);
 	}
+	ofDisableDepthTest();
 }
 
 // ======================== Méthodes privées ========================
 
-void Objects3DRenderer::drawObjects(const ObjectBase3D<VectorObjSettings>& objSet)
-{
+void Objects3DRenderer::drawObjects(const ObjectBase3D<VectorObjSettings>& objSet) {
 	for (const VectorObj* obj : objSet.getObject().object3D) {
 		switch (obj->type) {
-		case VectorObject3DType::sphere:
-			//graphics.noFill();
-			ofSetColor(obj->fillColor);
-			ofSphere(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->radius);
-			break;
+			case VectorObject3DType::sphere:
+				//graphics.noFill();
+				ofSetColor(obj->fillColor);
+				ofSphere(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->radius);
+				break;
 
-		case VectorObject3DType::cube:
-			//graphics.fill();
-			//graphics.setLineWidth(0);
-			ofSetColor(obj->fillColor);
-			//graphics.changeColor(primitive->fillColor.r, primitive->fillColor.g, primitive->fillColor.b);
-			ofDrawBox(obj->posStart, obj->width, obj->height, obj->length);
-			ofLog() << "<objects3DRenderer::cube drawn>";
-			break;
+			case VectorObject3DType::cube:
+				//graphics.fill();
+				//graphics.setLineWidth(0);
+				ofSetColor(obj->fillColor);
+				//graphics.changeColor(primitive->fillColor.r, primitive->fillColor.g, primitive->fillColor.b);
+				ofDrawBox(obj->posStart, obj->width, obj->height, obj->length);
+				//ofLog() << "<objects3DRenderer::cube drawn>";
+				break;
 
-		case VectorObject3DType::cone:
-			graphics.fill();
-			graphics.setLineWidth(0);
-			ofSetColor(obj->fillColor);
-			//graphics.changeColor(primitive->fillColor.r, primitive->fillColor.g, primitive->fillColor.b);
-			ofDrawCone(obj->posStart, obj->radius, obj->height);
-			break;
+			case VectorObject3DType::cone:
+				graphics.fill();
+				graphics.setLineWidth(0);
+				ofSetColor(obj->fillColor);
+				//graphics.changeColor(primitive->fillColor.r, primitive->fillColor.g, primitive->fillColor.b);
+				ofDrawCone(obj->posStart, obj->radius, obj->height);
+				break;
 
-		case VectorObject3DType::cylinder:
-			graphics.fill();
-			graphics.setLineWidth(0);
-			ofSetColor(obj->fillColor);
-			//graphics.changeColor(primitive->fillColor.r, primitive->fillColor.g, primitive->fillColor.b);
-			ofDrawCylinder(obj->posStart, obj->radius, obj->height);
-			break;
+			case VectorObject3DType::cylinder:
+				graphics.fill();
+				graphics.setLineWidth(0);
+				ofSetColor(obj->fillColor);
+				//graphics.changeColor(primitive->fillColor.r, primitive->fillColor.g, primitive->fillColor.b);
+				ofDrawCylinder(obj->posStart, obj->radius, obj->height);
+				break;
 
-		default:
-			break;
+			default:
+				break;
 		}
 	}
 }
@@ -137,8 +131,7 @@ VectorObj Objects3DRenderer::createNewObj() {
 	return obj;
 }
 
-VectorObj Objects3DRenderer::createCube(float x, float y, float z, float width, float height, float length)
-{
+VectorObj Objects3DRenderer::createCube(float x, float y, float z, float width, float height, float length) {
 	VectorObj obj = createNewObj();
 	obj.type = VectorObject3DType::cube;
 	this->updateCube(obj, x, y, z, width, height, length);
@@ -146,70 +139,61 @@ VectorObj Objects3DRenderer::createCube(float x, float y, float z, float width, 
 	return obj;
 }
 
-void Objects3DRenderer::updateCube(VectorObj& obj, float x, float y, float z, float width, float height, float length)
-{
+void Objects3DRenderer::updateCube(VectorObj& obj, float x, float y, float z, float width, float height, float length) {
 	obj.posStart.set(x, y, z);
 	obj.width = width;
 	obj.height = height;
 	obj.length = length;
 }
 
-VectorObj Objects3DRenderer::createSphere(float x = 0.0f, float y = 0.0f, float z = 0.0f, float r = 10.0f)
-{
+VectorObj Objects3DRenderer::createSphere(float x = 0.0f, float y = 0.0f, float z = 0.0f, float r = 10.0f) {
 	VectorObj obj = createNewObj();
 	obj.type = VectorObject3DType::sphere;
 	this->updateSphere(obj, x, y, z, r);
 	return obj;
 }
 
-void Objects3DRenderer::updateSphere(VectorObj& obj, float x, float y, float z, float r)
-{
+void Objects3DRenderer::updateSphere(VectorObj& obj, float x, float y, float z, float r) {
 	obj.posStart.set(x, y, z);
 	obj.width = obj.height = obj.length = r;
 	obj.radius = r;
 }
 
-VectorObj Objects3DRenderer::createCone(float x, float y, float z, float r, float height)
-{
+VectorObj Objects3DRenderer::createCone(float x, float y, float z, float r, float height) {
 	VectorObj obj = createNewObj();
 	obj.type = VectorObject3DType::cone;
 	this->updateCone(obj, x, y, z, r, height);
 	return obj;
 }
 
-void Objects3DRenderer::updateCone(VectorObj& obj, float x, float y, float z, float r, float height)
-{
+void Objects3DRenderer::updateCone(VectorObj& obj, float x, float y, float z, float r, float height) {
 	obj.posStart.set(x, y, z);
 	obj.width = obj.length = r;
 	obj.radius = r;
 	obj.height = height;
 }
 
-VectorObj Objects3DRenderer::createCylinder(float x, float y, float z, float r, float height)
-{
+VectorObj Objects3DRenderer::createCylinder(float x, float y, float z, float r, float height) {
 	VectorObj obj = createNewObj();
 	obj.type = VectorObject3DType::cylinder;
 	this->updateCone(obj, x, y, z, r, height);
 	return obj;
 }
 
-void Objects3DRenderer::updateCylinder(VectorObj& obj, float x, float y, float z, float r, float height)
-{
+void Objects3DRenderer::updateCylinder(VectorObj& obj, float x, float y, float z, float r, float height) {
 	obj.posStart.set(x, y, z);
 	obj.width = obj.length = r;
 	obj.radius = r;
 	obj.height = height;
 }
 
-VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float width, float height, float length)
-{
+VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float width, float height, float length) {
 	VectorOutline outline;
 	this->updateOutline(outline, x, y, z, width, height, length);
 	return outline;
 }
 
-VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float r, float length)
-{
+VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float r, float length) {
 	VectorOutline outline;
 	float width = r;
 	float height = r;
@@ -217,8 +201,7 @@ VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float 
 	return outline;
 }
 
-VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float r)
-{
+VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float r) {
 	VectorOutline outline;
 	float width = r;
 	float height = r;
@@ -227,8 +210,7 @@ VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float 
 	return outline;
 }
 
-void Objects3DRenderer::updateOutline(VectorOutline& outline, float x, float y, float z, float width, float height, float length)
-{
+void Objects3DRenderer::updateOutline(VectorOutline& outline, float x, float y, float z, float width, float height, float length) {
 	outline.posStart.set(x, y, z);
 	outline.width = width;
 	outline.height = height;
@@ -236,27 +218,23 @@ void Objects3DRenderer::updateOutline(VectorOutline& outline, float x, float y, 
 }
 
 // Crée un cube de base en 0,0
-void Objects3DRenderer::buttonCubePressed()
-{
+void Objects3DRenderer::buttonCubePressed() {
 	ofLog() << "<objects3DRenderer::buttonCubePressed>";
 	cube(centerScreen[0], centerScreen[1], centerScreen[2], 40.0f, 40.0f, 40.0f);
 }
 
 // Crée une sphere de base en 0,0
-void Objects3DRenderer::buttonSpherePressed()
-{
+void Objects3DRenderer::buttonSpherePressed() {
 	createSphere(centerScreen[0], centerScreen[1], centerScreen[2], 10);
 }
 
 // Crée un cone de base en 0,0
-void Objects3DRenderer::buttonConePressed()
-{
+void Objects3DRenderer::buttonConePressed() {
 	createCone(centerScreen[0], centerScreen[1], centerScreen[2], 10, 10);
 }
 
 // Crée un cylindre de base en 0,0
-void Objects3DRenderer::buttonCylinderPressed()
-{
+void Objects3DRenderer::buttonCylinderPressed() {
 	createCylinder(centerScreen[0], centerScreen[1], centerScreen[2], 10, 10);
 }
 

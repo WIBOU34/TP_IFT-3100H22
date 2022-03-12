@@ -15,9 +15,6 @@ public:
 	ObjectBase3D<VectorObjSettings> objTemporaire;
 	ObjectBase3D<VectorObjSettings>* selectedObj;
 
-	void setup(const std::string& name);
-	void updateCustom();
-
 	ofxGuiGroup parameters3D;
 	ofParameter<ofColor> fillColor;
 	ofxButton bDrawCube;
@@ -44,6 +41,8 @@ public:
 	void selectObject();
 
 protected:
+	void setupRenderer(const std::string& name);
+	void updateRenderer();
 	void generateDraw();
 	void render();
 private:
