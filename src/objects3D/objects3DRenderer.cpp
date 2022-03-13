@@ -6,10 +6,12 @@ void Objects3DRenderer::setupRenderer(const std::string& name) {
 	parameters3D.clear();
 	parameters3D.setName(name);
 
+	importObjButton.addListener(this, &Objects3DRenderer::buttonImportObjPressed);
 	bDrawCube.addListener(this, &Objects3DRenderer::buttonCubePressed);
 	bDrawSphere.addListener(this, &Objects3DRenderer::buttonSpherePressed);
 	bDrawCone.addListener(this, &Objects3DRenderer::buttonConePressed);
 	bDrawCylinder.addListener(this, &Objects3DRenderer::buttonCylinderPressed);
+	parameters3D.add(importObjButton.setup("Importer un objet 3D"));
 	parameters3D.add(bDrawCube.setup("Ajouter un cube"));
 	parameters3D.add(bDrawSphere.setup("Ajouter une sphere"));
 	parameters3D.add(bDrawCone.setup("Ajouter un cone"));
@@ -35,6 +37,28 @@ void Objects3DRenderer::setupRenderer(const std::string& name) {
 
 void Objects3DRenderer::updateRenderer() {
 
+}
+
+void Objects3DRenderer::buttonImportObjPressed()
+{
+	ofFileDialogResult dialogResult = ofSystemLoadDialog("Importer un objet");
+	if (dialogResult.bSuccess) {
+		ofLog() << "<objects3DRenderer::import: importing file>";
+		importObj(dialogResult.getPath(), 0, 0);
+	}
+	else {
+		ofLog() << "<objects3DRenderer::import: ABORTED>";
+	}
+}
+
+void Objects3DRenderer::importObj(const std::string& path, const int& x, const int& y) {
+	ofxAssimpModelLoader model;
+	if (!model.loadModel(path, false)) {
+		ofLogError() << "<objects3DRenderer::import: unable to load object: '" << path << "'>";
+		return;
+	}
+	model.setPosition(0, 0, 0);
+	listobjImport.push_back(model);
 }
 
 // ==========================================================
@@ -293,7 +317,7 @@ void Objects3DRenderer::buttonSpherePressed() {
 
 // Crée un cone de base en 0,0
 void Objects3DRenderer::buttonConePressed() {
-	cone(origin.x, origin.y, origin.z, 10, -10);
+	cone(origin.x, origin.y, origin.z, 10, 10);
 }
 
 // Crée un cylindre de base en 0,0
