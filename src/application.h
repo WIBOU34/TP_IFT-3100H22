@@ -27,7 +27,6 @@ public:
 	void setup();
 	void setupGui(const shared_ptr<ofAppBaseWindow>& window);
 	void update();
-	void updateGui();
 	void draw();
 	void drawCamera();
 	void exit();
@@ -57,9 +56,7 @@ public:
 	ofParameter<bool> bSelection;
 	ofParameter<bool> bShowCursor;
 	ofxLabel screenSize;
-	//ofParameter<string> screenSize;
 	ofxLabel mousePosition;
-	//ofParameter<string> mousePosition;
 	ofParameterGroup parameters;
 
 	ofxPanel gui;
@@ -76,5 +73,4 @@ private:
 	void drawTop(ofEventArgs& args);
 	void drawDown(ofEventArgs& args);
 	void drawCamera(const Camera& camera);
-	//void clearWindows(ofEventArgs& args);
 };

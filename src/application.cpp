@@ -71,13 +71,6 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	bHide = false;
 }
 
-void Application::updateGui() {
-	// =========== Méthode modifiée ===========
-	// ajout de "ownedCollection.clear();" dans ofxGuiGroup.cpp ligne 215
-	// pour corriger une fuite de mémoire
-	//gui.clear();
-}
-
 // fonction de mise à jour de la logique de l'application
 void Application::update() {
 	imageRenderer.update();
