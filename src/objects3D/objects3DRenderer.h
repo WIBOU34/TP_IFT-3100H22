@@ -3,6 +3,7 @@
 #include "../renderer.h"
 #include "../objectBase3D.h"
 #include "ofxVectorGraphics.h"
+#include "ofxAssimpModelLoader.h"
 //#include <list>
 #include <vector>
 #include "ofMath.h"
@@ -12,7 +13,7 @@
 class Objects3DRenderer : public RendererBase {
 public:
 	std::list<ObjectBase3D<VectorObjSettings>> lstObjSettings;
-	ObjectBase3D<VectorObjSettings> objTemporaire;
+	//ObjectBase3D<VectorObjSettings> objTemporaire;
 	ObjectBase3D<VectorObjSettings>* selectedObj;
 
 	ofxGuiGroup parameters3D;
@@ -68,9 +69,9 @@ private:
 	void updateCone(VectorObj& obj, float x, float y, float z, float r, float height);
 	VectorObj createCylinder(float x, float y, float z, float r, float height);
 	void updateCylinder(VectorObj& obj, float x, float y, float z, float r, float height);
-	VectorOutline createOutline(float x, float y, float z, float width, float height, float length);
-	VectorOutline createOutline(float x, float y, float z, float r, float height);
-	VectorOutline createOutline(float x, float y, float z, float r);
+	//VectorOutline createOutline(float x, float y, float z, float width, float height, float length);
+	//VectorOutline createOutline(float x, float y, float z, float r, float height);
+	//VectorOutline createOutline(float x, float y, float z, float r);
 	void updateOutline(VectorOutline& outline, float x, float y, float z, float width, float height, float length);
 
 	void buttonCubePressed();

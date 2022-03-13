@@ -26,15 +26,15 @@ struct VectorOutline {
 	float		height;						// 1 * 4 =  4  octets	y
 	float		length;						// 1 * 4 =  4  octets	z
 	float		radius = 0.0f;				// 1 * 4 =  4  octets	r
-	ofVec3f		fillColor = ofVec3f(255);	// 3 * 4 = 12  octets	white
+	ofColor		fillColor = ofColor::lightSkyBlue;	// 3 * 4 = 12  octets	white
 };											//       = 40  octets
 
 // structure d'un objet et son mode de rendu
 struct VectorObjSettings {
-	MeshRenderMode renderMode;					// 1 * 1 =  1 octet
-	std::vector<VectorObj*> object3D;			//		 = 36 octets
-	std::vector<VectorOutline> outline;//		 = 40 octets
-};												//		 = 77 octets
+	MeshRenderMode renderMode;				// 1 * 1 =  1 octet
+	VectorObj* object3D;					//		 = 36 octets
+	VectorOutline outline;					//		 = 40 octets
+};											//		 = 77 octets
 
 class Point3D {
 public:
@@ -52,7 +52,7 @@ public:
 	Coords3D(const int& x, const int& y, const int& z, const int& width, const int& height, const int& length);
 	Coords3D(const Point3D& start, const int& width, const int& height, const int& length);
 
-//private:
+	//private:
 	Point3D start;
 	int width;
 	int height;
@@ -120,7 +120,7 @@ inline void ObjectBase3D<T>::createObject(const Coords3D& coords, const T& objec
 }
 
 template<typename T>
-inline bool ObjectBase3D<T>::isPointInObject(const int& x, const int& y, const int&z) const {
+inline bool ObjectBase3D<T>::isPointInObject(const int& x, const int& y, const int& z) const {
 	const Coords3D coords = this->getCoords();
 	return coords.origine.x <= x && coords.origine.y <= y && coords.origine.z <= z
 		&& coords.width + coords.origine.x >= x
