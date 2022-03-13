@@ -164,11 +164,11 @@ void CameraRenderer::reset() {
 }
 
 void CameraRenderer::updateRenderer() {
-	if (!this->needsRedraw
-		&& (is_key_press_left || is_key_press_up || is_key_press_right || is_key_press_down
-			|| is_key_press_ctrl || is_key_press_shift || is_key_press_space)) {
-		this->needsRedraw = true;
-	}
+	//if (!this->needsRedraw
+	//	&& (is_key_press_left || is_key_press_up || is_key_press_right || is_key_press_down
+	//		|| is_key_press_ctrl || is_key_press_shift || is_key_press_space)) {
+	//	this->needsRedraw = true;
+	//}
 	// fleches seulement
 	is_camera_move_left = !is_key_press_ctrl && is_key_press_left;
 	is_camera_move_right = !is_key_press_ctrl && is_key_press_right;

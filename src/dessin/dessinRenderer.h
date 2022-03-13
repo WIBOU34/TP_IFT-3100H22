@@ -102,6 +102,7 @@ private:
 
 	bool isPointOnLine(const ofVec2f& start, const ofVec2f& end, const ofVec2f& find) const;
 	bool isPointOnEllipse(const ofVec2f& center, const ofVec2f& radiusXY, const ofVec2f& find) const;
+	bool isPointInRectangle(const ofVec2f& start, const ofVec2f& end, const ofVec2f& find) const;
 
 
 	void deleteSelected();
