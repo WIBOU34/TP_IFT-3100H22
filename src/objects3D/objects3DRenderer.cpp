@@ -6,10 +6,12 @@ void Objects3DRenderer::setupRenderer(const std::string& name) {
 	parameters3D.clear();
 	parameters3D.setName(name);
 
+	importObjButton.addListener(this, &Objects3DRenderer::buttonImportObjPressed);
 	bDrawCube.addListener(this, &Objects3DRenderer::buttonCubePressed);
 	bDrawSphere.addListener(this, &Objects3DRenderer::buttonSpherePressed);
 	bDrawCone.addListener(this, &Objects3DRenderer::buttonConePressed);
 	bDrawCylinder.addListener(this, &Objects3DRenderer::buttonCylinderPressed);
+	parameters3D.add(importObjButton.setup("Importer un objet 3D"));
 	parameters3D.add(bDrawCube.setup("Ajouter un cube"));
 	parameters3D.add(bDrawSphere.setup("Ajouter une sphere"));
 	parameters3D.add(bDrawCone.setup("Ajouter un cone"));
@@ -35,6 +37,31 @@ void Objects3DRenderer::setupRenderer(const std::string& name) {
 
 void Objects3DRenderer::updateRenderer() {
 
+}
+
+void Objects3DRenderer::buttonImportObjPressed()
+{
+	ofFileDialogResult dialogResult = ofSystemLoadDialog("Importer un objet");
+	if (dialogResult.bSuccess) {
+		ofLog() << "<objects3DRenderer::import: importing file>";
+		importObj(dialogResult.getPath(), 0, 0);
+	}
+	else {
+		ofLog() << "<objects3DRenderer::import: ABORTED>";
+	}
+}
+
+void Objects3DRenderer::importObj(const std::string& path, const int& x, const int& y) {
+	ofxAssimpModelLoader tempModel;
+
+	if (!tempModel.loadModel(path, false)) {
+		ofLogError() << "<objects3DRenderer::import: unable to load object: '" << path << "'>";
+		return;
+	}
+	tempModel.setPosition(0, 0, 0);
+	listobjImport.push_back(tempModel);
+	//lstImages.push_back(ObjectBase2D<ofImage>(x, y, x + widthToUse, y + heightToUse, tempObj, ((boost::filesystem::path)path).filename().string()));
+	//drawImage();
 }
 
 // ==========================================================
@@ -71,7 +98,8 @@ void Objects3DRenderer::sphere(float x, float y, float z, float r) {
 	lstObjSettings.push_back(objTemporaire);
 }
 
-void Objects3DRenderer::cone(float x, float y, float z, float r, float height) {
+void Objects3DRenderer::cone(float x, float y, float z, float r, float heightPositive) {
+	const float height = - heightPositive;
 	lstObjs.push_back(createCone(x, y, z, r, height));
 
 	VectorObj* obj = &lstObjs.back();
@@ -103,6 +131,7 @@ void Objects3DRenderer::cylinder(float x, float y, float z, float r, float heigh
 // =======================================================
 
 void Objects3DRenderer::selectObject() {
+
 }
 
 void Objects3DRenderer::generateDraw() {

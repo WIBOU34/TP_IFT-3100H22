@@ -7,6 +7,7 @@
 #include <vector>
 #include "ofMath.h"
 #include "ofxGui.h"
+#include "ofxAssimpModelLoader.h"
 
 
 class Objects3DRenderer : public RendererBase {
@@ -14,6 +15,13 @@ public:
 	std::list<ObjectBase3D<VectorObjSettings>> lstObjSettings;
 	ObjectBase3D<VectorObjSettings> objTemporaire;
 	ObjectBase3D<VectorObjSettings>* selectedObj;
+
+	// import 3D model
+	ofxAssimpModelLoader tempObj;
+	std::list<ofxAssimpModelLoader> listobjImport;
+	ofxButton importObjButton;
+	void importObj(const std::string& path, const int& x, const int& y);
+	void buttonImportObjPressed();
 
 	ofxGuiGroup parameters3D;
 	ofParameter<ofColor> fillColor;
