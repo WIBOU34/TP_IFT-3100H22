@@ -1,5 +1,4 @@
 #pragma once
-//#include "renderer.h"
 #include <utility>
 #include <string>
 #include "ofColor.h"
@@ -49,15 +48,6 @@ struct VectorForme {
 	}
 };
 
-//struct VectorPrimitive {
-//	VectorPrimitiveType type;				// 1 * 4 = 4  octets
-//	std::list<ofVec2f>	positions;			// 2 * 4 = 8  octets
-//	//ofVec2f				posEnd;				// 2 * 4 = 8  octets
-//	float				strokeWidth;		// 1 * 4 = 4  octets
-//	ofColor				strokeColor;		// 4 * 1 = 4  octets
-//	ofColor				fillColor;			// 4 * 1 = 4  octets
-//};											//       = 32 octets
-
 class Point2D {
 public:
 	Point2D();
@@ -79,31 +69,6 @@ public:
 		return coords.origine == this->origine && coords.end == this->end;
 	}
 };
-//class Point3D {
-//public:
-//	Point3D();
-//	Point3D(const int& x, const int& y, const int& z);
-//	int x;
-//	int y;
-//	int z;
-//};
-
-//class Coords3D {
-//public:
-//	//Coords3D() = default;
-//	Coords3D(const int& x, const int& y, const int& width, const int& height, const int& length);
-//	Coords3D(const Point3D& origine, const int& width, const int& height, const int& length);
-//	Coords3D& operator=(const Coords3D& coords) const;
-//	//int getX();
-//	//int getY();
-//	//int getWidth();
-//	//int getHeight();
-////private:
-//	Point2D origine;
-//	int width;
-//	int height;
-//	int length; // pour 3D (valeur z)
-//};
 
 template<typename T>
 class ObjectBase2D {
@@ -124,11 +89,11 @@ public:
 			return false;
 		}
 		return objetBase2D.objet2D == this->objet2D;
+
 	}
 private:
 	std::pair<Coords2D, T> objet2D;
 	std::string name;
-	//ObjectBase2D() = default;
 };
 
 //méthodes doivent être inline sinon ça ne compile pas :(
@@ -178,18 +143,10 @@ template<typename T>
 // Vérifie seulement la zone rectangulaire formée par les points dans Coords2D
 inline bool ObjectBase2D<T>::isPointInObject(const int& x, const int& y) const {
 	const Coords2D coords = this->getCoords();
-	return coords.origine.x <= x && coords.origine.y <= y
-		&& coords.end.x >= x && coords.end.y >= y;
+	const float width = coords.end.x - coords.origine.x;
+	const float height = coords.end.y - coords.origine.y;
+	ofRectangle rectangle;
+	rectangle.set(coords.origine.x, coords.origine.y, width, height);
+	return rectangle.inside(x, y);
 }
-//template<class T>
-//class ObjectBase3D {
-//public:
-//	T getObject() const;
-//	Coords3D getCoords() const;
-//	void createObject(const int& x, const int& y, const int& width, const int& height, const int& length, const T& object);
-//	void createObject(const Coords3D& coords, const T& object);
-//private:
-//	std::pair<Coords3D, T> objet3D;
-//	ObjectBase3D() = default;
-//};
 

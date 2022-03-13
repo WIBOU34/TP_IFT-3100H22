@@ -16,7 +16,7 @@ void DessinRenderer::setupRenderer(const std::string& name) {
 	parameters.add(strokeColor.set("Stroke color", ofColor::black));
 	parameters.add(fillColor.set("Fill color", ofColor::red));
 
-	parameters.add(btnDeleteSelected.setup("Supprimer forme sélectionnée", false)->getParameter());
+	parameters.add(btnDeleteSelected.setup("Supprimer forme selectionnee", false)->getParameter());
 	parameters.add(idSelected.set("ID", NO_ITEM_SELECTED));
 	parameters.add(strokeColorSelected.set("Stroke color selected", strokeColor.get()));
 	parameters.add(fillColorSelected.set("Fill color selected", fillColor.get()));

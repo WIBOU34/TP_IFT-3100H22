@@ -347,8 +347,6 @@ void Application::drawCamera(const Camera& camera) {
 	const Camera old = cameraRenderer.camera_active;
 	cameraRenderer.camera_active = camera;
 	cameraRenderer.setupCamera();
-	//cameraRenderer.update();
-	//sphereRenderer.update();
 	this->drawCamera();
 	cameraRenderer.camera_active = old;
 	cameraRenderer.setupCamera();
