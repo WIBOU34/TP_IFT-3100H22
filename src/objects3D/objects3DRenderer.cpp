@@ -220,21 +220,21 @@ void Objects3DRenderer::updateOutline(VectorOutline& outline, float x, float y, 
 // Crée un cube de base en 0,0
 void Objects3DRenderer::buttonCubePressed() {
 	ofLog() << "<objects3DRenderer::buttonCubePressed>";
-	cube(centerScreen[0], centerScreen[1], centerScreen[2], 40.0f, 40.0f, 40.0f);
+	cube(origin.x, origin.y, origin.z, 40.0f, 40.0f, 40.0f);
 }
 
 // Crée une sphere de base en 0,0
 void Objects3DRenderer::buttonSpherePressed() {
-	createSphere(centerScreen[0], centerScreen[1], centerScreen[2], 10);
+	createSphere(origin.x, origin.y, origin.z, 10);
 }
 
 // Crée un cone de base en 0,0
 void Objects3DRenderer::buttonConePressed() {
-	createCone(centerScreen[0], centerScreen[1], centerScreen[2], 10, 10);
+	createCone(origin.x, origin.y, origin.z, 10, 10);
 }
 
 // Crée un cylindre de base en 0,0
 void Objects3DRenderer::buttonCylinderPressed() {
-	createCylinder(centerScreen[0], centerScreen[1], centerScreen[2], 10, 10);
+	createCylinder(origin.x, origin.y, origin.z, 10, 10);
 }
 

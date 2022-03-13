@@ -231,17 +231,7 @@ void CameraRenderer::updateRenderer() {
 
 	speed_translation = speed_delta * time_elapsed;
 	speed_rotation = speed_translation / 8.0f;
-}
 
-void CameraRenderer::generateDraw() {
-	time_current = ofGetElapsedTimef();
-	time_elapsed = time_current - time_last;
-	time_last = time_current;
-
-	if (speed_translation != 0 && time_elapsed > 0.0001) {
-		speed_translation = speed_delta * time_elapsed;
-		speed_rotation = speed_translation / 8.0f;
-	}
 	for (ofCamera* camera : vecCamera) {
 		if (is_camera_move_left)
 			camera->truck(-speed_translation);
@@ -273,6 +263,18 @@ void CameraRenderer::generateDraw() {
 		if (is_camera_roll_right)
 			camera->rollDeg(speed_rotation);
 	}
+}
+
+void CameraRenderer::generateDraw() {
+	//time_current = ofGetElapsedTimef();
+	//time_elapsed = time_current - time_last;
+	//time_last = time_current;
+
+	//if (speed_translation != 0 && time_elapsed > 0.0001) {
+	//	speed_translation = speed_delta * time_elapsed;
+	//	speed_rotation = speed_translation / 8.0f;
+	//}
+	
 }
 
 void CameraRenderer::render() {

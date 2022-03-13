@@ -4,9 +4,9 @@ void SphereRenderer::setupRenderer(const std::string& name) {
 	sphereParameters.clear();
 	sphereParameters.setName(name);
 	radiusSphereSlider.set("Rayon de la sphere", 10.0f, 1.0f, 300.0f);
-	xSphereSlider.set("Position X de la sphere", 500.0f, 0.0f, 1100.0f);
-	ySphereSlider.set("Position Y de la sphere", 500.0f, 0.0f, 1100.0f);
-	zSphereSlider.set("Position Z de la sphere", 10.0f, 0.0f, 100.0f);
+	xSphereSlider.set("Position X de la sphere", 50.0f, 0.0f, 110.0f);
+	ySphereSlider.set("Position Y de la sphere", 50.0f, 0.0f, 110.0f);
+	zSphereSlider.set("Position Z de la sphere", 10.0f, 0.0f, 10.0f);
 	sphereParameters.add(radiusSphereSlider, xSphereSlider, ySphereSlider, zSphereSlider);
 }
 
@@ -27,6 +27,6 @@ void SphereRenderer::generateDraw() {
 void SphereRenderer::render() {
 	ofEnableDepthTest();
 	ofSphere(ofVec3f(xSphereSlider, ySphereSlider, zSphereSlider), sphere1.getRadius());
-	ofSphere(centerScreen, sphere2.getRadius());
+	ofSphere(origin, sphere2.getRadius());
 	ofDisableDepthTest();
 }

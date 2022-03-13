@@ -13,6 +13,7 @@ void Application::setup() {
 	sphereRenderer.setup("Sphere");
 	sphereRenderer.createSphere();
 	dessinRenderer.setup("Dessin");
+	objects3DRenderer.setup("Objets 3D");
 	cameraRenderer.setup("Camera - Frustum de vision");
 	// initialise les éléments et les enlèves pour avoir des objets vide pour la caméra
 	createNewWindow(Camera::front);
@@ -24,8 +25,6 @@ void Application::setup() {
 	for (auto& window : cameraRenderer.vecWindow) {
 		window->setWindowShouldClose();
 	}
-
-	objects3DRenderer.setup("Objets 3D");
 	ofLog() << "<app::GUISetup>";
 	ofSetVerticalSync(true);
 
