@@ -56,8 +56,10 @@ public:
 	ofxButton* btnImportImgSetup;
 	ofParameter<bool> bSelection;
 	ofParameter<bool> bShowCursor;
-	ofParameter<string> screenSize;
-	ofParameter<string> mousePosition;
+	ofxLabel screenSize;
+	//ofParameter<string> screenSize;
+	ofxLabel mousePosition;
+	//ofParameter<string> mousePosition;
 	ofParameterGroup parameters;
 
 	ofxPanel gui;

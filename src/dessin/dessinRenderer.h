@@ -26,6 +26,7 @@ public:
 	ofxButton btnDrawEllipse;
 	ofxButton btnDrawLine;
 	ofxButton btnDrawTriangle;
+	ofxButton btnStopDrawing;
 	ofxButton btnDeleteSelected;
 	bool bDrawPoint;
 	bool bDrawSquare;
@@ -41,7 +42,7 @@ public:
 	ofParameter<ofColor> strokeColorSelected;
 	ofParameter<ofColor> fillColorSelected;
 
-	ofEventListener listenerDelete;
+	//ofEventListener listenerDelete;
 
 	void point(float x, float y);
 	void square(float x1, float y1, float x2, float y2);

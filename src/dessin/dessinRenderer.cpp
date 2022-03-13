@@ -11,6 +11,7 @@ void DessinRenderer::setupRenderer(const std::string& name) {
 	parameters.add(btnDrawCircle.setup(DRAW_CIRCLE_NAME, false)->getParameter());
 	parameters.add(btnDrawEllipse.setup(DRAW_ELLIPSE_NAME, false)->getParameter());
 	parameters.add(btnDrawLine.setup(DRAW_LINE_NAME, false)->getParameter());
+	parameters.add(btnStopDrawing.setup("Arreter dessin", false)->getParameter());
 
 	parameters.add(strokeWidth.set("Stroke width", 1, 1, 20));
 	parameters.add(strokeColor.set("Stroke color", ofColor::black));
@@ -30,6 +31,7 @@ void DessinRenderer::setupRenderer(const std::string& name) {
 	btnDrawCircle.addListener(this, &DessinRenderer::deselectButtonsCircle);
 	btnDrawEllipse.addListener(this, &DessinRenderer::deselectButtonsEllipse);
 	btnDrawLine.addListener(this, &DessinRenderer::deselectButtonsLine);
+	btnStopDrawing.addListener(this, &DessinRenderer::deselectButtons);
 	//TODO: faire le triangle si c'est simple
 	btnDrawTriangle.addListener(this, &DessinRenderer::deselectButtonsTriangle);
 }
