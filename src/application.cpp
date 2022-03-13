@@ -11,9 +11,10 @@ void Application::setup() {
 
 	imageRenderer.setup("Images");
 	sphereRenderer.setup("Sphere");
-	sphereRenderer.createSphere();
+	//sphereRenderer.createSphere();
 	dessinRenderer.setup("Dessin");
 	objects3DRenderer.setup("Objets 3D");
+	curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
 	// initialise les éléments et les enlèves pour avoir des objets vide pour la caméra
 	createNewWindow(Camera::front);
@@ -59,6 +60,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(btnExportImgSetup);
 	gui.add(btnImportImgSetup);
 	gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
+	gui.add(sliderCurseur.set("différents curseurs", 1, 0, 4));
 	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
 	gui.add(mousePosition.set("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
 	gui.add(cameraRenderer.parameters);
@@ -84,6 +86,8 @@ void Application::update() {
 	sphereRenderer.update();
 	dessinRenderer.update();
 	cameraRenderer.update();
+
+	curseurRenderer.valCurseurSlider = sliderCurseur;
 }
 
 // fonction de mise à jour du rendu de la fenêtre d'affichage de l'application

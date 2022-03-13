@@ -6,6 +6,10 @@
 class CurseurRenderer : public RendererBase
 {
 public:
+	//ofParameterGroup group;
+	//ofParameter<int> sliderCurseurs;
+
+	int valCurseurSlider;
 
 protected:
 	void setupRenderer(const std::string& name);

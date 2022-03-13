@@ -17,6 +17,7 @@ void Objects3DRenderer::setupRenderer(const std::string& name) {
 
 	parameters3D.add(fillColor.set("Fill color", ofColor::red));
 
+	selectedObjParams.add(sliderIdObjs.set("Slider pour selectionner un objet", 0, 0, 50));
 	selectedObjParams.add(idSelected.set("ID", NO_ITEM_SELECTED));
 	selectedObjParams.add(sliderXpos.set("Position X", 0.0f, 0.0f, ofGetWidth()));
 	selectedObjParams.add(sliderYpos.set("Position Y", 0.0f, 0.0f, ofGetHeight()));
@@ -33,8 +34,11 @@ void Objects3DRenderer::setupRenderer(const std::string& name) {
 }
 
 void Objects3DRenderer::updateRenderer() {
+
 }
 
+// ==========================================================
+// Initialisation/création des objets
 void Objects3DRenderer::cube(float x, float y, float z, float width, float height, float length) {
 	lstObjs.push_back(createCube(x, y, z, width, height, length));
 
@@ -67,6 +71,37 @@ void Objects3DRenderer::sphere(float x, float y, float z, float r) {
 	lstObjSettings.push_back(objTemporaire);
 }
 
+void Objects3DRenderer::cone(float x, float y, float z, float r, float height) {
+	lstObjs.push_back(createCone(x, y, z, r, height));
+
+	VectorObj* obj = &lstObjs.back();
+	updateCone(*obj, x, y, z, r, height);
+
+	VectorObjSettings objSet;
+	VectorOutline outlineSet = createOutline(x, y, z, r, height);
+	objSet.object3D.push_back(obj);
+	objSet.renderMode = MeshRenderMode::fill;
+	objSet.outline.push_back(outlineSet);
+	objTemporaire = ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cone " + ofToString(lstObjSettings.size()));
+	lstObjSettings.push_back(objTemporaire);
+}
+
+void Objects3DRenderer::cylinder(float x, float y, float z, float r, float height) {
+	lstObjs.push_back(createCylinder(x, y, z, r, height));
+
+	VectorObj* obj = &lstObjs.back();
+	updateCylinder(*obj, x, y, z, r, height);
+
+	VectorObjSettings objSet;
+	VectorOutline outlineSet = createOutline(x, y, z, r, height);
+	objSet.object3D.push_back(obj);
+	objSet.renderMode = MeshRenderMode::fill;
+	objSet.outline.push_back(outlineSet);
+	objTemporaire = ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cylinder " + ofToString(lstObjSettings.size()));
+	lstObjSettings.push_back(objTemporaire);
+}
+// =======================================================
+
 void Objects3DRenderer::selectObject() {
 }
 
@@ -75,10 +110,10 @@ void Objects3DRenderer::generateDraw() {
 
 void Objects3DRenderer::render() {
 	ofEnableDepthTest();
-	//ofLog() << "<objects3DRenderer::render>";
 	for (const ObjectBase3D<VectorObjSettings>& obj : lstObjSettings) {
 		this->drawObjects(obj);
 	}
+
 	ofDisableDepthTest();
 }
 
@@ -131,6 +166,7 @@ VectorObj Objects3DRenderer::createNewObj() {
 	return obj;
 }
 
+// ============= Cube =================
 VectorObj Objects3DRenderer::createCube(float x, float y, float z, float width, float height, float length) {
 	VectorObj obj = createNewObj();
 	obj.type = VectorObject3DType::cube;
@@ -146,6 +182,7 @@ void Objects3DRenderer::updateCube(VectorObj& obj, float x, float y, float z, fl
 	obj.length = length;
 }
 
+// ============= Sphere =================
 VectorObj Objects3DRenderer::createSphere(float x = 0.0f, float y = 0.0f, float z = 0.0f, float r = 10.0f) {
 	VectorObj obj = createNewObj();
 	obj.type = VectorObject3DType::sphere;
@@ -159,6 +196,7 @@ void Objects3DRenderer::updateSphere(VectorObj& obj, float x, float y, float z, 
 	obj.radius = r;
 }
 
+// ============= Cone =================
 VectorObj Objects3DRenderer::createCone(float x, float y, float z, float r, float height) {
 	VectorObj obj = createNewObj();
 	obj.type = VectorObject3DType::cone;
@@ -173,6 +211,7 @@ void Objects3DRenderer::updateCone(VectorObj& obj, float x, float y, float z, fl
 	obj.height = height;
 }
 
+// ============= Cube =================
 VectorObj Objects3DRenderer::createCylinder(float x, float y, float z, float r, float height) {
 	VectorObj obj = createNewObj();
 	obj.type = VectorObject3DType::cylinder;
@@ -186,6 +225,9 @@ void Objects3DRenderer::updateCylinder(VectorObj& obj, float x, float y, float z
 	obj.radius = r;
 	obj.height = height;
 }
+
+
+// ================== Outline ==========================
 
 VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float width, float height, float length) {
 	VectorOutline outline;
@@ -217,6 +259,9 @@ void Objects3DRenderer::updateOutline(VectorOutline& outline, float x, float y, 
 	outline.length = length;
 }
 
+
+// ============== Lorsqu'un bouton est pesé ==================================
+
 // Crée un cube de base en 0,0
 void Objects3DRenderer::buttonCubePressed() {
 	ofLog() << "<objects3DRenderer::buttonCubePressed>";
@@ -225,16 +270,16 @@ void Objects3DRenderer::buttonCubePressed() {
 
 // Crée une sphere de base en 0,0
 void Objects3DRenderer::buttonSpherePressed() {
-	createSphere(origin.x, origin.y, origin.z, 10);
+	sphere(origin.x, origin.y, origin.z, 10);
 }
 
 // Crée un cone de base en 0,0
 void Objects3DRenderer::buttonConePressed() {
-	createCone(origin.x, origin.y, origin.z, 10, 10);
+	cone(origin.x, origin.y, origin.z, 10, 10);
 }
 
 // Crée un cylindre de base en 0,0
 void Objects3DRenderer::buttonCylinderPressed() {
-	createCylinder(origin.x, origin.y, origin.z, 10, 10);
+	cylinder(origin.x, origin.y, origin.z, 10, 10);
 }
 

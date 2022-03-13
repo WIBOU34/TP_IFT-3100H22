@@ -11,8 +11,8 @@ void SphereRenderer::setupRenderer(const std::string& name) {
 }
 
 void SphereRenderer::updateRenderer() {
-	sphere1.setRadius(radiusSphereSlider);
-	sphere2.setRadius(radiusSphereSlider);
+	//sphere1.setRadius(radiusSphereSlider);
+	//sphere2.setRadius(radiusSphereSlider);
 }
 
 void SphereRenderer::createSphere() {
@@ -25,8 +25,8 @@ void SphereRenderer::generateDraw() {
 }
 
 void SphereRenderer::render() {
-	ofEnableDepthTest();
-	ofSphere(ofVec3f(xSphereSlider, ySphereSlider, zSphereSlider), sphere1.getRadius());
-	ofSphere(origin, sphere2.getRadius());
-	ofDisableDepthTest();
+	//ofEnableDepthTest();
+	//ofSphere(ofVec3f(xSphereSlider, ySphereSlider, zSphereSlider), sphere1.getRadius());
+	//ofSphere(origin, sphere2.getRadius());
+	//ofDisableDepthTest();
 }

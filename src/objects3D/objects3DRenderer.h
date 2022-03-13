@@ -31,12 +31,15 @@ public:
 	ofParameter<float> sliderHeightPos;
 	ofParameter<float> sliderLengthPos;
 
+	ofParameter<int> sliderIdObjs;
 	ofParameter<string> idSelected;
 	ofParameter<string> typeSelected;
 	ofParameter<ofColor> fillColorSelected;
 
 	void cube(float x, float y, float z, float width, float height, float length);
 	void sphere(float x, float y, float z, float r);
+	void cone(float x, float y, float z, float r, float height);
+	void cylinder(float x, float y, float z, float r, float height);
 
 	void selectObject();
 
@@ -66,7 +69,7 @@ private:
 	VectorObj createCylinder(float x, float y, float z, float r, float height);
 	void updateCylinder(VectorObj& obj, float x, float y, float z, float r, float height);
 	VectorOutline createOutline(float x, float y, float z, float width, float height, float length);
-	VectorOutline createOutline(float x, float y, float z, float r, float length);
+	VectorOutline createOutline(float x, float y, float z, float r, float height);
 	VectorOutline createOutline(float x, float y, float z, float r);
 	void updateOutline(VectorOutline& outline, float x, float y, float z, float width, float height, float length);
 

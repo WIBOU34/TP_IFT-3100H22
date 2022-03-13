@@ -58,6 +58,7 @@ public:
 	ofParameter<bool> bShowCursor;
 	ofParameter<string> screenSize;
 	ofParameter<string> mousePosition;
+	ofParameter<int> sliderCurseur;
 	ofParameterGroup parameters;
 
 	ofxPanel gui;
