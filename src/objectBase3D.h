@@ -17,6 +17,15 @@ struct VectorObj {
 	float				length;				// 1 * 4 = 4  octets	z
 	float				radius = 0.0f;		// 1 * 4 = 4  octets	r
 	ofColor				fillColor = 200;	// 4 * 1 = 4  octets
+	bool operator==(const VectorObj& obj) const {
+		return obj.type == this->type
+			&& obj.posStart == this->posStart
+			&& obj.width == this->width
+			&& obj.height == this->height
+			&& obj.length == this->length
+			&& obj.radius == this->radius
+			&& obj.fillColor == this->fillColor;
+	}
 };											//       = 36 octets
 
 // structure d'un contour
@@ -27,6 +36,14 @@ struct VectorOutline {
 	float		length;						// 1 * 4 =  4  octets	z
 	float		radius = 0.0f;				// 1 * 4 =  4  octets	r
 	ofColor		fillColor = ofColor::lightSkyBlue;	// 3 * 4 = 12  octets	white
+	bool operator==(const VectorOutline& outline) const {
+		return outline.posStart == this->posStart
+			&& outline.width == this->width
+			&& outline.height == this->height
+			&& outline.length == this->length
+			&& outline.radius == this->radius
+			&& outline.fillColor == this->fillColor;
+	}
 };											//       = 40  octets
 
 // structure d'un objet et son mode de rendu
@@ -34,6 +51,11 @@ struct VectorObjSettings {
 	MeshRenderMode renderMode;				// 1 * 1 =  1 octet
 	VectorObj* object3D;					//		 = 36 octets
 	VectorOutline outline;					//		 = 40 octets
+	bool operator==(const VectorObjSettings& objSettings) const {
+		return objSettings.renderMode == this->renderMode
+			&& *objSettings.object3D == *this->object3D
+			&& objSettings.outline == this->outline;
+	}
 };											//		 = 77 octets
 
 class Point3D {
@@ -50,13 +72,19 @@ class Coords3D {
 public:
 	Coords3D() = default;
 	Coords3D(const int& x, const int& y, const int& z, const int& width, const int& height, const int& length);
-	Coords3D(const Point3D& start, const int& width, const int& height, const int& length);
+	Coords3D(const ofVec3f& start, const int& width, const int& height, const int& length);
 
 	//private:
-	Point3D start;
-	int width;
-	int height;
-	int length; // pour 3D (valeur z)
+	ofVec3f start;
+	int width = 0;
+	int height = 0;
+	int length = 0; // pour 3D (valeur z)
+	bool operator==(const Coords3D& coords) const {
+		return coords.start == this->start
+			&& coords.width == this->width
+			&& coords.height == this->height
+			&& coords.length == this->length;
+	}
 };
 
 template<typename T>
@@ -72,6 +100,13 @@ public:
 	void createObject(const int& x, const int& y, const int& z, const int& width, const int& height, const int& length, const T& object, const std::string& name);
 	void createObject(const Coords3D& coords, const T& object, const std::string& name);
 	bool isPointInObject(const int& x, const int& y, const int& z) const;
+	bool operator==(const ObjectBase3D& objet) const {
+
+		if (objet.name != this->name) {
+			return false;
+		}
+		return objet.objet3D == this->objet3D;
+	}
 private:
 	std::pair<Coords3D, T> objet3D;
 	std::string name;

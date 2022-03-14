@@ -2,23 +2,30 @@
 
 #include "../renderer.h"
 #include "../objectBase3D.h"
-#include "ofxVectorGraphics.h"
 #include "ofxAssimpModelLoader.h"
-//#include <list>
-#include <vector>
+#include <list>
 #include "ofMath.h"
 #include "ofxGui.h"
 
+class ofxAssimpModelLoaderExtended : public ofxAssimpModelLoader {
+public:
+	bool operator==(const ofxAssimpModelLoaderExtended& model) const {
+		return model.pos == this->pos;
+	}
+};
 
 class Objects3DRenderer : public RendererBase {
 public:
 	std::list<ObjectBase3D<VectorObjSettings>> lstObjSettings;
 	//ObjectBase3D<VectorObjSettings> objTemporaire;
 	ObjectBase3D<VectorObjSettings>* selectedObj;
+	ObjectBase3D<ofxAssimpModelLoaderExtended*>* selectedModelObj;
+	ofLight light;
 
 	// import 3D model
-	ofxAssimpModelLoader tempObj;
-	std::list<ofxAssimpModelLoader> listobjImport;
+	//ofxAssimpModelLoader tempObj;
+	std::list<ObjectBase3D<ofxAssimpModelLoaderExtended*>> listObjImport;
+	std::list<ofxAssimpModelLoaderExtended> listModelImport;
 	ofxButton importObjButton;
 	void importObj(const std::string& path, const int& x, const int& y);
 	void buttonImportObjPressed();
@@ -29,6 +36,8 @@ public:
 	ofxButton bDrawSphere;
 	ofxButton bDrawCone;
 	ofxButton bDrawCylinder;
+	ofxButton btnDeleteSelected;
+	ofParameter<bool> boundingBox;
 
 	ofxGuiGroup selectedObjParams;
 	ofParameter<float> sliderXpos;
@@ -40,7 +49,10 @@ public:
 	ofParameter<float> sliderLengthPos;
 
 	ofParameter<int> sliderIdObjs;
-	ofParameter<string> idSelected;
+	ofParameter<int> sliderIdModelObjs;
+	int oldSelectedId;
+	int oldSelectedModelId;
+	ofxLabel idSelected;
 	ofParameter<string> typeSelected;
 	ofParameter<ofColor> fillColorSelected;
 
@@ -58,8 +70,6 @@ protected:
 	void render();
 private:
 	const std::string NO_ITEM_SELECTED = "NULL";
-
-	ofxVectorGraphics graphics;
 
 	std::list<VectorObj> lstObjs;
 	bool updateShapeObj3D = false;
@@ -85,8 +95,10 @@ private:
 	void buttonSpherePressed();
 	void buttonConePressed();
 	void buttonCylinderPressed();
+	void deleteSelected();
 
 	//bool isPointOnLine(const ofVec2f& start, const ofVec2f& end, const ofVec2f& find) const;
 	//bool isPointOnEllipse(const ofVec2f& center, const ofVec2f& radiusXY, const ofVec2f& find) const;
+	void getBoundingBox(ofxAssimpModelLoaderExtended& model, glm::vec3& cornerMin, glm::vec3& cornerMax);
+	void getBoundingBox(ofxAssimpModelLoaderExtended& model, glm::vec4& cornerMin, glm::vec4& cornerMax);
 };
-

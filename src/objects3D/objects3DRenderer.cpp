@@ -11,54 +11,181 @@ void Objects3DRenderer::setupRenderer(const std::string& name) {
 	bDrawSphere.addListener(this, &Objects3DRenderer::buttonSpherePressed);
 	bDrawCone.addListener(this, &Objects3DRenderer::buttonConePressed);
 	bDrawCylinder.addListener(this, &Objects3DRenderer::buttonCylinderPressed);
+	btnDeleteSelected.addListener(this, &Objects3DRenderer::deleteSelected);
 	parameters3D.add(importObjButton.setup("Importer un objet 3D"));
 	parameters3D.add(bDrawCube.setup("Ajouter un cube"));
 	parameters3D.add(bDrawSphere.setup("Ajouter une sphere"));
 	parameters3D.add(bDrawCone.setup("Ajouter un cone"));
 	parameters3D.add(bDrawCylinder.setup("Ajouter un cylindre"));
+	parameters3D.add(boundingBox.set("Afficher boite delimitation", false));
+	parameters3D.add(btnDeleteSelected.setup("Supprimer objet selectionne"));
 
 	parameters3D.add(fillColor.set("Fill color", ofColor::red));
 
-	selectedObjParams.add(sliderIdObjs.set("Slider pour selectionner un objet", 0, 0, 50));
-	selectedObjParams.add(idSelected.set("ID", NO_ITEM_SELECTED));
-	selectedObjParams.add(sliderXpos.set("Position X", 0.0f, 0.0f, ofGetWidth()));
-	selectedObjParams.add(sliderYpos.set("Position Y", 0.0f, 0.0f, ofGetHeight()));
-	selectedObjParams.add(sliderZpos.set("Position Z", 0.0f, -100.0f, 100.0f));
+	selectedObjParams.setup("Objet selectionne");
+	selectedObjParams.add(sliderIdObjs.set("Selectionner une forme 3D", 0, 0, 50));
+	selectedObjParams.add(sliderIdModelObjs.set("Selectionner un model 3D", 0, 0, 50));
+	selectedObjParams.add(idSelected.setup("ID", NO_ITEM_SELECTED));
+	selectedObjParams.add(sliderXpos.set("Position X", 0.0f, -5000, 5000));
+	selectedObjParams.add(sliderYpos.set("Position Y", 0.0f, -5000, 5000));
+	selectedObjParams.add(sliderZpos.set("Position Z", 0.0f, -5000, 5000));
 	selectedObjParams.add(sliderRadiusPos.set("Rayon", 0.0f, 0.0f, 1000.0f));
 	selectedObjParams.add(sliderWidthPos.set("Largeur", 0.0f, 0.0f, 1000.0f));
 	selectedObjParams.add(sliderHeightPos.set("Hauteur", 0.0f, 0.0f, 1000.0f));
-	selectedObjParams.add(sliderLengthPos.set("Profondeur", 0.0f));
+	selectedObjParams.add(sliderLengthPos.set("Profondeur", 0.0f, 0.0f, 1000.0f));
 	selectedObjParams.add(fillColorSelected.set("Fill color selected", fillColor.get()));
 
 	parameters3D.add(&selectedObjParams);
-
-	graphics.enableDraw();
 }
 
 void Objects3DRenderer::updateRenderer() {
+	// Formes 3D
+	if (selectedObj != nullptr && sliderIdObjs <= 0) {
+		selectedObj = nullptr;
+		oldSelectedId = 0;
 
+		idSelected = NO_ITEM_SELECTED;
+		sliderXpos = 0;
+		sliderYpos = 0;
+		sliderZpos = 0;
+		sliderRadiusPos = 0;
+		sliderWidthPos = 0;
+		sliderHeightPos = 0;
+		sliderLengthPos = 0;
+	}
+	if (sliderIdObjs <= lstObjSettings.size() && selectedModelObj == nullptr) {
+		if (oldSelectedId != sliderIdObjs) {
+			oldSelectedId = sliderIdObjs;
+			int index = 0;
+			for (std::list<ObjectBase3D<VectorObjSettings>>::iterator it = lstObjSettings.begin(); it != lstObjSettings.end(); ++it) {
+				if (++index == sliderIdObjs) {
+					selectedObj = &*it;
+					idSelected = selectedObj->getName();
+					sliderXpos = selectedObj->getObject().object3D->posStart.x;
+					sliderYpos = selectedObj->getObject().object3D->posStart.y;
+					sliderZpos = selectedObj->getObject().object3D->posStart.z;
+					sliderRadiusPos = selectedObj->getObject().object3D->radius;
+					sliderWidthPos = selectedObj->getObject().object3D->width;
+					sliderHeightPos = selectedObj->getObject().object3D->height;
+					sliderLengthPos = selectedObj->getObject().object3D->length;
+					fillColorSelected = selectedObj->getObject().object3D->fillColor;
+					break;
+				}
+			}
+		}
+		if (selectedObj != nullptr) {
+			VectorObjSettings newObjSettings;
+			newObjSettings.object3D = selectedObj->getObject().object3D;
+			newObjSettings.object3D->posStart.x = sliderXpos;
+			newObjSettings.object3D->posStart.y = sliderYpos;
+			newObjSettings.object3D->posStart.z = sliderZpos;
+			newObjSettings.object3D->width = sliderWidthPos;
+			newObjSettings.object3D->height = sliderHeightPos;
+			newObjSettings.object3D->length = sliderLengthPos;
+			newObjSettings.object3D->radius = sliderRadiusPos;
+			newObjSettings.object3D->fillColor = fillColorSelected;
+			selectedObj->createObject(
+				sliderXpos, sliderYpos, sliderZpos,
+				sliderWidthPos, sliderHeightPos, sliderLengthPos,
+				newObjSettings, selectedObj->getName()
+			);
+		}
+	}
+
+	// Models 3D
+	if (selectedModelObj != nullptr && sliderIdModelObjs <= 0) {
+		selectedModelObj = nullptr;
+		oldSelectedModelId = 0;
+
+		idSelected = NO_ITEM_SELECTED;
+		sliderXpos = 0;
+		sliderYpos = 0;
+		sliderZpos = 0;
+		sliderRadiusPos = 0;
+		sliderWidthPos = 0;
+		sliderHeightPos = 0;
+		sliderLengthPos = 0;
+	}
+	if (sliderIdModelObjs <= listObjImport.size() && selectedObj == nullptr) {
+		if (oldSelectedModelId != sliderIdModelObjs) {
+			oldSelectedModelId = sliderIdModelObjs;
+			int index = 0;
+			for (std::list<ObjectBase3D<ofxAssimpModelLoaderExtended*>>::iterator it = listObjImport.begin(); it != listObjImport.end(); ++it) {
+				if (++index == sliderIdModelObjs) {
+					selectedModelObj = &*it;
+					idSelected = selectedModelObj->getName();
+					sliderXpos = selectedModelObj->getObject()->getPosition().x;
+					sliderYpos = selectedModelObj->getObject()->getPosition().y;
+					sliderZpos = selectedModelObj->getObject()->getPosition().z;
+					break;
+				}
+			}
+		}
+		if (selectedModelObj != nullptr) {
+			selectedModelObj->getObject()->setPosition(sliderXpos, sliderYpos, sliderZpos);
+			glm::vec3 max;
+			glm::vec3 min;
+			getBoundingBox(*selectedModelObj->getObject(), min, max);
+
+			glm::vec3 center;
+			center.x = (min.x + max.x) / 2.0f;
+			center.y = (min.y + max.y) / 2.0f;
+			center.z = (min.z + max.z) / 2.0f;
+
+			const float width = max.x - min.x;
+			const float height = max.y - min.y;
+			const float depth = max.z - min.z;
+			selectedModelObj->createObject(
+				center.x, center.y, center.z,
+				width, height, depth,
+				selectedModelObj->getObject(),
+				selectedModelObj->getName()
+			);
+			sliderRadiusPos = 0;
+			sliderWidthPos = 0;
+			sliderHeightPos = 0;
+			sliderLengthPos = 0;
+		}
+	}
 }
 
-void Objects3DRenderer::buttonImportObjPressed()
-{
+void Objects3DRenderer::buttonImportObjPressed() {
 	ofFileDialogResult dialogResult = ofSystemLoadDialog("Importer un objet");
 	if (dialogResult.bSuccess) {
 		ofLog() << "<objects3DRenderer::import: importing file>";
 		importObj(dialogResult.getPath(), 0, 0);
-	}
-	else {
+	} else {
 		ofLog() << "<objects3DRenderer::import: ABORTED>";
 	}
 }
 
 void Objects3DRenderer::importObj(const std::string& path, const int& x, const int& y) {
-	ofxAssimpModelLoader model;
+	ofxAssimpModelLoaderExtended model;
 	if (!model.loadModel(path, false)) {
 		ofLogError() << "<objects3DRenderer::import: unable to load object: '" << path << "'>";
 		return;
 	}
+	model.enableColors();
+	model.enableTextures();
+	model.enableMaterials();
+	model.enableNormals();
 	model.setPosition(0, 0, 0);
-	listobjImport.push_back(model);
+
+	glm::vec3 max;
+	glm::vec3 min;
+	getBoundingBox(model, min, max);
+
+	glm::vec3 center;
+	center.x = (min.x + max.x) / 2.0f;
+	center.y = (min.y + max.y) / 2.0f;
+	center.z = (min.z + max.z) / 2.0f;
+
+	const float width = max.x - min.x;
+	const float height = max.y - min.y;
+	const float depth = max.z - min.z;
+
+	listModelImport.push_back(model);
+	listObjImport.push_back(ObjectBase3D<ofxAssimpModelLoaderExtended*>(center.x, center.y, center.z, width, height, depth, &listModelImport.back(), ((boost::filesystem::path) path).filename().string()));
 }
 
 // ==========================================================
@@ -70,11 +197,8 @@ void Objects3DRenderer::cube(float x, float y, float z, float width, float heigh
 	updateCube(*obj, x, y, z, width, height, length);
 
 	VectorObjSettings objSet;
-	//VectorOutline outlineSet = createOutline(x, y, z, width, height, length);
 	objSet.object3D = obj;
 	objSet.renderMode = MeshRenderMode::fill;
-	//objSet.outline.push_back(outlineSet);
-	//objTemporaire = ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cube " + ofToString(lstObjSettings.size()));
 
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cube " + ofToString(lstObjSettings.size())));
 
@@ -87,27 +211,20 @@ void Objects3DRenderer::sphere(float x, float y, float z, float r) {
 	updateSphere(*obj, x, y, z, r);
 
 	VectorObjSettings objSet;
-	//VectorOutline outlineSet = createOutline(x, y, z, r);
 	objSet.object3D = obj;
 	objSet.renderMode = MeshRenderMode::fill;
-	//objSet.outline.push_back(outlineSet);
-	//objTemporaire = ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Sphere " + ofToString(lstObjSettings.size()));
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Sphere " + ofToString(lstObjSettings.size())));
 }
 
-void Objects3DRenderer::cone(float x, float y, float z, float r, float heightPositive) {
-	const float height = -heightPositive;
+void Objects3DRenderer::cone(float x, float y, float z, float r, float height) {
 	lstObjs.push_back(createCone(x, y, z, r, height));
 
 	VectorObj* obj = &lstObjs.back();
 	updateCone(*obj, x, y, z, r, height);
 
 	VectorObjSettings objSet;
-	//VectorOutline outlineSet = createOutline(x, y, z, r, height);
 	objSet.object3D = obj;
 	objSet.renderMode = MeshRenderMode::fill;
-	//objSet.outline.push_back(outlineSet);
-	//objTemporaire = ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cone " + ofToString(lstObjSettings.size()));
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cone " + ofToString(lstObjSettings.size())));
 }
 
@@ -118,11 +235,8 @@ void Objects3DRenderer::cylinder(float x, float y, float z, float r, float heigh
 	updateCylinder(*obj, x, y, z, r, height);
 
 	VectorObjSettings objSet;
-	//VectorOutline outlineSet = createOutline(x, y, z, r, height);
 	objSet.object3D = obj;
 	objSet.renderMode = MeshRenderMode::fill;
-	//objSet.outline.push_back(outlineSet);
-	//objTemporaire = ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cylinder " + ofToString(lstObjSettings.size()));
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cylinder " + ofToString(lstObjSettings.size())));
 }
 // =======================================================
@@ -139,6 +253,21 @@ void Objects3DRenderer::render() {
 		this->drawObjects(obj);
 	}
 
+	for (const ObjectBase3D<ofxAssimpModelLoaderExtended*>& model : listObjImport) {
+		ofSetColor(ofColor::limit());
+		model.getObject()->draw(ofPolyRenderMode::OF_MESH_WIREFRAME);
+
+		if (boundingBox) {
+			ofNoFill();
+			ofSetLineWidth(2);
+			ofSetColor(ofColor::lightSkyBlue);
+			ofVec3f center;
+			center.x = model.getCoords().start.x;
+			center.y = model.getCoords().start.y;
+			center.z = model.getCoords().start.z;
+			ofDrawBox(center, model.getCoords().width, model.getCoords().height, model.getCoords().length);
+		}
+	}
 	ofDisableDepthTest();
 }
 
@@ -149,14 +278,14 @@ void Objects3DRenderer::drawObjects(const ObjectBase3D<VectorObjSettings>& objSe
 	VectorOutline& outline = objSet.getObject().outline;
 	switch (obj->type) {
 		case VectorObject3DType::sphere:
-			outline.posStart = obj->posStart - obj->radius;
+			outline.posStart = obj->posStart;
 			outline.width = obj->radius * 2;
 			outline.height = obj->radius * 2;
 			outline.length = obj->radius * 2;
 			ofFill();
 			ofSetLineWidth(0);
 			ofSetColor(obj->fillColor);
-			ofSphere(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->radius);
+			ofDrawSphere(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->radius);
 			break;
 
 		case VectorObject3DType::cube:
@@ -182,10 +311,10 @@ void Objects3DRenderer::drawObjects(const ObjectBase3D<VectorObjSettings>& objSe
 			break;
 
 		case VectorObject3DType::cylinder:
-			outline.posStart = obj->posStart - obj->radius;
-			outline.width = obj->width;
+			outline.posStart = obj->posStart;
+			outline.width = obj->radius * 2;
 			outline.height = obj->height;
-			outline.length = obj->length;
+			outline.length = obj->radius * 2;
 			ofFill();
 			ofSetLineWidth(0);
 			ofSetColor(obj->fillColor);
@@ -195,10 +324,12 @@ void Objects3DRenderer::drawObjects(const ObjectBase3D<VectorObjSettings>& objSe
 		default:
 			break;
 	}
-	ofNoFill();
-	ofSetLineWidth(2);
-	ofSetColor(outline.fillColor); 
-	ofDrawBox(outline.posStart, outline.width, outline.height, outline.length);
+	if (boundingBox) {
+		ofNoFill();
+		ofSetLineWidth(2);
+		ofSetColor(outline.fillColor);
+		ofDrawBox(outline.posStart, outline.width, outline.height, outline.length);
+	}
 }
 
 VectorObj Objects3DRenderer::createNewObj() {
@@ -271,29 +402,6 @@ void Objects3DRenderer::updateCylinder(VectorObj& obj, float x, float y, float z
 
 // ================== Outline ==========================
 
-//VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float width, float height, float length) {
-//	VectorOutline outline;
-//	this->updateOutline(outline, x, y, z, width, height, length);
-//	return outline;
-//}
-//
-//VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float r, float length) {
-//	VectorOutline outline;
-//	float width = r;
-//	float height = r;
-//	this->updateOutline(outline, x, y, z, width, height, length);
-//	return outline;
-//}
-//
-//VectorOutline Objects3DRenderer::createOutline(float x, float y, float z, float r) {
-//	VectorOutline outline;
-//	float width = r;
-//	float height = r;
-//	float length = r;
-//	this->updateOutline(outline, x, y, z, width, height, length);
-//	return outline;
-//}
-
 void Objects3DRenderer::updateOutline(VectorOutline& outline, float x, float y, float z, float width, float height, float length) {
 	outline.posStart.set(x, y, z);
 	outline.width = width;
@@ -323,5 +431,52 @@ void Objects3DRenderer::buttonConePressed() {
 // Crée un cylindre de base en 0,0
 void Objects3DRenderer::buttonCylinderPressed() {
 	cylinder(origin.x, origin.y, origin.z, 10, 10);
+}
+
+void Objects3DRenderer::deleteSelected() {
+	if (selectedObj != nullptr) {
+		lstObjs.remove(*selectedObj->getObject().object3D);
+		lstObjSettings.remove(*selectedObj);
+		selectedObj = nullptr;
+		sliderIdObjs = std::max(0, sliderIdObjs - 1);
+	}
+	if (selectedModelObj != nullptr) {
+		listModelImport.remove(*selectedModelObj->getObject());
+		listObjImport.remove(*selectedModelObj);
+		sliderIdModelObjs = std::max(0, sliderIdModelObjs - 1);
+	}
+	ofLog() << "<Objects3DRenderer::deleteSelected: Success>";
+}
+
+
+void Objects3DRenderer::getBoundingBox(ofxAssimpModelLoaderExtended& model, glm::vec3& cornerMin, glm::vec3& cornerMax) {
+	glm::vec4 minTemp;
+	glm::vec4 maxTemp;
+	getBoundingBox(model, minTemp, maxTemp);
+	cornerMin.x = minTemp.x;
+	cornerMin.y = minTemp.y;
+	cornerMin.z = minTemp.z;
+
+	cornerMax.x = maxTemp.x;
+	cornerMax.y = maxTemp.y;
+	cornerMax.z = maxTemp.z;
+}
+
+void Objects3DRenderer::getBoundingBox(ofxAssimpModelLoaderExtended& model, glm::vec4& cornerMin, glm::vec4& cornerMax) {
+	glm::mat4 modelMatrix = ofMatrix4x4::getTransposedOf(model.getModelMatrix());
+	glm::vec3 min = model.getSceneMin();
+	glm::vec3 max = model.getSceneMax();
+
+	cornerMax.x = max.x;
+	cornerMax.y = max.y;
+	cornerMax.z = max.z;
+	cornerMax.w = 1;
+	cornerMax = cornerMax * modelMatrix;
+
+	cornerMin.x = min.x;
+	cornerMin.y = min.y;
+	cornerMin.z = min.z;
+	cornerMin.w = 1;
+	cornerMin = cornerMin * modelMatrix;
 }
 

@@ -20,13 +20,13 @@ Point3D::Point3D(const ofVec3f& coords)
 }
 
 Coords3D::Coords3D(const int& x, const int& y, const int& z, const int& width, const int& height, const int& length) {
-	this->start = Point3D(x, y, z);
+	this->start = ofVec3f(x, y, z);
 	this->width = width;
 	this->height = height;
 	this->length = length;
 }
 
-Coords3D::Coords3D(const Point3D& start, const int& width, const int& height, const int& length) {
+Coords3D::Coords3D(const ofVec3f& start, const int& width, const int& height, const int& length) {
 	this->start = start;
 	this->width = width;
 	this->height = height;

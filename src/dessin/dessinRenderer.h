@@ -3,7 +3,7 @@
 #include "../renderer.h"
 #include "../objectBase.h"
 #include "ofxVectorGraphics.h"
-#include <vector>
+#include <list>
 #include "ofMath.h"
 #include "ofxGui.h"
 

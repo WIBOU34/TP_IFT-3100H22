@@ -86,6 +86,7 @@ void Application::update() {
 	sphereRenderer.update();
 	dessinRenderer.update();
 	cameraRenderer.update();
+	objects3DRenderer.update();
 
 	curseurRenderer.valCurseurSlider = sliderCurseur;
 }

@@ -140,6 +140,13 @@ void CameraRenderer::reset() {
 
 	// position initiale de chaque caméra
 
+	camera_front.setVFlip(true);
+	camera_back.setVFlip(true);
+	camera_left.setVFlip(true);
+	camera_top.setVFlip(true);
+	camera_top.setVFlip(true);
+	camera_down.setVFlip(true);
+
 	camera_front.setPosition(0, 0, -offset_camera);
 	camera_back.setPosition(0, 0, offset_camera);
 	camera_left.setPosition(-offset_camera, 0, 0);
@@ -176,9 +183,9 @@ void CameraRenderer::updateRenderer() {
 	is_camera_move_backward = !is_key_press_ctrl && is_key_press_down;
 
 	// Shift
-	is_camera_move_down = is_key_press_shift;
+	is_camera_move_up = is_key_press_shift;
 	// Space
-	is_camera_move_up = is_key_press_space;
+	is_camera_move_down = is_key_press_space;
 
 	// ctrl + fleches
 	is_camera_pan_left = is_key_press_ctrl && is_key_press_left;
