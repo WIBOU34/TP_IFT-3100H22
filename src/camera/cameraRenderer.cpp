@@ -171,11 +171,6 @@ void CameraRenderer::reset() {
 }
 
 void CameraRenderer::updateRenderer() {
-	//if (!this->needsRedraw
-	//	&& (is_key_press_left || is_key_press_up || is_key_press_right || is_key_press_down
-	//		|| is_key_press_ctrl || is_key_press_shift || is_key_press_space)) {
-	//	this->needsRedraw = true;
-	//}
 	// fleches seulement
 	is_camera_move_left = !is_key_press_ctrl && is_key_press_left;
 	is_camera_move_right = !is_key_press_ctrl && is_key_press_right;
@@ -273,15 +268,6 @@ void CameraRenderer::updateRenderer() {
 }
 
 void CameraRenderer::generateDraw() {
-	//time_current = ofGetElapsedTimef();
-	//time_elapsed = time_current - time_last;
-	//time_last = time_current;
-
-	//if (speed_translation != 0 && time_elapsed > 0.0001) {
-	//	speed_translation = speed_delta * time_elapsed;
-	//	speed_rotation = speed_translation / 8.0f;
-	//}
-	
 }
 
 void CameraRenderer::render() {
