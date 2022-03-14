@@ -27,7 +27,6 @@ public:
 	void setup();
 	void setupGui(const shared_ptr<ofAppBaseWindow>& window);
 	void update();
-	void updateGui();
 	void draw();
 	void drawCamera();
 	void exit();
@@ -56,8 +55,8 @@ public:
 	ofxButton* btnImportImgSetup;
 	ofParameter<bool> bSelection;
 	ofParameter<bool> bShowCursor;
-	ofParameter<string> screenSize;
-	ofParameter<string> mousePosition;
+	ofxLabel screenSize;
+	ofxLabel mousePosition;
 	ofParameter<int> sliderCurseur;
 	ofParameterGroup parameters;
 
@@ -75,5 +74,4 @@ private:
 	void drawTop(ofEventArgs& args);
 	void drawDown(ofEventArgs& args);
 	void drawCamera(const Camera& camera);
-	//void clearWindows(ofEventArgs& args);
 };

@@ -26,7 +26,6 @@ void Application::setup() {
 	for (auto& window : cameraRenderer.vecWindow) {
 		window->setWindowShouldClose();
 	}
-	ofLog() << "<app::GUISetup>";
 	ofSetVerticalSync(true);
 
 	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
@@ -34,17 +33,18 @@ void Application::setup() {
 	bHide = true;
 	bSelection = false;
 	bShowCursor = false;
-	ofLog() << "size Object2D<ofImage>: " << sizeof(ObjectBase2D<ofImage>) <<
-		"\n size Object2D<int>: " << sizeof(ObjectBase2D<int>) <<
-		"\n size Object2D<float>: " << sizeof(ObjectBase2D<float>) <<
-		"\n size Object2D<VectorForme>: " << sizeof(ObjectBase2D<VectorForme>) <<
-		"\n size vectorForme: " << sizeof(VectorForme) <<
-		"\n size vectorPrimitive: " << sizeof(VectorPrimitive);
+	//ofLog() << "size Object2D<ofImage>: " << sizeof(ObjectBase2D<ofImage>) <<
+	//	"\n size Object2D<int>: " << sizeof(ObjectBase2D<int>) <<
+	//	"\n size Object2D<float>: " << sizeof(ObjectBase2D<float>) <<
+	//	"\n size Object2D<VectorForme>: " << sizeof(ObjectBase2D<VectorForme>) <<
+	//	"\n size vectorForme: " << sizeof(VectorForme) <<
+	//	"\n size vectorPrimitive: " << sizeof(VectorPrimitive);
 	//"\n size vectorPrimitive2: " << sizeof(VectorPrimitive2);
 
 }
 
 void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
+	ofLog() << "<app::GUISetup>";
 	mainWindow = window;
 	btnExportImgSetup = btnExportImg.setup("Exporter en image 'e'");
 	btnImportImgSetup = btnImportImg.setup("Importer une image");
@@ -60,9 +60,9 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(btnExportImgSetup);
 	gui.add(btnImportImgSetup);
 	gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
-	gui.add(sliderCurseur.set("différents curseurs", 1, 0, 4));
-	gui.add(screenSize.set("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
-	gui.add(mousePosition.set("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
+	gui.add(sliderCurseur.set("Differents curseurs", 1, 0, 4));
+	gui.add(screenSize.setup("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
+	gui.add(mousePosition.setup("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
 	gui.add(cameraRenderer.parameters);
 	gui.add(imageRenderer.parameters);
 	gui.add(dessinRenderer.parameters);
@@ -71,13 +71,6 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 
 	gui.minimizeAll();
 	bHide = false;
-}
-
-void Application::updateGui() {
-	// =========== Méthode modifiée ===========
-	// ajout de "ownedCollection.clear();" dans ofxGuiGroup.cpp ligne 215
-	// pour corriger une fuite de mémoire
-	//gui.clear();
 }
 
 // fonction de mise à jour de la logique de l'application
@@ -234,9 +227,7 @@ void Application::mouseEntered(int x, int y) {
 
 //--------------------------------------------------------------
 void Application::mouseExited(int x, int y) {
-
 	ofShowCursor();
-
 }
 
 //--------------------------------------------------------------
@@ -352,8 +343,6 @@ void Application::drawCamera(const Camera& camera) {
 	const Camera old = cameraRenderer.camera_active;
 	cameraRenderer.camera_active = camera;
 	cameraRenderer.setupCamera();
-	//cameraRenderer.update();
-	//sphereRenderer.update();
 	this->drawCamera();
 	cameraRenderer.camera_active = old;
 	cameraRenderer.setupCamera();

@@ -11,12 +11,13 @@ void DessinRenderer::setupRenderer(const std::string& name) {
 	parameters.add(btnDrawCircle.setup(DRAW_CIRCLE_NAME, false)->getParameter());
 	parameters.add(btnDrawEllipse.setup(DRAW_ELLIPSE_NAME, false)->getParameter());
 	parameters.add(btnDrawLine.setup(DRAW_LINE_NAME, false)->getParameter());
+	parameters.add(btnStopDrawing.setup("Arreter dessin", false)->getParameter());
 
 	parameters.add(strokeWidth.set("Stroke width", 1, 1, 20));
 	parameters.add(strokeColor.set("Stroke color", ofColor::black));
 	parameters.add(fillColor.set("Fill color", ofColor::red));
 
-	parameters.add(btnDeleteSelected.setup("Supprimer forme sélectionnée", false)->getParameter());
+	parameters.add(btnDeleteSelected.setup("Supprimer forme selectionnee", false)->getParameter());
 	parameters.add(idSelected.set("ID", NO_ITEM_SELECTED));
 	parameters.add(strokeColorSelected.set("Stroke color selected", strokeColor.get()));
 	parameters.add(fillColorSelected.set("Fill color selected", fillColor.get()));
@@ -30,6 +31,7 @@ void DessinRenderer::setupRenderer(const std::string& name) {
 	btnDrawCircle.addListener(this, &DessinRenderer::deselectButtonsCircle);
 	btnDrawEllipse.addListener(this, &DessinRenderer::deselectButtonsEllipse);
 	btnDrawLine.addListener(this, &DessinRenderer::deselectButtonsLine);
+	btnStopDrawing.addListener(this, &DessinRenderer::deselectButtons);
 	//TODO: faire le triangle si c'est simple
 	btnDrawTriangle.addListener(this, &DessinRenderer::deselectButtonsTriangle);
 }
@@ -76,15 +78,10 @@ void DessinRenderer::selectPrimitive() {
 		ObjectBase2D<VectorForme>& forme = *rit;
 
 		for (const VectorPrimitive* primitive : forme.getObject().primitives) {
-			const ofVec2f topRight = ofVec2f(primitive->posEnd.x, primitive->posStart.y);
-			const ofVec2f bottomLeft = ofVec2f(primitive->posStart.x, primitive->posEnd.y);
 			switch (primitive->type) {
 				case VectorPrimitiveType::square:
 				case VectorPrimitiveType::rectangle:
-					selectedFound = isPointOnLine(primitive->posStart, topRight, find)	// topLine
-						|| isPointOnLine(primitive->posStart, bottomLeft, find)			// left
-						|| isPointOnLine(topRight, primitive->posEnd, find)				// right
-						|| isPointOnLine(bottomLeft, primitive->posEnd, find);			// bottom
+					selectedFound = isPointInRectangle(primitive->posStart, primitive->posEnd, find);
 					break;
 				case VectorPrimitiveType::circle:
 				case VectorPrimitiveType::ellipse:
@@ -92,6 +89,8 @@ void DessinRenderer::selectPrimitive() {
 					break;
 				case VectorPrimitiveType::pixel:
 				case VectorPrimitiveType::point:
+					selectedFound = isPointOnEllipse(primitive->posStart, ofVec2f(primitive->strokeWidth, primitive->strokeWidth), find);
+					break;
 				case VectorPrimitiveType::line:
 					selectedFound = isPointOnLine(primitive->posStart, primitive->posEnd, find);
 					break;
@@ -170,6 +169,12 @@ void DessinRenderer::drawPrimitives(const ObjectBase2D<VectorForme>& forme) {
 		switch (primitive->type) {
 			case VectorPrimitiveType::pixel:
 			case VectorPrimitiveType::point:
+				graphics.fill();
+				graphics.setLineWidth(0);
+				ofSetColor(primitive->strokeColor);
+				graphics.circle(primitive->posStart.x, primitive->posStart.y, primitive->strokeWidth);
+				break;
+
 			case VectorPrimitiveType::line:
 				graphics.noFill();
 				graphics.setLineWidth(primitive->strokeWidth);
@@ -437,7 +442,18 @@ bool DessinRenderer::isPointOnLine(const ofVec2f& start, const ofVec2f& end, con
 
 bool DessinRenderer::isPointOnEllipse(const ofVec2f& center, const ofVec2f& radiusXY, const ofVec2f& find) const {
 	const float distance = std::powf(find.x - center.x, 2) / std::powf(radiusXY.x, 2) + std::powf(find.y - center.y, 2) / std::powf(radiusXY.y, 2);
-	return distance > 0.8f && distance < 1.1f;
+	return distance >= 0.0f && distance < 1.1f;
+	//return distance > 0.8f && distance < 1.1f;
+}
+
+bool DessinRenderer::isPointInRectangle(const ofVec2f& start, const ofVec2f& end, const ofVec2f& find) const {
+	ofRectangle rect;
+	rect.set(start.x, start.y, end.x - start.x, end.y - start.y);
+	return rect.inside(find)
+		|| isPointOnLine(rect.getTopLeft(), rect.getTopRight(), find)
+		|| isPointOnLine(rect.getTopLeft(), rect.getBottomLeft(), find)
+		|| isPointOnLine(rect.getBottomLeft(), rect.getBottomRight(), find)
+		|| isPointOnLine(rect.getTopRight(), rect.getBottomRight(), find);
 }
 
 void DessinRenderer::deleteSelected() {

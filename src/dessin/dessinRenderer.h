@@ -26,6 +26,7 @@ public:
 	ofxButton btnDrawEllipse;
 	ofxButton btnDrawLine;
 	ofxButton btnDrawTriangle;
+	ofxButton btnStopDrawing;
 	ofxButton btnDeleteSelected;
 	bool bDrawPoint;
 	bool bDrawSquare;
@@ -41,7 +42,7 @@ public:
 	ofParameter<ofColor> strokeColorSelected;
 	ofParameter<ofColor> fillColorSelected;
 
-	ofEventListener listenerDelete;
+	//ofEventListener listenerDelete;
 
 	void point(float x, float y);
 	void square(float x1, float y1, float x2, float y2);
@@ -101,6 +102,7 @@ private:
 
 	bool isPointOnLine(const ofVec2f& start, const ofVec2f& end, const ofVec2f& find) const;
 	bool isPointOnEllipse(const ofVec2f& center, const ofVec2f& radiusXY, const ofVec2f& find) const;
+	bool isPointInRectangle(const ofVec2f& start, const ofVec2f& end, const ofVec2f& find) const;
 
 
 	void deleteSelected();
