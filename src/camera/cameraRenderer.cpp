@@ -346,6 +346,7 @@ void CameraRenderer::perspectiveChanged() {
 		if (is_camera_perspective) {
 			camera->disableOrtho();
 			camera->setupPerspective(false, camera_fov, camera_n, camera_f, ofVec2f(0, 0));
+			camera->setVFlip(true);
 			camera_projection = "perspective";
 		} else {
 			camera->enableOrtho();

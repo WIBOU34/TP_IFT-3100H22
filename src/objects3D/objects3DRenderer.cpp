@@ -198,7 +198,7 @@ void Objects3DRenderer::cube(float x, float y, float z, float width, float heigh
 
 	VectorObjSettings objSet;
 	objSet.object3D = obj;
-	objSet.renderMode = MeshRenderMode::fill;
+	objSet.renderMode = MeshRenderMode::wireframe;
 
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cube " + ofToString(lstObjSettings.size())));
 
@@ -212,7 +212,7 @@ void Objects3DRenderer::sphere(float x, float y, float z, float r) {
 
 	VectorObjSettings objSet;
 	objSet.object3D = obj;
-	objSet.renderMode = MeshRenderMode::fill;
+	objSet.renderMode = MeshRenderMode::wireframe;
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Sphere " + ofToString(lstObjSettings.size())));
 }
 
@@ -224,7 +224,7 @@ void Objects3DRenderer::cone(float x, float y, float z, float r, float height) {
 
 	VectorObjSettings objSet;
 	objSet.object3D = obj;
-	objSet.renderMode = MeshRenderMode::fill;
+	objSet.renderMode = MeshRenderMode::wireframe;
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cone " + ofToString(lstObjSettings.size())));
 }
 
@@ -236,7 +236,7 @@ void Objects3DRenderer::cylinder(float x, float y, float z, float r, float heigh
 
 	VectorObjSettings objSet;
 	objSet.object3D = obj;
-	objSet.renderMode = MeshRenderMode::fill;
+	objSet.renderMode = MeshRenderMode::wireframe;
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cylinder " + ofToString(lstObjSettings.size())));
 }
 // =======================================================
@@ -276,14 +276,19 @@ void Objects3DRenderer::render() {
 void Objects3DRenderer::drawObjects(const ObjectBase3D<VectorObjSettings>& objSet) {
 	const VectorObj* obj = objSet.getObject().object3D;
 	VectorOutline& outline = objSet.getObject().outline;
+	if (objSet.getObject().renderMode == MeshRenderMode::fill) {
+		ofFill();
+		ofSetLineWidth(0);
+	} else {
+		ofNoFill();
+		ofSetLineWidth(1);
+	}
 	switch (obj->type) {
 		case VectorObject3DType::sphere:
 			outline.posStart = obj->posStart;
 			outline.width = obj->radius * 2;
 			outline.height = obj->radius * 2;
 			outline.length = obj->radius * 2;
-			ofFill();
-			ofSetLineWidth(0);
 			ofSetColor(obj->fillColor);
 			ofDrawSphere(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->radius);
 			break;
@@ -293,8 +298,6 @@ void Objects3DRenderer::drawObjects(const ObjectBase3D<VectorObjSettings>& objSe
 			outline.width = obj->width;
 			outline.height = obj->height;
 			outline.length = obj->length;
-			ofFill();
-			ofSetLineWidth(0);
 			ofSetColor(obj->fillColor);
 			ofDrawBox(obj->posStart, obj->width, obj->height, obj->length);
 			break;
@@ -304,8 +307,6 @@ void Objects3DRenderer::drawObjects(const ObjectBase3D<VectorObjSettings>& objSe
 			outline.width = obj->radius * 2;
 			outline.height = obj->height;
 			outline.length = obj->radius * 2;
-			ofFill();
-			ofSetLineWidth(0);
 			ofSetColor(obj->fillColor);
 			ofDrawCone(obj->posStart, obj->radius, obj->height);
 			break;
@@ -315,8 +316,6 @@ void Objects3DRenderer::drawObjects(const ObjectBase3D<VectorObjSettings>& objSe
 			outline.width = obj->radius * 2;
 			outline.height = obj->height;
 			outline.length = obj->radius * 2;
-			ofFill();
-			ofSetLineWidth(0);
 			ofSetColor(obj->fillColor);
 			ofDrawCylinder(obj->posStart, obj->radius, obj->height);
 			break;
