@@ -8,7 +8,6 @@
 #include "image/imageRenderer.h"
 #include "curseur/curseurRenderer.h"
 #include "dessin/dessinRenderer.h"
-#include "sphere/sphereRenderer.h"
 #include "objects3D/objects3DRenderer.h"
 #include "camera/cameraRenderer.h"
 #include "ofxGui.h"
@@ -18,7 +17,6 @@ public:
 
 	ImageRenderer imageRenderer;
 	CurseurRenderer curseurRenderer;
-	SphereRenderer sphereRenderer;
 	DessinRenderer dessinRenderer;
 	CameraRenderer cameraRenderer;
 	shared_ptr<ofAppBaseWindow> mainWindow;
@@ -61,9 +59,6 @@ public:
 	ofParameterGroup parameters;
 
 	ofxPanel gui;
-
-	// Pour dessiner des lignes
-	//ofPolyline polyline;
 
 private:
 	void createNewWindow(const Camera& type);

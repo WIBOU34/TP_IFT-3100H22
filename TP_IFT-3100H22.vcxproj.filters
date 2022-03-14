@@ -70,9 +70,6 @@
     <ClCompile Include="src\curseur\curseurRenderer.cpp">
       <Filter>src\curseur</Filter>
     </ClCompile>
-    <ClCompile Include="src\sphere\sphereRenderer.cpp">
-      <Filter>src\sphere</Filter>
-    </ClCompile>
     <ClCompile Include="src\objectBase3D.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -170,9 +167,6 @@
     </Filter>
     <Filter Include="src\curseur">
       <UniqueIdentifier>{b1866cc8-3f99-417d-a775-091a4f42297f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\sphere">
-      <UniqueIdentifier>{b14120a1-75aa-438b-864c-f7d440835aa7}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\dessin">
       <UniqueIdentifier>{95e4ffba-03ff-4415-b0f1-c2711d2ab3cc}</UniqueIdentifier>
@@ -533,9 +527,6 @@
     </ClInclude>
     <ClInclude Include="src\curseur\curseurRenderer.h">
       <Filter>src\curseur</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sphere\sphereRenderer.h">
-      <Filter>src\sphere</Filter>
     </ClInclude>
     <ClInclude Include="src\objectBase3D.h">
       <Filter>src</Filter>

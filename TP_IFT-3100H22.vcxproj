@@ -207,7 +207,6 @@
     <ClCompile Include="src\objectBase3D.cpp" />
     <ClCompile Include="src\objects3D\objects3DRenderer.cpp" />
     <ClCompile Include="src\renderer.cpp" />
-    <ClCompile Include="src\sphere\sphereRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -331,7 +330,6 @@
     <ClInclude Include="src\objectBase3D.h" />
     <ClInclude Include="src\objects3D\objects3DRenderer.h" />
     <ClInclude Include="src\renderer.h" />
-    <ClInclude Include="src\sphere\sphereRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

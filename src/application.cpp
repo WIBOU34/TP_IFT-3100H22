@@ -10,8 +10,6 @@ void Application::setup() {
 	ofSetWindowTitle("Travail Pratique");
 
 	imageRenderer.setup("Images");
-	sphereRenderer.setup("Sphere");
-	//sphereRenderer.createSphere();
 	dessinRenderer.setup("Dessin");
 	objects3DRenderer.setup("Objets 3D");
 	curseurRenderer.setup("Curseur");
@@ -66,7 +64,6 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(cameraRenderer.parameters);
 	gui.add(imageRenderer.parameters);
 	gui.add(dessinRenderer.parameters);
-	gui.add(sphereRenderer.sphereParameters);
 	gui.add(&objects3DRenderer.parameters3D);
 
 	gui.minimizeAll();
@@ -76,7 +73,6 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 // fonction de mise à jour de la logique de l'application
 void Application::update() {
 	imageRenderer.update();
-	sphereRenderer.update();
 	dessinRenderer.update();
 	cameraRenderer.update();
 	objects3DRenderer.update();
@@ -102,7 +98,6 @@ void Application::draw() {
 void Application::drawCamera() {
 	cameraRenderer.camera->begin();
 	cameraRenderer.draw();
-	sphereRenderer.draw();
 	objects3DRenderer.draw();
 	cameraRenderer.camera->end();
 }
