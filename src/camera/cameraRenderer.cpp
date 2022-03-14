@@ -143,7 +143,7 @@ void CameraRenderer::reset() {
 	camera_front.setVFlip(true);
 	camera_back.setVFlip(true);
 	camera_left.setVFlip(true);
-	camera_top.setVFlip(true);
+	camera_right.setVFlip(true);
 	camera_top.setVFlip(true);
 	camera_down.setVFlip(true);
 
