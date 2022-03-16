@@ -88,12 +88,6 @@ void Application::drawCamera() {
 // fonction appelée juste avant de quitter l'application
 void Application::exit() {
 	ofLog() << "<app::exit>";
-
-	for (auto& window : cameraRenderer.vecWindow) {
-		if (window != nullptr && window->renderer() != nullptr) {
-			window->setWindowShouldClose();
-		}
-	}
 }
 
 //--------------------------------------------------------------
