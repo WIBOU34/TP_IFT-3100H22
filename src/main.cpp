@@ -11,9 +11,9 @@
 int main() {
 	// création du contexte de rendu (OpenGL 4.5)
 	// OpenGL 3+ ne supporte pas lineWidth avec openFramework malgré ce que dit la doc openGL
-	ofGLWindowSettings settings;
-	//settings.setGLVersion(4, 5);
-	settings.setGLVersion(2, 1);
+	ofGLFWWindowSettings settings;
+	settings.setGLVersion(4, 5);
+	//settings.setGLVersion(2, 1);
 	settings.windowMode = OF_WINDOW;
 	shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
 	//ofSetupOpenGL(1024, 768, OF_WINDOW);

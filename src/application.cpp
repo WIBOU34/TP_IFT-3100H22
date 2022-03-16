@@ -14,16 +14,6 @@ void Application::setup() {
 	objects3DRenderer.setup("Objets 3D");
 	curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
-	// initialise les éléments et les enlèves pour avoir des objets vide pour la caméra
-	createNewWindow(Camera::front);
-	createNewWindow(Camera::back);
-	createNewWindow(Camera::left);
-	createNewWindow(Camera::right);
-	createNewWindow(Camera::top);
-	createNewWindow(Camera::down);
-	for (auto& window : cameraRenderer.vecWindow) {
-		window->setWindowShouldClose();
-	}
 	ofSetVerticalSync(true);
 
 	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
@@ -31,13 +21,6 @@ void Application::setup() {
 	bHide = true;
 	bSelection = false;
 	bShowCursor = false;
-	//ofLog() << "size Object2D<ofImage>: " << sizeof(ObjectBase2D<ofImage>) <<
-	//	"\n size Object2D<int>: " << sizeof(ObjectBase2D<int>) <<
-	//	"\n size Object2D<float>: " << sizeof(ObjectBase2D<float>) <<
-	//	"\n size Object2D<VectorForme>: " << sizeof(ObjectBase2D<VectorForme>) <<
-	//	"\n size vectorForme: " << sizeof(VectorForme) <<
-	//	"\n size vectorPrimitive: " << sizeof(VectorPrimitive);
-	//"\n size vectorPrimitive2: " << sizeof(VectorPrimitive2);
 
 }
 
@@ -134,38 +117,6 @@ void Application::keyPressed(int key) {
 //--------------------------------------------------------------
 void Application::keyReleased(int key) {
 	cameraRenderer.keyReleased(key);
-	switch (key) {
-		case '1':
-			//this->camera_active = Camera::front;
-			//this->setupCamera();
-			this->createNewWindow(Camera::front);
-			break;
-		case '2':
-			//this->camera_active = Camera::back;
-			//this->setupCamera();
-			this->createNewWindow(Camera::back);
-			break;
-		case '3':
-			//this->camera_active = Camera::left;
-			//this->setupCamera();
-			this->createNewWindow(Camera::left);
-			break;
-		case '4':
-			//this->camera_active = Camera::right;
-			//this->setupCamera();
-			this->createNewWindow(Camera::right);
-			break;
-		case '5':
-			//this->camera_active = Camera::top;
-			//this->setupCamera();
-			this->createNewWindow(Camera::top);
-			break;
-		case '6':
-			//this->camera_active = Camera::down;
-			//this->setupCamera();
-			this->createNewWindow(Camera::down);
-			break;
-	}
 }
 
 //--------------------------------------------------------------
@@ -248,97 +199,4 @@ void Application::dragEvent(ofDragInfo dragInfo) {
 	ofLog() << "<app::ofDragInfo file[0]: " << dragInfo.files.at(0)
 		<< " at : " << dragInfo.position << ">";
 	imageRenderer.importImage(dragInfo.files.at(0), dragInfo.position.x, dragInfo.position.y);
-}
-
-
-// ===============================================================
-// Méthodes de caméra nécessitant un accès aux méthodes de draw
-// ===============================================================
-
-
-void Application::createNewWindow(const Camera& type) {
-	// front = 0, back = 1, left = 2, right = 3, top = 4, down = 5
-
-	auto method = &Application::drawFront;
-	int index = -1;
-	switch (type) {
-		case Camera::front:
-			method = &Application::drawFront;
-			index = 0;
-			break;
-		case Camera::back:
-			method = &Application::drawBack;
-			index = 1;
-			break;
-		case Camera::left:
-			method = &Application::drawLeft;
-			index = 2;
-			break;
-		case Camera::right:
-			method = &Application::drawRight;
-			index = 3;
-			break;
-		case Camera::top:
-			method = &Application::drawTop;
-			index = 4;
-			break;
-		case Camera::down:
-			method = &Application::drawDown;
-			index = 5;
-			break;
-		default:
-			index = -1;
-			break;
-	}
-	if (index == -1) {
-		ofLog(ofLogLevel::OF_LOG_ERROR) << "<CameraRenderer::CreateNewWindow: Type invalid>";
-		return;
-	}
-	if (cameraRenderer.vecWindow.at(index) == nullptr || cameraRenderer.vecWindow.at(index).get()->renderer().get() == nullptr) {
-		ofGLFWWindowSettings settings;
-		settings.setGLVersion(2, 1);
-		settings.windowMode = OF_WINDOW;
-		settings.shareContextWith = this->mainWindow;
-		cameraRenderer.vecWindow.at(index) = ofCreateWindow(settings);
-		cameraRenderer.vecWindow.at(index)->setWindowTitle(cameraRenderer.getCameraName(type));
-		cameraRenderer.vecWindow.at(index)->setVerticalSync(true);
-		cameraRenderer.vecWindow.at(index)->events().setFrameRate(ofGetFrameRate());
-
-		ofAddListener(cameraRenderer.vecWindow.at(index)->events().draw, this, method);
-	} else {
-		ofLog(ofLogLevel::OF_LOG_WARNING) << "<CameraRenderer::CreateNewWindow: window already exists>";
-	}
-}
-
-void Application::drawFront(ofEventArgs& args) {
-	drawCamera(Camera::front);
-}
-
-void Application::drawBack(ofEventArgs& args) {
-	drawCamera(Camera::back);
-}
-
-void Application::drawLeft(ofEventArgs& args) {
-	drawCamera(Camera::left);
-}
-
-void Application::drawRight(ofEventArgs& args) {
-	drawCamera(Camera::right);
-}
-
-void Application::drawTop(ofEventArgs& args) {
-	drawCamera(Camera::top);
-}
-
-void Application::drawDown(ofEventArgs& args) {
-	drawCamera(Camera::down);
-}
-
-void Application::drawCamera(const Camera& camera) {
-	const Camera old = cameraRenderer.camera_active;
-	cameraRenderer.camera_active = camera;
-	cameraRenderer.setupCamera();
-	this->drawCamera();
-	cameraRenderer.camera_active = old;
-	cameraRenderer.setupCamera();
 }
