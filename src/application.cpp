@@ -14,6 +14,7 @@ void Application::setup() {
 	objects3DRenderer.setup("Objets 3D");
 	curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
+	textureRenderer.setup();
 	ofSetVerticalSync(true);
 
 	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
@@ -59,6 +60,7 @@ void Application::update() {
 	dessinRenderer.update();
 	cameraRenderer.update();
 	objects3DRenderer.update();
+	textureRenderer.update();
 
 	curseurRenderer.valCurseurSlider = sliderCurseur;
 }
@@ -67,6 +69,7 @@ void Application::update() {
 void Application::draw() {
 	imageRenderer.draw();
 	dessinRenderer.draw();
+	textureRenderer.draw();
 	drawCamera();
 
 	if (!bHide) {

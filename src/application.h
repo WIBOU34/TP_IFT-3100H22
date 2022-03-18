@@ -11,6 +11,7 @@
 #include "objects3D/objects3DRenderer.h"
 #include "camera/cameraRenderer.h"
 #include "ofxGui.h"
+#include "texture/textureRenderer.h"
 
 class Application : public ofBaseApp {
 public:
@@ -21,6 +22,7 @@ public:
 	CameraRenderer cameraRenderer;
 	shared_ptr<ofAppBaseWindow> mainWindow;
 	Objects3DRenderer objects3DRenderer;
+	TextureRenderer textureRenderer; 
 
 	void setup();
 	void setupGui(const shared_ptr<ofAppBaseWindow>& window);
