@@ -20,9 +20,10 @@ public:
 	CurseurRenderer curseurRenderer;
 	DessinRenderer dessinRenderer;
 	CameraRenderer cameraRenderer;
-	shared_ptr<ofAppBaseWindow> mainWindow;
 	Objects3DRenderer objects3DRenderer;
-	TextureRenderer textureRenderer; 
+	TextureRenderer textureRenderer;
+
+	shared_ptr<ofAppBaseWindow> mainWindow;
 
 	void setup();
 	void setupGui(const shared_ptr<ofAppBaseWindow>& window);

@@ -9,12 +9,14 @@ void Application::setup() {
 	ofAddListener(ofEvents().mouseMoved, this, &Application::customMouseMoved, OF_EVENT_ORDER_BEFORE_APP - 100);
 	ofSetWindowTitle("Travail Pratique");
 
+	ofSetWindowShape(1480, 1028);
+
 	imageRenderer.setup("Images");
 	dessinRenderer.setup("Dessin");
 	objects3DRenderer.setup("Objets 3D");
 	curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
-	textureRenderer.setup();
+	textureRenderer.setup("Textures");
 	ofSetVerticalSync(true);
 
 	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
@@ -49,6 +51,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(imageRenderer.parameters);
 	gui.add(dessinRenderer.parameters);
 	gui.add(&objects3DRenderer.parameters3D);
+	gui.add(textureRenderer.parameters);
 
 	gui.minimizeAll();
 	bHide = false;

@@ -4,14 +4,12 @@
 #pragma once
 
 #include "ofMain.h"
+#include "../renderer.h"
 
 
-class TextureRenderer : public ofBaseApp {
-
+class TextureRenderer : public RendererBase {
 public:
-	void setup();
-	void update();
-	void draw();
+	ofParameterGroup parameters;
 
 	ofMesh mesh;
 	ofEasyCam cam;
@@ -19,4 +17,10 @@ public:
 	ofLight light;
 
 	ofShader shader;
+
+protected:
+	void setupRenderer(const std::string& name);
+	void updateRenderer();
+	void generateDraw();
+	void render();
 };

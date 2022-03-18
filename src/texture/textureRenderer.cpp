@@ -3,11 +3,9 @@
 
 #include "textureRenderer.h"
 
-//--------------------------------------------------------------
-void TextureRenderer::setup() {
-
-	ofSetFrameRate(60);
-	ofSetBackgroundColor(31);
+void TextureRenderer::setupRenderer(const std::string& name) {
+	parameters.clear();
+	parameters.setName(name);
 
 	// load an image 
 	image.load("miror.jpg");
@@ -23,17 +21,15 @@ void TextureRenderer::setup() {
 
 	// load the shaders 
 	shader.load("shader/frag_150.glsl", "shader/geom_150.glsl", "shader/vert_150.glsl");
-
 }
 
-//--------------------------------------------------------------
-void TextureRenderer::update() {
-
+void TextureRenderer::updateRenderer() {
 }
 
-//--------------------------------------------------------------
-void TextureRenderer::draw() {
+void TextureRenderer::generateDraw() {
+}
 
+void TextureRenderer::render() {
 	// enable z-buffering 
 	ofEnableDepthTest();
 
