@@ -117,6 +117,7 @@ void Application::keyPressed(int key) {
 //--------------------------------------------------------------
 void Application::keyReleased(int key) {
 	cameraRenderer.keyReleased(key);
+	textureRenderer.keyReleased(key);
 }
 
 //--------------------------------------------------------------

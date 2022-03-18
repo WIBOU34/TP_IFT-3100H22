@@ -7,9 +7,14 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
 	parameters.setName(name);
 
-    // menu gui pour la texture
-   
-    parameters.add(meshSphereToggle.setup("Sphere mesh", true)->getParameter());
+    // menu gui pour la texture   
+    parameters.add(mesh_sphere_toggle.setup("Sphere mesh", true)->getParameter());
+    parameters.add(identite_toggle.setup("Filtre identite", false)->getParameter());
+    parameters.add(emboss_toggle.setup("Filtre emboss", false)->getParameter());
+    parameters.add(sharpen_toggle.setup("Filtre sharpen", false)->getParameter());
+    parameters.add(edge_detect_toggle.setup("Filtre edge detect", false)->getParameter());
+    
+    
     
 	// loader image 
 	image.load("fire.jpg");
@@ -23,23 +28,23 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 		mesh.setTexCoord(i, texCoord);
 	}
 
-	// load the shaders 
+	// load des shaders 
 	shader.load("shader/frag_150.glsl", "shader/geom_150.glsl", "shader/vert_150.glsl");
 
 	// dimensions de l'image source
 	image_width = image.getWidth();
 	image_height = image.getHeight();
 	// initialiser l'image de destination
-	image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-	// sélectionner le filtre de convolution par défaut
-	kernel_type = ConvolutionKernel::edge_detect;
-	kernel_name = "edge_detect";
+	image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);	
+    // sélectionner le filtre de convolution par défaut   
+    kernel_type = ConvolutionKernel::identity;
+	kernel_name = "identity";   
 	// appliquer le filtre de convolution par défaut
 	filter();
 }
 
 void TextureRenderer::updateRenderer() {
-
+ 
 }
 
 void TextureRenderer::generateDraw() {
@@ -47,8 +52,9 @@ void TextureRenderer::generateDraw() {
 }
 
 void TextureRenderer::render() {
+
 	
-    if (meshSphereToggle == true) {
+    if (mesh_sphere_toggle == true) {
 
     
     // enable z-buffering 
@@ -194,7 +200,41 @@ void TextureRenderer::filter()
     // écrire les pixels dans l'image de destination
     image_destination.setFromPixels(pixel_array_dst);
 
-    ofLog() << "<convolution filter done>";
+    //ofLog() << "<convolution filter done>";
+}
+
+void TextureRenderer::keyReleased(int key) {
+    switch (key) {
+    
+    case 49: // touche 1 
+        kernel_type = ConvolutionKernel::identity;
+        kernel_name = "identity";
+        break;
+
+    case 50: // touche 2
+        kernel_type = ConvolutionKernel::emboss;
+        kernel_name = "emboss";
+        break;
+
+    case 51: // touche 3
+        kernel_type = ConvolutionKernel::sharpen;
+        kernel_name = "sharpen";
+        break;
+
+    case 52: // touche 4
+        kernel_type = ConvolutionKernel::edge_detect;
+        kernel_name = "edge_detect";
+        break;
+
+    default:
+        break;
+
+    }
+   
+    
+   
+    // appliquer le filtre de convolution 
+    filter();
 }
 
 void TextureRenderer::buttonSpherePressed()

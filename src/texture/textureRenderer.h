@@ -53,27 +53,32 @@ const std::array<float, 9> convolution_kernel_edge_detect
 
 class TextureRenderer : public RendererBase {
 public:
+
+	// menu gui 
 	ofParameterGroup parameters;
+	ofxToggle mesh_sphere_toggle; 	
+	ofxToggle identite_toggle;
+	ofxToggle emboss_toggle; 
+	ofxToggle sharpen_toggle; 
+	ofxToggle edge_detect_toggle;
 
-
-	ofxToggle meshSphereToggle; 
-
+	// variable pour la sphere de mesh
 	ofMesh mesh;
 	ofEasyCam cam;
 	ofImage image;
 	ofLight light;
-
 	ofShader shader;
 
+	// filtre de convolution
 	ConvolutionKernel kernel_type; 
 	string kernel_name; 
-
 	ofImage image_destination;
 	int image_width;
 	int image_height;
 	int offset_vertical;
 	int offset_horizontal;
 
+void keyReleased(int key);
 
 protected:
 	void setupRenderer(const std::string& name);
@@ -81,6 +86,7 @@ protected:
 	void generateDraw();
 	void render();
 	void filter();
+	
 
 private: 
 	void buttonSpherePressed();
