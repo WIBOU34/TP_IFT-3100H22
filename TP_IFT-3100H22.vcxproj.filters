@@ -4,6 +4,36 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\application.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera\cameraRenderer.cpp">
+      <Filter>src\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\curseur\curseurRenderer.cpp">
+      <Filter>src\curseur</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dessin\dessinRenderer.cpp">
+      <Filter>src\dessin</Filter>
+    </ClCompile>
+    <ClCompile Include="src\image\imageRenderer.cpp">
+      <Filter>src\image</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objectBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objectBase3D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objects3D\objects3DRenderer.cpp">
+      <Filter>src\objects3D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.cpp">
       <Filter>addons\ofxAssimpModelLoader\src</Filter>
     </ClCompile>
@@ -55,37 +85,25 @@
     <ClCompile Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS.cpp">
       <Filter>addons\ofxVectorGraphics\libs</Filter>
     </ClCompile>
-    <ClCompile Include="src\application.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\objectBase.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\image\imageRenderer.cpp">
-      <Filter>src\image</Filter>
-    </ClCompile>
-    <ClCompile Include="src\curseur\curseurRenderer.cpp">
-      <Filter>src\curseur</Filter>
-    </ClCompile>
-    <ClCompile Include="src\objectBase3D.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\dessin\dessinRenderer.cpp">
-      <Filter>src\dessin</Filter>
-    </ClCompile>
-    <ClCompile Include="src\objects3D\objects3DRenderer.cpp">
-      <Filter>src\objects3D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\camera\cameraRenderer.cpp">
-      <Filter>src\camera</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
       <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\camera">
+      <UniqueIdentifier>{8BF399F1-AE24-2FFA-F0CC-EA38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\curseur">
+      <UniqueIdentifier>{588E0087-548E-9A81-5B2B-8B2E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\dessin">
+      <UniqueIdentifier>{E271C6E9-7315-986B-559C-EFF4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\image">
+      <UniqueIdentifier>{4604291C-4C48-59C3-2BA4-9224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\objects3D">
+      <UniqueIdentifier>{18371F2B-9E8A-99D1-3B84-F639}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons">
       <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
@@ -162,23 +180,35 @@
     <Filter Include="addons\ofxVectorGraphics\libs">
       <UniqueIdentifier>{B341F552-35C4-7EB6-B3C9-9D96}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\image">
-      <UniqueIdentifier>{63b3ad8b-0aa7-4e3b-9315-83fac6263ae0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\curseur">
-      <UniqueIdentifier>{b1866cc8-3f99-417d-a775-091a4f42297f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\dessin">
-      <UniqueIdentifier>{95e4ffba-03ff-4415-b0f1-c2711d2ab3cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\objects3D">
-      <UniqueIdentifier>{97180c7b-add9-465d-a253-4ab0043d91b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\camera">
-      <UniqueIdentifier>{cbdbee0c-d8cd-485b-b75a-803bf8ddecc3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\application.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\cameraRenderer.h">
+      <Filter>src\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\curseur\curseurRenderer.h">
+      <Filter>src\curseur</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dessin\dessinRenderer.h">
+      <Filter>src\dessin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\image\imageRenderer.h">
+      <Filter>src\image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objectBase.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objectBase3D.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objects3D\objects3DRenderer.h">
+      <Filter>src\objects3D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h">
       <Filter>addons\ofxAssimpModelLoader\src</Filter>
     </ClInclude>
@@ -512,39 +542,8 @@
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS_Types.hpp">
       <Filter>addons\ofxVectorGraphics\libs</Filter>
     </ClInclude>
-    <ClInclude Include="src\application.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="src\objectBase.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\image\imageRenderer.h">
-      <Filter>src\image</Filter>
-    </ClInclude>
-    <ClInclude Include="src\curseur\curseurRenderer.h">
-      <Filter>src\curseur</Filter>
-    </ClInclude>
-    <ClInclude Include="src\objectBase3D.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\dessin\dessinRenderer.h">
-      <Filter>src\dessin</Filter>
-    </ClInclude>
-    <ClInclude Include="src\objects3D\objects3DRenderer.h">
-      <Filter>src\objects3D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\camera\cameraRenderer.h">
-      <Filter>src\camera</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="icon.ico" />
   </ItemGroup>
 </Project>
