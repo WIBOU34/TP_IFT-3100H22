@@ -9,7 +9,7 @@ void Application::setup() {
 	ofAddListener(ofEvents().mouseMoved, this, &Application::customMouseMoved, OF_EVENT_ORDER_BEFORE_APP - 100);
 	ofSetWindowTitle("Travail Pratique");
 
-	ofSetWindowShape(1480, 1028);
+	ofSetWindowShape(1280, 728);
 
 	imageRenderer.setup("Images");
 	dessinRenderer.setup("Dessin");
