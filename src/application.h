@@ -61,12 +61,12 @@ public:
 	ofxPanel gui;
 
 private:
-	void createNewWindow(const Camera& type);
-	void drawFront(ofEventArgs& args);
-	void drawBack(ofEventArgs& args);
-	void drawLeft(ofEventArgs& args);
-	void drawRight(ofEventArgs& args);
-	void drawTop(ofEventArgs& args);
-	void drawDown(ofEventArgs& args);
-	void drawCamera(const Camera& camera);
+	//void createNewWindow(const Camera& type);
+	//void drawFront(ofEventArgs& args);
+	//void drawBack(ofEventArgs& args);
+	//void drawLeft(ofEventArgs& args);
+	//void drawRight(ofEventArgs& args);
+	//void drawTop(ofEventArgs& args);
+	//void drawDown(ofEventArgs& args);
+	//void drawCamera(const Camera& camera);
 };

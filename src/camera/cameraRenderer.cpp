@@ -4,14 +4,6 @@ void CameraRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
 	parameters.setName(name);
 
-	vecCamera.at(0) = &camera_front;
-	vecCamera.at(1) = &camera_back;
-	vecCamera.at(2) = &camera_left;
-	vecCamera.at(3) = &camera_right;
-	vecCamera.at(4) = &camera_top;
-	vecCamera.at(5) = &camera_down;
-
-
 	// attributs de la caméra
 	camera_position = { 0.0f, 0.0f, 0.0f };
 	camera_target = { 0.0f, 0.0f, 0.0f };
@@ -57,7 +49,6 @@ void CameraRenderer::setupRenderer(const std::string& name) {
 	parameters.add(mouvementsFleches.setup("Fleches", "deplacement Z")->getParameter());
 	parameters.add(mouvementsFlechesCtrl.setup("Fleches + ctrl", "Changement angles")->getParameter());
 	parameters.add(mouvementsHautBas.setup("Shift - Space", "Haut - Bas")->getParameter());
-	parameters.add(agencementCamera.setup("Agencement camera", "1-6")->getParameter());
 	parameters.add(btnReset.setup("Reset la camera (r)")->getParameter());
 
 	parameters.add(is_camera_perspective.setup("Mode perspective", is_camera_perspective)->getParameter());
@@ -76,57 +67,57 @@ void CameraRenderer::setupRenderer(const std::string& name) {
 
 void CameraRenderer::keyPressed(int key) {
 	switch (key) {
-		case OF_KEY_LEFT:
-			is_key_press_left = true;
-			break;
-		case OF_KEY_UP:
-			is_key_press_up = true;
-			break;
-		case OF_KEY_RIGHT:
-			is_key_press_right = true;
-			break;
-		case OF_KEY_DOWN:
-			is_key_press_down = true;
-			break;
-		case OF_KEY_CONTROL:
-			is_key_press_ctrl = true;
-			break;
-		case OF_KEY_SHIFT:
-			is_key_press_shift = true;
-			break;
-		case ' ':
-			is_key_press_space = true;
-			break;
+	case OF_KEY_LEFT:
+		is_key_press_left = true;
+		break;
+	case OF_KEY_UP:
+		is_key_press_up = true;
+		break;
+	case OF_KEY_RIGHT:
+		is_key_press_right = true;
+		break;
+	case OF_KEY_DOWN:
+		is_key_press_down = true;
+		break;
+	case OF_KEY_CONTROL:
+		is_key_press_ctrl = true;
+		break;
+	case OF_KEY_SHIFT:
+		is_key_press_shift = true;
+		break;
+	case ' ':
+		is_key_press_space = true;
+		break;
 	}
 }
 
 void CameraRenderer::keyReleased(int key) {
 	switch (key) {
-		case OF_KEY_LEFT:
-			is_key_press_left = false;
-			break;
-		case OF_KEY_UP:
-			is_key_press_up = false;
-			break;
-		case OF_KEY_RIGHT:
-			is_key_press_right = false;
-			break;
-		case OF_KEY_DOWN:
-			is_key_press_down = false;
-			break;
-		case OF_KEY_CONTROL:
-			is_key_press_ctrl = false;
-			break;
-		case OF_KEY_SHIFT:
-			is_key_press_shift = false;
-			break;
-		case ' ':
-			is_key_press_space = false;
-			break;
-		case 'r':
-			reset();
-			break;
-			// Creation des fenetres dans application.cpp
+	case OF_KEY_LEFT:
+		is_key_press_left = false;
+		break;
+	case OF_KEY_UP:
+		is_key_press_up = false;
+		break;
+	case OF_KEY_RIGHT:
+		is_key_press_right = false;
+		break;
+	case OF_KEY_DOWN:
+		is_key_press_down = false;
+		break;
+	case OF_KEY_CONTROL:
+		is_key_press_ctrl = false;
+		break;
+	case OF_KEY_SHIFT:
+		is_key_press_shift = false;
+		break;
+	case ' ':
+		is_key_press_space = false;
+		break;
+	case 'r':
+		reset();
+		break;
+		// Creation des fenetres dans application.cpp
 	}
 }
 
@@ -141,18 +132,8 @@ void CameraRenderer::reset() {
 	// position initiale de chaque caméra
 
 	camera_front.setVFlip(true);
-	camera_back.setVFlip(true);
-	camera_left.setVFlip(true);
-	camera_right.setVFlip(true);
-	camera_top.setVFlip(true);
-	camera_down.setVFlip(true);
 
 	camera_front.setPosition(0, 0, -offset_camera);
-	camera_back.setPosition(0, 0, offset_camera);
-	camera_left.setPosition(-offset_camera, 0, 0);
-	camera_right.setPosition(offset_camera, 0, 0);
-	camera_top.setPosition(0, offset_camera, 0);
-	camera_down.setPosition(0, -offset_camera, 0);
 
 	camera_target.x = 0.0f;
 	camera_target.y = 0.0f;
@@ -160,11 +141,6 @@ void CameraRenderer::reset() {
 
 	// orientation de chaque caméra
 	camera_front.lookAt(camera_target);
-	camera_back.lookAt(camera_target);
-	camera_left.lookAt(camera_target);
-	camera_right.lookAt(camera_target);
-	camera_top.lookAt(camera_target, ofVec3f(1, 0, 0));
-	camera_down.lookAt(camera_target, ofVec3f(1, 0, 0));
 
 	// caméra par défaut
 	camera_active = Camera::front;
@@ -234,37 +210,35 @@ void CameraRenderer::updateRenderer() {
 	speed_translation = speed_delta * time_elapsed;
 	speed_rotation = speed_translation / 8.0f;
 
-	for (ofCamera* camera : vecCamera) {
-		if (is_camera_move_left)
-			camera->truck(-speed_translation);
-		if (is_camera_move_right)
-			camera->truck(speed_translation);
+	if (is_camera_move_left)
+		camera->truck(-speed_translation);
+	if (is_camera_move_right)
+		camera->truck(speed_translation);
 
-		if (is_camera_move_up)
-			camera->boom(speed_translation);
-		if (is_camera_move_down)
-			camera->boom(-speed_translation);
+	if (is_camera_move_up)
+		camera->boom(speed_translation);
+	if (is_camera_move_down)
+		camera->boom(-speed_translation);
 
-		if (is_camera_move_forward)
-			camera->dolly(-speed_translation);
-		if (is_camera_move_backward)
-			camera->dolly(speed_translation);
+	if (is_camera_move_forward)
+		camera->dolly(-speed_translation);
+	if (is_camera_move_backward)
+		camera->dolly(speed_translation);
 
-		if (is_camera_tilt_up)
-			camera->tiltDeg(-speed_rotation);
-		if (is_camera_tilt_down)
-			camera->tiltDeg(speed_rotation);
+	if (is_camera_tilt_up)
+		camera->tiltDeg(-speed_rotation);
+	if (is_camera_tilt_down)
+		camera->tiltDeg(speed_rotation);
 
-		if (is_camera_pan_left)
-			camera->panDeg(speed_rotation);
-		if (is_camera_pan_right)
-			camera->panDeg(-speed_rotation);
+	if (is_camera_pan_left)
+		camera->panDeg(speed_rotation);
+	if (is_camera_pan_right)
+		camera->panDeg(-speed_rotation);
 
-		if (is_camera_roll_left)
-			camera->rollDeg(-speed_rotation);
-		if (is_camera_roll_right)
-			camera->rollDeg(speed_rotation);
-	}
+	if (is_camera_roll_left)
+		camera->rollDeg(-speed_rotation);
+	if (is_camera_roll_right)
+		camera->rollDeg(speed_rotation);
 }
 
 void CameraRenderer::generateDraw() {
@@ -280,38 +254,6 @@ void CameraRenderer::render() {
 	// dessiner un gizmo pour les axes de la scène
 	if (is_visible_axes)
 		ofDrawRotationAxes(64);
-
-	// dessiner un gizmo pour toutes les caméras sauf celle qui est active
-	if (is_visible_camera) {
-		if (camera_active != Camera::front)
-			camera_front.draw();
-		if (camera_active != Camera::back)
-			camera_back.draw();
-		if (camera_active != Camera::left)
-			camera_left.draw();
-		if (camera_active != Camera::right)
-			camera_right.draw();
-		if (camera_active != Camera::top)
-			camera_top.draw();
-		if (camera_active != Camera::down)
-			camera_down.draw();
-	}
-
-	// dessiner une zone de texte avec le nom des caméras
-	if (is_visible_text) {
-		if (camera_active != Camera::front)
-			ofDrawBitmapString(" camera front", camera_front.getPosition());
-		if (camera_active != Camera::back)
-			ofDrawBitmapString(" camera back", camera_back.getPosition());
-		if (camera_active != Camera::left)
-			ofDrawBitmapString(" camera left", camera_left.getPosition());
-		if (camera_active != Camera::right)
-			ofDrawBitmapString(" camera right", camera_right.getPosition());
-		if (camera_active != Camera::top)
-			ofDrawBitmapString(" camera top", camera_top.getPosition());
-		if (camera_active != Camera::down)
-			ofDrawBitmapString(" camera down", camera_down.getPosition());
-	}
 
 	// dessiner le contenu de la scène
 	if (is_visible_box) {
@@ -338,88 +280,46 @@ void CameraRenderer::render() {
 }
 
 void CameraRenderer::perspectiveChanged() {
-	for (auto& camera : vecCamera) {
-		camera_position = camera->getPosition();
-		camera_orientation = camera->getOrientationQuat();
+	camera_position = camera->getPosition();
+	camera_orientation = camera->getOrientationQuat();
 
-		// mode de projection de la caméra
-		if (is_camera_perspective) {
-			camera->disableOrtho();
-			camera->setupPerspective(false, camera_fov, camera_n, camera_f, ofVec2f(0, 0));
-			camera->setVFlip(true);
-			camera_projection = "perspective";
-		} else {
-			camera->enableOrtho();
-			camera_projection = "orthogonale";
-		}
-
-		camera->setPosition(camera_position);
-		camera->setOrientation(camera_orientation);
+	// mode de projection de la caméra
+	if (is_camera_perspective) {
+		camera->disableOrtho();
+		camera->setupPerspective(false, camera_fov, camera_n, camera_f, ofVec2f(0, 0));
+		camera->setVFlip(true);
+		camera_projection = "perspective";
+	} else {
+		camera->enableOrtho();
+		camera_projection = "orthogonale";
 	}
+
+	camera->setPosition(camera_position);
+	camera->setOrientation(camera_orientation);
 }
 
 // fonction de configuration de la caméra active
 void CameraRenderer::setupCamera() {
 	switch (camera_active) {
-		case Camera::front:
-			camera = &camera_front;
-			camera_name = "avant";
-			break;
+	case Camera::front:
+		camera = &camera_front;
+		camera_name = "avant";
+		break;
 
-		case Camera::back:
-			camera = &camera_back;
-			camera_name = "arriere";
-			break;
-
-		case Camera::left:
-			camera = &camera_left;
-			camera_name = "gauche";
-			break;
-
-		case Camera::right:
-			camera = &camera_right;
-			camera_name = "droite";
-			break;
-
-		case Camera::top:
-			camera = &camera_top;
-			camera_name = "haut";
-			break;
-
-		case Camera::down:
-			camera = &camera_down;
-			camera_name = "bas";
-			break;
-
-		default:
-			break;
+	default:
+		break;
 	}
 }
 
 std::string CameraRenderer::getCameraName(const Camera& type) {
 	std::string returnValue = "";
 	switch (type) {
-		case Camera::front:
-			returnValue = "avant";
-			break;
-		case Camera::back:
-			returnValue = "arriere";
-			break;
-		case Camera::left:
-			returnValue = "gauche";
-			break;
-		case Camera::right:
-			returnValue = "droite";
-			break;
-		case Camera::top:
-			returnValue = "haut";
-			break;
-		case Camera::down:
-			returnValue = "bas";
-			break;
+	case Camera::front:
+		returnValue = "avant";
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 	return returnValue;
 }

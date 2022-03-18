@@ -14,17 +14,9 @@ enum class Camera { front = 0, back = 1, left = 2, right = 3, top = 4, down = 5 
 
 class CameraRenderer : public RendererBase {
 public:
-	std::vector<std::shared_ptr<ofAppBaseWindow>> vecWindow = std::vector<std::shared_ptr<ofAppBaseWindow>>(6);
-	std::vector<ofCamera*> vecCamera = std::vector<ofCamera*>(6);
-
 	Camera camera_active;
 
 	ofCamera camera_front;
-	ofCamera camera_back;
-	ofCamera camera_left;
-	ofCamera camera_right;
-	ofCamera camera_top;
-	ofCamera camera_down;
 
 	ofCamera* camera;
 
