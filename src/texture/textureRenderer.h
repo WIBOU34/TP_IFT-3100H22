@@ -5,6 +5,8 @@
 
 #include "ofMain.h"
 #include "../renderer.h"
+#include "../objectBase3D.h"
+#include "ofxGui.h"
 
 enum class ConvolutionKernel
 {
@@ -53,6 +55,9 @@ class TextureRenderer : public RendererBase {
 public:
 	ofParameterGroup parameters;
 
+
+	ofxToggle meshSphereToggle; 
+
 	ofMesh mesh;
 	ofEasyCam cam;
 	ofImage image;
@@ -76,4 +81,7 @@ protected:
 	void generateDraw();
 	void render();
 	void filter();
+
+private: 
+	void buttonSpherePressed();
 };

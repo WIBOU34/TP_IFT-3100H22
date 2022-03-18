@@ -7,10 +7,14 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
 	parameters.setName(name);
 
-	// load an image 
+    // menu gui pour la texture
+   
+    parameters.add(meshSphereToggle.setup("Sphere mesh", true)->getParameter());
+    
+	// loader image 
 	image.load("fire.jpg");
 
-	// create mesh from sphere 
+	// creer un mesh a partir d'une sphere 
 	mesh = ofSpherePrimitive(200, 40).getMesh();
 	for (int i = 0; i < mesh.getVertices().size(); i++) {
 		ofVec2f texCoord = mesh.getTexCoord(i);
@@ -43,7 +47,11 @@ void TextureRenderer::generateDraw() {
 }
 
 void TextureRenderer::render() {
-	// enable z-buffering 
+	
+    if (meshSphereToggle == true) {
+
+    
+    // enable z-buffering 
 	ofEnableDepthTest();
 
     image = image_destination; 
@@ -51,8 +59,8 @@ void TextureRenderer::render() {
 	cam.begin();
 	//light.enable();
 	ofPushMatrix();
-
-	ofRotate(ofGetElapsedTimef() * 10, 0, 1, 0);
+    ofRotate(ofGetElapsedTimef() * 10, 0, 1, 0);
+	
 
 	image.bind();
 	//mesh.drawWireframe();
@@ -62,12 +70,8 @@ void TextureRenderer::render() {
 	//light.disable();
 	cam.end();
 
-    // dessiner l'image avec le filtre 
-    /*image_destination.draw(
-        image_width + offset_horizontal * 2,
-        offset_vertical,
-        image_width,
-        image_height);*/
+    
+    }    
 }
 
 void TextureRenderer::filter()
@@ -191,6 +195,10 @@ void TextureRenderer::filter()
     image_destination.setFromPixels(pixel_array_dst);
 
     ofLog() << "<convolution filter done>";
+}
+
+void TextureRenderer::buttonSpherePressed()
+{
 }
 
 
