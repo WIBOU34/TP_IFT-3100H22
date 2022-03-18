@@ -85,6 +85,9 @@
     <ClCompile Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS.cpp">
       <Filter>addons\ofxVectorGraphics\libs</Filter>
     </ClCompile>
+    <ClCompile Include="src\texture\textureRenderer.cpp">
+      <Filter>src\texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -179,6 +182,9 @@
     </Filter>
     <Filter Include="addons\ofxVectorGraphics\libs">
       <UniqueIdentifier>{B341F552-35C4-7EB6-B3C9-9D96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\texture">
+      <UniqueIdentifier>{f91448f6-5d0b-427d-a1ef-03235c1810a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -541,6 +547,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS_Types.hpp">
       <Filter>addons\ofxVectorGraphics\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texture\textureRenderer.h">
+      <Filter>src\texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
