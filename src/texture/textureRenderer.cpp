@@ -9,16 +9,17 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 
     // menu gui pour la texture   
     parameters.add(mesh_sphere_toggle.setup("Sphere mesh", true)->getParameter());
-    parameters.add(identite_toggle.setup("Filtre identite", false)->getParameter());
-    parameters.add(emboss_toggle.setup("Filtre emboss", false)->getParameter());
-    parameters.add(sharpen_toggle.setup("Filtre sharpen", false)->getParameter());
-    parameters.add(edge_detect_toggle.setup("Filtre edge detect", false)->getParameter());
-    
+    parameters.add(identite_label.setup("Image originale    ", "' 1 '")->getParameter());
+    parameters.add(emboss_label.setup("Filtre emboss      ", "' 2 '")->getParameter());
+    parameters.add(sharpen_label.setup("Filtre sharpen     ", "' 3 '")->getParameter());
+    parameters.add(edge_detect_label.setup("Filtre edge detect ", "' 4 '")->getParameter());
     
     
 	// loader image 
 	image.load("fire.jpg");
-
+    // assigner l'image originale a une variable pour conserver son état d'origine
+    image_selection = image; 
+    
 	// creer un mesh a partir d'une sphere 
 	mesh = ofSpherePrimitive(200, 40).getMesh();
 	for (int i = 0; i < mesh.getVertices().size(); i++) {
@@ -60,7 +61,7 @@ void TextureRenderer::render() {
     // enable z-buffering 
 	ofEnableDepthTest();
 
-    image = image_destination; 
+    image = image_destination;
 
 	cam.begin();
 	//light.enable();
@@ -204,8 +205,11 @@ void TextureRenderer::filter()
 }
 
 void TextureRenderer::keyReleased(int key) {
-    switch (key) {
     
+    image = image_selection; // permet de revenir a l'image d'origine et ne pas emplier les filtres 
+
+    switch (key) {
+        
     case 49: // touche 1 
         kernel_type = ConvolutionKernel::identity;
         kernel_name = "identity";
@@ -223,7 +227,7 @@ void TextureRenderer::keyReleased(int key) {
 
     case 52: // touche 4
         kernel_type = ConvolutionKernel::edge_detect;
-        kernel_name = "edge_detect";
+        kernel_name = "edge_detect";        
         break;
 
     default:

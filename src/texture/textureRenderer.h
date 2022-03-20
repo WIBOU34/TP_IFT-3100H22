@@ -57,15 +57,16 @@ public:
 	// menu gui 
 	ofParameterGroup parameters;
 	ofxToggle mesh_sphere_toggle; 	
-	ofxToggle identite_toggle;
-	ofxToggle emboss_toggle; 
-	ofxToggle sharpen_toggle; 
-	ofxToggle edge_detect_toggle;
+	ofxLabel identite_label;
+	ofxLabel emboss_label; 
+	ofxLabel sharpen_label; 
+	ofxLabel edge_detect_label;
 
 	// variable pour la sphere de mesh
 	ofMesh mesh;
 	ofEasyCam cam;
 	ofImage image;
+	ofImage image_selection; 
 	ofLight light;
 	ofShader shader;
 
