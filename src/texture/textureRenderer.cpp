@@ -6,6 +6,7 @@
 void TextureRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
 	parameters.setName(name);
+    
 
     // menu gui pour la texture   
     parameters.add(mesh_sphere_toggle.setup("Sphere mesh", true)->getParameter());
@@ -13,10 +14,11 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     parameters.add(emboss_label.setup("Filtre emboss      ", "' 2 '")->getParameter());
     parameters.add(sharpen_label.setup("Filtre sharpen     ", "' 3 '")->getParameter());
     parameters.add(edge_detect_label.setup("Filtre edge detect ", "' 4 '")->getParameter());
-    
-    
+    slider_exposure.set("exposure", tone_map_exposure, 0.0f, 5.0f);    
+    parameters.add(slider_exposure);
+
 	// loader image 
-	image.load("fire.jpg");
+	image.load("fire.jpg"); // https://www.istockphoto.com/search/2/image?phrase=fire
     // assigner l'image originale a une variable pour conserver son état d'origine
     image_selection = image; 
     
@@ -30,7 +32,8 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 	}
 
 	// load des shaders 
-	shader.load("shader/frag_150.glsl", "shader/geom_150.glsl", "shader/vert_150.glsl");
+	shader_geom.load("shader/geom/frag_150.glsl", "shader/geom/geom_150.glsl", "shader/geom/vert_150.glsl");
+    shader_tone_map.load("shader/tone_map/frag_330.glsl", "shader/tone_map/vert_330.glsl");
 
 	// dimensions de l'image source
 	image_width = image.getWidth();
@@ -42,10 +45,18 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 	kernel_name = "identity";   
 	// appliquer le filtre de convolution par défaut
 	filter();
+
+    // setup mappage tonal 
+    tone_map_exposure = 1.0f;
+    tone_map_gamma = 2.2f;
+    tone_map_toggle = true; 
+
+    offset_vertical_ton = 32; 
+    offset_horizontal_ton = 32; 
 }
 
 void TextureRenderer::updateRenderer() {
- 
+   
 }
 
 void TextureRenderer::generateDraw() {
@@ -60,22 +71,38 @@ void TextureRenderer::render() {
     
     // enable z-buffering 
 	ofEnableDepthTest();
+     
 
-    image = image_destination;
-
+   
 	cam.begin();
 	//light.enable();
 	ofPushMatrix();
     ofRotate(ofGetElapsedTimef() * 10, 0, 1, 0);
 	
+    image = image_destination;
 
 	image.bind();
 	//mesh.drawWireframe();
 	mesh.draw();
 
+    
 	ofPopMatrix();
 	//light.disable();
 	cam.end();
+    
+    // shader pour mappage tonal 
+    shader_tone_map.begin();
+
+    shader_tone_map.setUniformTexture("image", image.getTexture(), 1);
+
+    shader_tone_map.setUniform1f("tone_mapping_exposure", tone_map_exposure);
+    shader_tone_map.setUniform1f("tone_mapping_gamma", tone_map_gamma);
+    shader_tone_map.setUniform1f("tone_mapping_toggle", tone_map_toggle);
+
+
+    //image.draw(100, 100, 100, 100);
+    
+    shader_tone_map.end();
 
     
     }    
@@ -241,8 +268,6 @@ void TextureRenderer::keyReleased(int key) {
     filter();
 }
 
-void TextureRenderer::buttonSpherePressed()
-{
-}
+
 
 

@@ -61,14 +61,15 @@ public:
 	ofxLabel emboss_label; 
 	ofxLabel sharpen_label; 
 	ofxLabel edge_detect_label;
+	ofParameter<float> slider_exposure;
 
-	// variable pour la sphere de mesh
+	// sphere de mesh
 	ofMesh mesh;
 	ofEasyCam cam;
 	ofImage image;
 	ofImage image_selection; 
 	ofLight light;
-	ofShader shader;
+	ofShader shader_geom;
 
 	// filtre de convolution
 	ConvolutionKernel kernel_type; 
@@ -79,6 +80,15 @@ public:
 	int offset_vertical;
 	int offset_horizontal;
 
+	// mappage tonal 
+	ofShader shader_tone_map; 
+	int offset_vertical_ton; 
+	int offset_horizontal_ton; 
+	float tone_map_exposure;
+	float tone_map_gamma;
+	bool tone_map_toggle;
+
+
 void keyReleased(int key);
 
 protected:
@@ -87,8 +97,6 @@ protected:
 	void generateDraw();
 	void render();
 	void filter();
-	
 
-private: 
-	void buttonSpherePressed();
+
 };
