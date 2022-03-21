@@ -62,6 +62,8 @@ public:
 	ofxLabel sharpen_label; 
 	ofxLabel edge_detect_label;
 	ofParameter<float> slider_exposure;
+	ofParameter<float> slider_gamma;
+	ofxToggle tone_map_toggle;
 
 	// sphere de mesh
 	ofMesh mesh;
@@ -81,12 +83,8 @@ public:
 	int offset_horizontal;
 
 	// mappage tonal 
-	ofShader shader_tone_map; 
-	int offset_vertical_ton; 
-	int offset_horizontal_ton; 
-	float tone_map_exposure;
-	float tone_map_gamma;
-	bool tone_map_toggle;
+	ofShader shader_tone_map;	
+	
 
 
 void keyReleased(int key);

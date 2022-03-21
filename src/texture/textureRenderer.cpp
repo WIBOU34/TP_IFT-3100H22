@@ -5,17 +5,19 @@
 
 void TextureRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
-	parameters.setName(name);
+	parameters.setName(name);    
     
-
     // menu gui pour la texture   
     parameters.add(mesh_sphere_toggle.setup("Sphere mesh", true)->getParameter());
     parameters.add(identite_label.setup("Image originale    ", "' 1 '")->getParameter());
     parameters.add(emboss_label.setup("Filtre emboss      ", "' 2 '")->getParameter());
     parameters.add(sharpen_label.setup("Filtre sharpen     ", "' 3 '")->getParameter());
     parameters.add(edge_detect_label.setup("Filtre edge detect ", "' 4 '")->getParameter());
-    slider_exposure.set("exposure", tone_map_exposure, 0.0f, 5.0f);    
-    parameters.add(slider_exposure);
+    
+    parameters.add(slider_exposure.set("Exposure",1.0f, 0.0f, 5.0f));
+    parameters.add(slider_gamma.set("Gamma", 2.2f, 0.0f, 5.0f));     
+    parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());    
+  
 
 	// loader image 
 	image.load("fire.jpg"); // https://www.istockphoto.com/search/2/image?phrase=fire
@@ -31,9 +33,8 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 		mesh.setTexCoord(i, texCoord);
 	}
 
-	// load des shaders 
-	shader_geom.load("shader/geom/frag_150.glsl", "shader/geom/geom_150.glsl", "shader/geom/vert_150.glsl");
-    shader_tone_map.load("shader/tone_map/frag_330.glsl", "shader/tone_map/vert_330.glsl");
+	// load du shader  
+    shader_tone_map.load("shader/tone_mapping_330_vs.glsl", "shader/tone_mapping_330_fs.glsl");
 
 	// dimensions de l'image source
 	image_width = image.getWidth();
@@ -46,13 +47,8 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 	// appliquer le filtre de convolution par défaut
 	filter();
 
-    // setup mappage tonal 
-    tone_map_exposure = 1.0f;
-    tone_map_gamma = 2.2f;
-    tone_map_toggle = true; 
-
-    offset_vertical_ton = 32; 
-    offset_horizontal_ton = 32; 
+ 
+ 
 }
 
 void TextureRenderer::updateRenderer() {
@@ -63,49 +59,44 @@ void TextureRenderer::generateDraw() {
 
 }
 
-void TextureRenderer::render() {
-
-	
+void TextureRenderer::render() {   
+   
+        
+    // si on veut afficher la sphere sur laquelle les textures sont appliquées 
     if (mesh_sphere_toggle == true) {
 
-    
-    // enable z-buffering 
-	ofEnableDepthTest();
-     
 
+        // pour sélectionner le type de tone-mapping
+        if (tone_map_toggle) tone_map_toggle.setup("aces filmic", true)->getParameter();       
+        else tone_map_toggle.setup("reinhard", false)->getParameter();    
+
+        // shader pour mappage tonal 
+        shader_tone_map.begin();
+        shader_tone_map.setUniformTexture("image", image.getTexture(), 1);
+        shader_tone_map.setUniform1f("tone_mapping_exposure", slider_exposure);
+        shader_tone_map.setUniform1f("tone_mapping_gamma", slider_gamma);
+        shader_tone_map.setUniform1f("tone_mapping_toggle", tone_map_toggle);    
+        image.draw(100, 100, 300, 300);     
+        shader_tone_map.end();        
+    
+    
+        // dessiner la sphere de mesh avec son image en texture 
+	    ofEnableDepthTest(); // enable z-buffering 
+
+	    cam.begin();
+	    ofPushMatrix();
+
+        ofRotate(ofGetElapsedTimef() * 10, 0, 1, 0);
+        image = image_destination;
+    
+	    image.bind();
+	    mesh.draw();
+    
+	    ofPopMatrix();
+	    cam.end();
    
-	cam.begin();
-	//light.enable();
-	ofPushMatrix();
-    ofRotate(ofGetElapsedTimef() * 10, 0, 1, 0);
-	
-    image = image_destination;
-
-	image.bind();
-	//mesh.drawWireframe();
-	mesh.draw();
-
-    
-	ofPopMatrix();
-	//light.disable();
-	cam.end();
-    
-    // shader pour mappage tonal 
-    shader_tone_map.begin();
-
-    shader_tone_map.setUniformTexture("image", image.getTexture(), 1);
-
-    shader_tone_map.setUniform1f("tone_mapping_exposure", tone_map_exposure);
-    shader_tone_map.setUniform1f("tone_mapping_gamma", tone_map_gamma);
-    shader_tone_map.setUniform1f("tone_mapping_toggle", tone_map_toggle);
-
-
-    //image.draw(100, 100, 100, 100);
-    
-    shader_tone_map.end();
-
-    
-    }    
+    }   ofDisableArbTex();
+   
 }
 
 void TextureRenderer::filter()
