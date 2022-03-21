@@ -1,5 +1,5 @@
 // IFT3100H21 
-// Classe responsable des testures de l'application.
+// Classe responsable des textures de l'application.
 
 #include "textureRenderer.h"
 
@@ -16,11 +16,13 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     
     parameters.add(slider_exposure.set("Exposure",1.0f, 0.0f, 5.0f));
     parameters.add(slider_gamma.set("Gamma", 2.2f, 0.0f, 5.0f));     
-    parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());    
+    parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());  
+
+    parameters.add(display.setup("Display", true)->getParameter());
   
 
 	// loader image 
-	image.load("fire.jpg"); // https://www.istockphoto.com/search/2/image?phrase=fire
+	image.load("galax.jpg"); // https://www.wallpaperflare.com/teal-nebula-galaxy-wallpaper-planets-light-swirl-abstract-wallpaper-daa
     // assigner l'image originale a une variable pour conserver son état d'origine
     image_selection = image; 
     
@@ -61,11 +63,15 @@ void TextureRenderer::generateDraw() {
 
 void TextureRenderer::render() {   
    
-        
+    
+    // faire apparaitre la sphere ou l'image
+    if (display) ofDisableArbTex();
+    else ofEnableArbTex();
+          
     // si on veut afficher la sphere sur laquelle les textures sont appliquées 
     if (mesh_sphere_toggle == true) {
 
-
+        
         // pour sélectionner le type de tone-mapping
         if (tone_map_toggle) tone_map_toggle.setup("aces filmic", true)->getParameter();       
         else tone_map_toggle.setup("reinhard", false)->getParameter();    
@@ -75,11 +81,12 @@ void TextureRenderer::render() {
         shader_tone_map.setUniformTexture("image", image.getTexture(), 1);
         shader_tone_map.setUniform1f("tone_mapping_exposure", slider_exposure);
         shader_tone_map.setUniform1f("tone_mapping_gamma", slider_gamma);
-        shader_tone_map.setUniform1f("tone_mapping_toggle", tone_map_toggle);    
-        image.draw(100, 100, 300, 300);     
+        shader_tone_map.setUniform1f("tone_mapping_toggle", tone_map_toggle);   
+        
+        image.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
         shader_tone_map.end();        
-    
-    
+       
+        
         // dessiner la sphere de mesh avec son image en texture 
 	    ofEnableDepthTest(); // enable z-buffering 
 
@@ -90,13 +97,14 @@ void TextureRenderer::render() {
         image = image_destination;
     
 	    image.bind();
-	    mesh.draw();
-    
+	    if (!display) mesh.draw();
+        
+
 	    ofPopMatrix();
 	    cam.end();
    
-    }   ofDisableArbTex();
-   
+    }   
+    
 }
 
 void TextureRenderer::filter()

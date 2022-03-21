@@ -1,5 +1,5 @@
 // IFT3100H21
-// Classe responsable du rendu de l'application.
+// Classe responsable des textures de l'application.
 
 #pragma once
 
@@ -45,7 +45,7 @@ const std::array<float, 9> convolution_kernel_sharpen
 const std::array<float, 9> convolution_kernel_edge_detect
 {
 	 0.0,  1.0f, 0.0f,
-	 1.0f, -4.0f, 1.0f,
+	 1.0f, 1.0f, 1.0f,
 	 0.0f, -1.0f, 0.0f
 };
 
@@ -64,6 +64,7 @@ public:
 	ofParameter<float> slider_exposure;
 	ofParameter<float> slider_gamma;
 	ofxToggle tone_map_toggle;
+	ofxToggle display;
 
 	// sphere de mesh
 	ofMesh mesh;
@@ -85,7 +86,6 @@ public:
 	// mappage tonal 
 	ofShader shader_tone_map;	
 	
-
 
 void keyReleased(int key);
 
