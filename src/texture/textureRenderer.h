@@ -8,6 +8,7 @@
 #include "../objectBase3D.h"
 #include "ofxGui.h"
 
+
 enum class ConvolutionKernel
 {
 	identity,
@@ -66,6 +67,12 @@ public:
 	ofxToggle tone_map_toggle;
 	ofxToggle display;
 
+	// menu gui planet 
+	ofParameterGroup parameters_planet;
+	ofxButton mars_button; 
+	ofxButton venus_button;
+	ofxButton terre_button;
+
 	// sphere de mesh
 	ofMesh mesh;
 	ofEasyCam cam;
@@ -84,10 +91,12 @@ public:
 	int offset_horizontal;
 
 	// mappage tonal 
-	ofShader shader_tone_map;	
+	ofShader shader_tone_map;
 	
-
-void keyReleased(int key);
+	void keyReleased(int key);
+	void buttonMarsPicker();
+	void buttonVenusPicker();
+	void buttonTerrePicker();
 
 protected:
 	void setupRenderer(const std::string& name);
@@ -95,6 +104,7 @@ protected:
 	void generateDraw();
 	void render();
 	void filter();
+	
 
 
 };

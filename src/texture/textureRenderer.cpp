@@ -5,8 +5,8 @@
 
 void TextureRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
-	parameters.setName(name);    
-    
+	parameters.setName(name);
+
     // menu gui pour la texture   
     parameters.add(mesh_sphere_toggle.setup("Sphere mesh", true)->getParameter());
     parameters.add(identite_label.setup("Image originale    ", "' 1 '")->getParameter());
@@ -14,15 +14,31 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     parameters.add(sharpen_label.setup("Filtre sharpen     ", "' 3 '")->getParameter());
     parameters.add(edge_detect_label.setup("Filtre edge detect ", "' 4 '")->getParameter());
     
+    parameters.add(display.setup("Texture planete", false)->getParameter());
+    parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());
     parameters.add(slider_exposure.set("Exposure",1.0f, 0.0f, 5.0f));
-    parameters.add(slider_gamma.set("Gamma", 2.2f, 0.0f, 5.0f));     
-    parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());  
-
-    parameters.add(display.setup("Display", true)->getParameter());
+    parameters.add(slider_gamma.set("Gamma", 2.2f, 0.0f, 5.0f)); 
   
 
-	// loader image 
-	image.load("galax.jpg"); // https://www.wallpaperflare.com/teal-nebula-galaxy-wallpaper-planets-light-swirl-abstract-wallpaper-daa
+     // panel pour choisir la planete
+    parameters_planet.setName("Voie lactée"); 
+
+	// boutons pour le planet picker 
+    mars_button.addListener(this, &TextureRenderer::buttonMarsPicker);
+    parameters_planet.add(mars_button.setup("Mars")->getParameter());
+
+    venus_button.addListener(this, &TextureRenderer::buttonVenusPicker);
+    parameters_planet.add(venus_button.setup("Venus")->getParameter());
+
+    terre_button.addListener(this, &TextureRenderer::buttonTerrePicker);
+    parameters_planet.add(terre_button.setup("Terre")->getParameter());
+    
+   
+    // loader image de départ                                           
+    image.load("earth.jpg"); // https://www.wallpaperflare.com/teal-nebula-galaxy-wallpaper-planets-light-swirl-abstract-wallpaper-daa
+    //mars.load("mars.jpg");
+    //terre.load("venus.jpg");
+
     // assigner l'image originale a une variable pour conserver son état d'origine
     image_selection = image; 
     
@@ -55,6 +71,7 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 
 void TextureRenderer::updateRenderer() {
    
+
 }
 
 void TextureRenderer::generateDraw() {
@@ -62,7 +79,8 @@ void TextureRenderer::generateDraw() {
 }
 
 void TextureRenderer::render() {   
-   
+    
+    //planetPicker();
     
     // faire apparaitre la sphere ou l'image
     if (display) ofDisableArbTex();
@@ -70,8 +88,7 @@ void TextureRenderer::render() {
           
     // si on veut afficher la sphere sur laquelle les textures sont appliquées 
     if (mesh_sphere_toggle == true) {
-
-        
+                
         // pour sélectionner le type de tone-mapping
         if (tone_map_toggle) tone_map_toggle.setup("aces filmic", true)->getParameter();       
         else tone_map_toggle.setup("reinhard", false)->getParameter();    
@@ -85,8 +102,7 @@ void TextureRenderer::render() {
         
         image.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
         shader_tone_map.end();        
-       
-        
+               
         // dessiner la sphere de mesh avec son image en texture 
 	    ofEnableDepthTest(); // enable z-buffering 
 
@@ -99,12 +115,13 @@ void TextureRenderer::render() {
 	    image.bind();
 	    if (!display) mesh.draw();
         
-
 	    ofPopMatrix();
 	    cam.end();
    
     }   
-    
+
+
+   
 }
 
 void TextureRenderer::filter()
@@ -228,6 +245,61 @@ void TextureRenderer::filter()
     image_destination.setFromPixels(pixel_array_dst);
 
     //ofLog() << "<convolution filter done>";
+}
+
+void TextureRenderer::buttonMarsPicker() {
+    
+
+    image.load("mars.jpg");
+   
+    image.update();
+    
+    image_selection = image; 
+    image_selection.update();
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
+    image_destination.update();
+       
+    filter();
+    std::cout << "--> BUTTON MARS CLICKED <--";
+
+
+}
+
+void TextureRenderer::buttonVenusPicker() {
+
+    image.load("venus.jpg");
+    
+    image.update();
+
+    image_selection = image;
+    image_selection.update();
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
+    image_destination.update();
+
+    filter();
+
+    std::cout << "--> BUTTON VENUS CLICKED <--";
+
+}
+
+void TextureRenderer::buttonTerrePicker() {
+    image.load("earth.jpg");
+    image.update();
+
+    image_selection = image;
+    image_selection.update();
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
+    image_destination.update();
+
+    filter();
+
+    std::cout << "--> BUTTON EARTH CLICKED <--";
 }
 
 void TextureRenderer::keyReleased(int key) {
