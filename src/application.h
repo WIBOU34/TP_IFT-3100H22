@@ -64,6 +64,7 @@ public:
 	ofParameterGroup parameters;
 
 	ofxPanel gui;
+	ofxPanel gui_planet;
 
 private:
 	//void createNewWindow(const Camera& type);

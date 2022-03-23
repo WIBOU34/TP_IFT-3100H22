@@ -58,6 +58,14 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 
 	gui.minimizeAll();
 	bHide = false;
+
+	// gui pour sélectionner une planète 
+	gui_planet.setup("Selection planetes");
+	gui_planet.setDefaultWidth(300);
+	gui_planet.setPosition(ofGetWindowWidth() - 310, 10);
+	gui_planet.add(textureRenderer.parameters_planet);
+	
+
 }
 
 // fonction de mise à jour de la logique de l'application
@@ -87,6 +95,7 @@ void Application::draw() {
 	}
 
 	curseurRenderer.draw();
+	gui_planet.draw();
 }
 
 // fonction pour dessiner les éléments qui seront affectés par la caméra
@@ -126,6 +135,7 @@ void Application::keyPressed(int key) {
 //--------------------------------------------------------------
 void Application::keyReleased(int key) {
 	cameraRenderer.keyReleased(key);
+	textureRenderer.keyReleased(key);
 }
 
 //--------------------------------------------------------------
