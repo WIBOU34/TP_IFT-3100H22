@@ -16,7 +16,7 @@ void Application::setup() {
 	objects3DRenderer.setup("Objets 3D");
 	curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
-	//textureRenderer.setup("Textures");
+	textureRenderer.setup("Textures");
 	illuminationRenderer.setup("Illumination");
 	illuminationRenderer.camera = cameraRenderer.camera;
 	ofSetVerticalSync(true);
@@ -74,7 +74,7 @@ void Application::update() {
 	dessinRenderer.update();
 	cameraRenderer.update();
 	objects3DRenderer.update();
-	//textureRenderer.update();
+	textureRenderer.update();
 	illuminationRenderer.update();
 
 
@@ -85,7 +85,7 @@ void Application::update() {
 void Application::draw() {
 	imageRenderer.draw();
 	dessinRenderer.draw();
-	//textureRenderer.draw();
+	textureRenderer.draw();
 	//illuminationRenderer.draw();
 	drawCamera();
 
