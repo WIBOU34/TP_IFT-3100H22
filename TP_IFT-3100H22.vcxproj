@@ -180,6 +180,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\illuminationClassique\illuminationRenderer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\application.cpp" />
     <ClCompile Include="src\camera\cameraRenderer.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="src\camera\cameraRenderer.h" />
     <ClInclude Include="src\curseur\curseurRenderer.h" />
     <ClInclude Include="src\dessin\dessinRenderer.h" />
+    <ClInclude Include="src\illuminationClassique\illuminationRenderer.h" />
     <ClInclude Include="src\image\imageRenderer.h" />
     <ClInclude Include="src\objectBase.h" />
     <ClInclude Include="src\objectBase3D.h" />

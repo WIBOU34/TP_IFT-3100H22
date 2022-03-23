@@ -16,7 +16,9 @@ void Application::setup() {
 	objects3DRenderer.setup("Objets 3D");
 	curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
-	textureRenderer.setup("Textures");
+	//textureRenderer.setup("Textures");
+	illuminationRenderer.setup("Illumination");
+	illuminationRenderer.camera = cameraRenderer.camera;
 	ofSetVerticalSync(true);
 
 	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
@@ -52,6 +54,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(dessinRenderer.parameters);
 	gui.add(&objects3DRenderer.parameters3D);
 	gui.add(textureRenderer.parameters);
+	gui.add(&illuminationRenderer.parameters);
 
 	gui.minimizeAll();
 	bHide = false;
@@ -63,7 +66,9 @@ void Application::update() {
 	dessinRenderer.update();
 	cameraRenderer.update();
 	objects3DRenderer.update();
-	textureRenderer.update();
+	//textureRenderer.update();
+	illuminationRenderer.update();
+
 
 	curseurRenderer.valCurseurSlider = sliderCurseur;
 }
@@ -72,7 +77,8 @@ void Application::update() {
 void Application::draw() {
 	imageRenderer.draw();
 	dessinRenderer.draw();
-	textureRenderer.draw();
+	//textureRenderer.draw();
+	//illuminationRenderer.draw();
 	drawCamera();
 
 	if (!bHide) {
@@ -88,6 +94,7 @@ void Application::drawCamera() {
 	cameraRenderer.camera->begin();
 	cameraRenderer.draw();
 	objects3DRenderer.draw();
+	illuminationRenderer.draw();
 	cameraRenderer.camera->end();
 }
 
@@ -110,6 +117,8 @@ void Application::keyPressed(int key) {
 			ofShowCursor();
 		} else
 			ofHideCursor();
+	} else if (key == 'r' && illuminationRenderer.drawObjetcs) {
+		illuminationRenderer.reset();
 	}
 	cameraRenderer.keyPressed(key);
 }

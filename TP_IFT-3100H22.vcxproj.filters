@@ -88,6 +88,9 @@
     <ClCompile Include="src\texture\textureRenderer.cpp">
       <Filter>src\texture</Filter>
     </ClCompile>
+    <ClCompile Include="src\illuminationClassique\illuminationRenderer.cpp">
+      <Filter>src\illuminationClassique</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -185,6 +188,9 @@
     </Filter>
     <Filter Include="src\texture">
       <UniqueIdentifier>{f91448f6-5d0b-427d-a1ef-03235c1810a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\illuminationClassique">
+      <UniqueIdentifier>{12db21c4-e213-4c77-9c6b-0384b2298242}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -550,6 +556,9 @@
     </ClInclude>
     <ClInclude Include="src\texture\textureRenderer.h">
       <Filter>src\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\illuminationClassique\illuminationRenderer.h">
+      <Filter>src\illuminationClassique</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

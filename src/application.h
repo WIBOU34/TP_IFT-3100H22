@@ -10,6 +10,7 @@
 #include "dessin/dessinRenderer.h"
 #include "objects3D/objects3DRenderer.h"
 #include "camera/cameraRenderer.h"
+#include "illuminationClassique/illuminationRenderer.h"
 #include "ofxGui.h"
 #include "texture/textureRenderer.h"
 
@@ -22,6 +23,7 @@ public:
 	CameraRenderer cameraRenderer;
 	Objects3DRenderer objects3DRenderer;
 	TextureRenderer textureRenderer;
+	IlluminationRenderer illuminationRenderer;
 
 	shared_ptr<ofAppBaseWindow> mainWindow;
 
