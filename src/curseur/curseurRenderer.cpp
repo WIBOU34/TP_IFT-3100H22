@@ -19,7 +19,7 @@ void CurseurRenderer::generateDraw()
 void CurseurRenderer::render()
 {
 	// dessiner le curseur
-	draw_cursor(mouse_current_x, mouse_current_y);
+	//draw_cursor(mouse_current_x, mouse_current_y);
 }
 
 // fonction qui dessine un curseur

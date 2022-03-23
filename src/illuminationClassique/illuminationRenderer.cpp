@@ -81,9 +81,9 @@ void IlluminationRenderer::setupRenderer(const std::string& name) {
 	teapot.disableMaterials();
 
 	// charger, compiler et linker les sources des shaders
-	shader_color_fill.load(
-		"shader/color_fill_330_vs.glsl",
-		"shader/color_fill_330_fs.glsl");
+	//shader_color_fill.load(
+		//"shader/color_fill_330_vs.glsl",
+		//"shader/color_fill_330_fs.glsl");
 
 	shader_lambert.load(
 		"shader/lambert_330_vs.glsl",
