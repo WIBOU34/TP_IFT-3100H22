@@ -19,6 +19,8 @@ void Application::setup() {
 	textureRenderer.setup("Textures");
 	illuminationRenderer.setup("Illumination");
 	illuminationRenderer.camera = cameraRenderer.camera;
+	raytracingManager.setup("Lancer de rayons");
+	raytracingManager.obj3Drenderer = &objects3DRenderer;
 	ofSetVerticalSync(true);
 
 	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
@@ -52,6 +54,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(cameraRenderer.parameters);
 	gui.add(imageRenderer.parameters);
 	gui.add(dessinRenderer.parameters);
+	gui.add(raytracingManager.parameters);
 	gui.add(&objects3DRenderer.parameters3D);
 	gui.add(textureRenderer.parameters);
 	gui.add(&illuminationRenderer.parameters);

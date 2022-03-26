@@ -11,6 +11,7 @@
 #include "objects3D/objects3DRenderer.h"
 #include "camera/cameraRenderer.h"
 #include "illuminationClassique/illuminationRenderer.h"
+#include "raytracing/raytracingManager.h"
 #include "ofxGui.h"
 #include "texture/textureRenderer.h"
 
@@ -24,6 +25,7 @@ public:
 	Objects3DRenderer objects3DRenderer;
 	TextureRenderer textureRenderer;
 	IlluminationRenderer illuminationRenderer;
+	RaytracingManager raytracingManager;
 
 	shared_ptr<ofAppBaseWindow> mainWindow;
 
