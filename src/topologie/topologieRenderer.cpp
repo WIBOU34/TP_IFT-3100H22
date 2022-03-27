@@ -15,7 +15,8 @@ void TopologieRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
 	parameters.setName(name);
 
-   
+   // position de la caméra 
+    cam.setPosition(ofPoint(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2, 1500));
 
     // menu gui pour la topologie
     parameters.add(bezier_toggle.setup("Spline de bezier", false)->getParameter());
@@ -52,10 +53,7 @@ void TopologieRenderer::setupRenderer(const std::string& name) {
 
 void TopologieRenderer::updateRenderer() {
 
-
-    // position de la caméra 
-    cam.setPosition(ofPoint(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2, 1500));
-
+  
     if (same_point_4) ctrl_point5 = ctrl_point4;
     if (same_point_5) ctrl_point4 = ctrl_point5;   
 
@@ -137,9 +135,29 @@ void TopologieRenderer::render() {
         // dessiner les points de contrôle
         ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point1.x, ctrl_point1.y, radius, radius);
+        ofSetColor(200);
+        string e1 = "1";
+        ofDrawBitmapString(e1, ctrl_point1.x -7, ctrl_point1.y+7);
+
+        ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point2.x, ctrl_point2.y, radius, radius);
+        ofSetColor(200);
+        string e2 = "2";
+        ofDrawBitmapString(e2, ctrl_point2.x -9, ctrl_point2.y+7);
+
+        ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point3.x, ctrl_point3.y, radius, radius);
+        ofSetColor(200);
+        string e3 = "3";
+        ofDrawBitmapString(e3, ctrl_point3.x - 9, ctrl_point3.y + 7);
+
+        ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point4.x, ctrl_point4.y, radius, radius);
+        ofSetColor(200);
+        string e4 = "4";
+        ofDrawBitmapString(e4, ctrl_point4.x - 9, ctrl_point4.y + 7);
+       
+       
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -169,9 +187,27 @@ void TopologieRenderer::render() {
         // dessiner les points de contrôle
         ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point5.x, ctrl_point5.y, radius, radius);
+        ofSetColor(200);
+        string e5 = "4";
+        ofDrawBitmapString(e5, ctrl_point5.x-9, ctrl_point5.y+7);
+
+        ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point6.x, ctrl_point6.y, radius, radius);
+        ofSetColor(200);
+        string e6 = "5";
+        ofDrawBitmapString(e6, ctrl_point6.x - 9, ctrl_point6.y + 7);
+
+        ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point7.x, ctrl_point7.y, radius, radius);
+        ofSetColor(200);
+        string e7 = "6";
+        ofDrawBitmapString(e7, ctrl_point7.x - 9, ctrl_point7.y + 7);
+
+        ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point8.x, ctrl_point8.y, radius, radius);
+        ofSetColor(200);
+        string e8 = "7";
+        ofDrawBitmapString(e8, ctrl_point8.x - 9, ctrl_point8.y + 7);
 
         //----------------------------------------------------------------------------------------------------------
 
@@ -179,7 +215,7 @@ void TopologieRenderer::render() {
 
         // draw instruction de controle des points pour l'utilisateur 
         ofSetColor(200);
-        string msg = "Utiliser les touches 1 a 8 pour controler les points \n et les fleches pour deplacer les points \n r -> reset";
+        string msg = "Utiliser les touches 1 a 7 pour choisir un point de controle\net les fleches pour les deplacer\nr:reset";
         ofDrawBitmapString(msg, 400, 20);
 
     }
@@ -298,23 +334,24 @@ void TopologieRenderer::keyReleased(int key) {
         ofLog() << "<select control point 4>";
         break;
     case 53: // touche 5
-        selected_ctrl_point = &ctrl_point5;
-        same_point_4 = false;
-        same_point_5 = true;
+        //selected_ctrl_point = &ctrl_point5;
+        //same_point_4 = false;
+        //same_point_5 = true;
+        selected_ctrl_point = &ctrl_point6;
         ofLog() << "<select control point 5>";
         break;
     case 54: // touche 5
-        selected_ctrl_point = &ctrl_point6;
+        selected_ctrl_point = &ctrl_point7;
         ofLog() << "<select control point 6>";
         break;
     case 55: // touche 5
-        selected_ctrl_point = &ctrl_point7;
+        selected_ctrl_point = &ctrl_point8;
         ofLog() << "<select control point 7>";
         break;
-    case 56: // touche 8
-        selected_ctrl_point = &ctrl_point8;
-        ofLog() << "<select control point 5>";
-        break;
+    //case 56: // touche 8
+        //selected_ctrl_point = &ctrl_point8;
+       // ofLog() << "<select control point 5>";
+       // break;
 
 
 

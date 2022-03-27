@@ -86,7 +86,7 @@ public:
 
 	// sphere de mesh
 	ofMesh mesh;
-	ofEasyCam cam;
+	ofEasyCam cam_tex;
 	ofImage image;
 	ofImage image_selection; 
 	ofLight light;

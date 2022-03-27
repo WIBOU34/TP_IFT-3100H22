@@ -108,7 +108,7 @@ void TextureRenderer::render() {
         // dessiner la sphere de mesh avec son image en texture 
 	    ofEnableDepthTest(); // enable z-buffering 
 
-	    cam.begin();
+	    cam_tex.begin();
 	    ofPushMatrix();
 
         ofRotate(ofGetElapsedTimef() * 10, 0, 1, 0);
@@ -118,15 +118,13 @@ void TextureRenderer::render() {
 	    if (!display) mesh.draw();
         
 	    ofPopMatrix();
-	    cam.end();
+	    cam_tex.end();
    
         // draw instruction de controle filtre de convolution pour l'utilisateur 
         ofSetColor(200);
         string msg = "i: image originale\ne: filtre emboss\ns: filtre sharpen\nd: filtre edge detect";
         ofDrawBitmapString(msg, 400, 20);
-    }   
-
-
+    } 
    
 }
 
@@ -253,61 +251,44 @@ void TextureRenderer::filter()
     //ofLog() << "<convolution filter done>";
 }
 
-void TextureRenderer::buttonMarsPicker() {
-    
+void TextureRenderer::buttonMarsPicker() {   
 
-    image.load("mars.jpg");
-   
-    image.update();
-    
+    image.load("mars.jpg");   
+    image.update();    
     image_selection = image; 
     image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();
-       
+    image_destination.update();       
     filter();
-    std::cout << "--> BUTTON MARS CLICKED <--";
-
-
 }
 
 void TextureRenderer::buttonVenusPicker() {
 
-    image.load("venus.jpg");
-    
+    image.load("venus.jpg");    
     image.update();
-
     image_selection = image;
     image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
     image_destination.update();
-
     filter();
-
-    std::cout << "--> BUTTON VENUS CLICKED <--";
-
 }
 
 void TextureRenderer::buttonTerrePicker() {
-    image.load("earth.jpg");
-    image.update();
 
+    image.load("earth.jpg"); 
+    image.update();
     image_selection = image;
     image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
     image_destination.update();
-
     filter();
-
-    std::cout << "--> BUTTON EARTH CLICKED <--";
 }
-
 
 void TextureRenderer::keyReleased(int key) {
     
