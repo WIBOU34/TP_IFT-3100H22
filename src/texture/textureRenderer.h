@@ -52,6 +52,15 @@ const std::array<float, 9> convolution_kernel_edge_detect
 
 
 
+/**
+ * \IFT3100H21
+ * \file textureRenderer.h
+ * \author Stéphane Boulanger
+ * \brief Classe responsable des textures de l'application
+ * \version 0.1
+ * \date 2022-03-27
+ */
+
 class TextureRenderer : public RendererBase {
 public:
 

@@ -1,5 +1,13 @@
-// IFT3100H21_AlmostEmptyProject/application.h
-// Classe principale de l'application.
+/**
+ * \IFT3100H21
+ * \file application.h
+ * \authors William Boudreault
+ *          Stéphane Boulanger
+ * \brief Classe principale de l'application
+ * \version 0.1
+ * \date 2022-03-27
+ */
+
 
 #pragma once
 
@@ -13,6 +21,7 @@
 #include "illuminationClassique/illuminationRenderer.h"
 #include "ofxGui.h"
 #include "texture/textureRenderer.h"
+#include "topologie/topologieRenderer.h"
 
 class Application : public ofBaseApp {
 public:
@@ -24,6 +33,7 @@ public:
 	Objects3DRenderer objects3DRenderer;
 	TextureRenderer textureRenderer;
 	IlluminationRenderer illuminationRenderer;
+	TopologieRenderer topologieRenderer;
 
 	shared_ptr<ofAppBaseWindow> mainWindow;
 

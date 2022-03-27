@@ -1,5 +1,12 @@
-// IFT3100H21_AlmostEmptyProject/application.cpp
-// Classe principale de l'application.
+/**
+ * \IFT3100H21
+ * \file application.cpp
+ * \authors William Boudreault
+ *          Stéphane Boulanger
+ * \brief Classe principale de l'application
+ * \version 0.1
+ * \date 2022-03-27
+ */
 
 #include "application.h"
 
@@ -17,6 +24,7 @@ void Application::setup() {
 	//curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
 	textureRenderer.setup("Textures");
+	topologieRenderer.setup("Topologie");
 	illuminationRenderer.setup("Illumination");
 	illuminationRenderer.camera = cameraRenderer.camera;
 	ofSetVerticalSync(true);
@@ -55,6 +63,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(&objects3DRenderer.parameters3D);
 	gui.add(textureRenderer.parameters);
 	gui.add(&illuminationRenderer.parameters);
+	gui.add(topologieRenderer.parameters);
 
 	gui.minimizeAll();
 	bHide = false;
@@ -76,6 +85,7 @@ void Application::update() {
 	objects3DRenderer.update();
 	textureRenderer.update();
 	illuminationRenderer.update();
+	topologieRenderer.update();
 
 
 	//curseurRenderer.valCurseurSlider = sliderCurseur;
@@ -86,6 +96,7 @@ void Application::draw() {
 	imageRenderer.draw();
 	dessinRenderer.draw();
 	textureRenderer.draw();
+	topologieRenderer.draw();
 	//illuminationRenderer.draw();
 	drawCamera();
 
@@ -130,12 +141,14 @@ void Application::keyPressed(int key) {
 		illuminationRenderer.reset();
 	}
 	cameraRenderer.keyPressed(key);
+	topologieRenderer.keyPressed(key);
 }
 
 //--------------------------------------------------------------
 void Application::keyReleased(int key) {
 	cameraRenderer.keyReleased(key);
 	textureRenderer.keyReleased(key);
+	topologieRenderer.keyReleased(key);
 }
 
 //--------------------------------------------------------------

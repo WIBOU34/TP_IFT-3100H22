@@ -1,5 +1,12 @@
-// IFT3100H21 
-// Classe responsable des textures de l'application.
+/**
+ * \IFT3100H21
+ * \file textureRenderer.cpp
+ * \author Stéphane Boulanger
+ * \brief Classe responsable des textures de l'application
+ * \version 0.1
+ * \date 2022-03-27
+ */
+
 
 #include "textureRenderer.h"
 
@@ -8,7 +15,7 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 	parameters.setName(name);
 
     // menu gui pour la texture   
-    parameters.add(mesh_sphere_toggle.setup("Sphere mesh", true)->getParameter());
+    parameters.add(mesh_sphere_toggle.setup("Sphere mesh", false)->getParameter());
     parameters.add(identite_label.setup("Image originale    ", "' 1 '")->getParameter());
     parameters.add(emboss_label.setup("Filtre emboss      ", "' 2 '")->getParameter());
     parameters.add(sharpen_label.setup("Filtre sharpen     ", "' 3 '")->getParameter());
