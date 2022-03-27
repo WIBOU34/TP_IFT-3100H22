@@ -15,12 +15,7 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 	parameters.setName(name);
 
     // menu gui pour la texture   
-    parameters.add(mesh_sphere_toggle.setup("Sphere mesh", false)->getParameter());
-    parameters.add(identite_label.setup("Image originale    ", "' 1 '")->getParameter());
-    parameters.add(emboss_label.setup("Filtre emboss      ", "' 2 '")->getParameter());
-    parameters.add(sharpen_label.setup("Filtre sharpen     ", "' 3 '")->getParameter());
-    parameters.add(edge_detect_label.setup("Filtre edge detect ", "' 4 '")->getParameter());
-    
+    parameters.add(mesh_sphere_toggle.setup("Afficher la planete", false)->getParameter()); 
     parameters.add(display.setup("Texture planete", false)->getParameter());
     parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());
     parameters.add(slider_exposure.set("Exposure",1.0f, 0.0f, 5.0f));
@@ -125,6 +120,10 @@ void TextureRenderer::render() {
 	    ofPopMatrix();
 	    cam.end();
    
+        // draw instruction de controle filtre de convolution pour l'utilisateur 
+        ofSetColor(200);
+        string msg = "i: image originale\ne: filtre emboss\ns: filtre sharpen\nd: filtre edge detect";
+        ofDrawBitmapString(msg, 400, 20);
     }   
 
 
@@ -309,28 +308,29 @@ void TextureRenderer::buttonTerrePicker() {
     std::cout << "--> BUTTON EARTH CLICKED <--";
 }
 
+
 void TextureRenderer::keyReleased(int key) {
     
     image = image_selection; // permet de revenir a l'image d'origine et ne pas emplier les filtres 
 
     switch (key) {
         
-    case 49: // touche 1 
+    case 'i': // touche 1 
         kernel_type = ConvolutionKernel::identity;
         kernel_name = "identity";
         break;
 
-    case 50: // touche 2
+    case 'e': // touche 2
         kernel_type = ConvolutionKernel::emboss;
         kernel_name = "emboss";
         break;
 
-    case 51: // touche 3
+    case 's': // touche 3
         kernel_type = ConvolutionKernel::sharpen;
         kernel_name = "sharpen";
         break;
 
-    case 52: // touche 4
+    case 'd': // touche 4
         kernel_type = ConvolutionKernel::edge_detect;
         kernel_name = "edge_detect";        
         break;

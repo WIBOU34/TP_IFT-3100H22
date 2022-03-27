@@ -76,6 +76,8 @@ public:
 	ofxToggle tone_map_toggle;
 	ofxToggle display;
 
+	ofxButton emboss_button;
+
 	// menu gui planet 
 	ofParameterGroup parameters_planet;
 	ofxButton mars_button; 
@@ -101,11 +103,14 @@ public:
 
 	// mappage tonal 
 	ofShader shader_tone_map;
+
+	
 	
 	void keyReleased(int key);
 	void buttonMarsPicker();
 	void buttonVenusPicker();
 	void buttonTerrePicker();
+	
 
 protected:
 	void setupRenderer(const std::string& name);

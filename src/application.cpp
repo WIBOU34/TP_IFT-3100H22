@@ -40,7 +40,7 @@ void Application::setup() {
 void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	ofLog() << "<app::GUISetup>";
 	mainWindow = window;
-	btnExportImgSetup = btnExportImg.setup("Exporter en image 'e'");
+	btnExportImgSetup = btnExportImg.setup("Exporter une image");
 	btnImportImgSetup = btnImportImg.setup("Importer une image");
 
 	btnExportImg.addListener(this, &Application::exportImage);
@@ -50,7 +50,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	parameters.setName("Menu 'h'");
 	gui.setup(parameters);
 
-	gui.add(bSelection.set("Mode Selection 's'", bSelection));
+	gui.add(bSelection.set("Mode Selection 'm'", bSelection));
 	gui.add(btnExportImgSetup);
 	gui.add(btnImportImgSetup);
 	//gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
@@ -68,11 +68,14 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.minimizeAll();
 	bHide = false;
 
-	// gui pour sélectionner une planète 
+	
+    // gui pour sélectionner une planète 
 	gui_planet.setup("Selection planetes");
 	gui_planet.setDefaultWidth(300);
 	gui_planet.setPosition(ofGetWindowWidth() - 310, 10);
 	gui_planet.add(textureRenderer.parameters_planet);
+	
+	
 	
 
 }
@@ -106,7 +109,9 @@ void Application::draw() {
 	}
 
 	//curseurRenderer.draw();
-	gui_planet.draw();
+	if (textureRenderer.mesh_sphere_toggle) {
+		gui_planet.draw();
+	}
 }
 
 // fonction pour dessiner les éléments qui seront affectés par la caméra
@@ -127,9 +132,7 @@ void Application::exit() {
 void Application::keyPressed(int key) {
 	if (key == 'h') {
 		bHide = !bHide;
-	} else if (key == 'e') {
-		this->exportImage();
-	} else if (key == 's') {
+	} else if (key == 'm') {
 		bSelection = !bSelection;
 	} else if (key == 'c') {
 		bShowCursor = !bShowCursor;
