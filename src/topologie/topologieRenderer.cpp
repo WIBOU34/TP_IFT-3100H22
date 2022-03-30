@@ -151,11 +151,11 @@ void TopologieRenderer::render() {
         string e3 = "3";
         ofDrawBitmapString(e3, ctrl_point3.x - 9, ctrl_point3.y + 7);
 
-        ofSetColor(255, 0, 0);
-        ofDrawEllipse(ctrl_point4.x, ctrl_point4.y, radius, radius);
-        ofSetColor(200);
-        string e4 = "4";
-        ofDrawBitmapString(e4, ctrl_point4.x - 9, ctrl_point4.y + 7);
+        //ofSetColor(255, 0, 0);
+        //ofDrawEllipse(ctrl_point4.x, ctrl_point4.y, radius, radius);
+        //ofSetColor(200);
+        //string e4 = "4";
+        //ofDrawBitmapString(e4, ctrl_point4.x - 9, ctrl_point4.y + 7);
        
        
 

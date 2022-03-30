@@ -16,6 +16,7 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 
     // menu gui pour la texture   
     parameters.add(mesh_sphere_toggle.setup("Afficher la planete", false)->getParameter()); 
+    parameters.add(mesh_square_toggle.setup("Relief de la planete", false)->getParameter());
     parameters.add(display.setup("Texture planete", false)->getParameter());
     parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());
     parameters.add(slider_exposure.set("Exposure",1.0f, 0.0f, 5.0f));
@@ -34,6 +35,13 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 
     terre_button.addListener(this, &TextureRenderer::buttonTerrePicker);
     parameters_planet.add(terre_button.setup("Terre")->getParameter());
+
+    // slider pour le square mesh 
+    map_mesh.setName("Effet de relief");
+    map_mesh.add(slider_1.set("Position", 0.0f, 0.0f, 100.0f));
+    map_mesh.add(slider_2.set("Position", 0.0f, 0.0f, 100.0f));
+    map_mesh.add(slider_3.set("Vagues", 5.0f, 0.0f, 100.0f));
+    map_mesh.add(slider_4.set("Rotation", 0.0f, 0.0f, 420.0f));
     
    
     // loader image de départ                                           
@@ -43,37 +51,82 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 
     // assigner l'image originale a une variable pour conserver son état d'origine
     image_selection = image; 
-    
-	// creer un mesh a partir d'une sphere 
-	mesh = ofSpherePrimitive(200, 40).getMesh();
-	for (int i = 0; i < mesh.getVertices().size(); i++) {
-		ofVec2f texCoord = mesh.getTexCoord(i);
-		texCoord.x *= image.getWidth();
-		texCoord.y = (1.0 - texCoord.y) * image.getHeight();
-		mesh.setTexCoord(i, texCoord);
-	}
 
-	// load du shader  
-    shader_tone_map.load("shader/tone_mapping_330_vs.glsl", "shader/tone_mapping_330_fs.glsl");
-
-	// dimensions de l'image source
-	image_width = image.getWidth();
-	image_height = image.getHeight();
-	// initialiser l'image de destination
-	image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);	
+    // dimensions de l'image source
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    // initialiser l'image de destination
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
     // sélectionner le filtre de convolution par défaut   
     kernel_type = ConvolutionKernel::identity;
-	kernel_name = "identity";   
-	// appliquer le filtre de convolution par défaut
-	filter();
+    kernel_name = "identity";
+    // appliquer le filtre de convolution par défaut
+    filter();
 
+    
+	// creer un mesh a partir d'une sphere 
+	sphere_mesh = ofSpherePrimitive(200, 40).getMesh();
+	for (int i = 0; i < sphere_mesh.getVertices().size(); i++) {
+		ofVec2f texCoord = sphere_mesh.getTexCoord(i);
+		texCoord.x *= image.getWidth();
+		texCoord.y = (1.0 - texCoord.y) * image.getHeight();
+		sphere_mesh.setTexCoord(i, texCoord);
+	}	
+
+    // creer un mesh square a partir de vertex 
+    // initialiser square de mesh
+    grid_width = 100;
+    grid_height = 100; 
+    mesh_size = 6; 
  
- 
+    // setup vertices
+    for (int y = 0; y < grid_height; y++) {
+        for (int x = 0; x < grid_width; x++) {
+            square_mesh.addVertex(ofPoint((x - grid_width / 2) * mesh_size, (y - grid_width / 2) * mesh_size, 0)); // adding texure coordinates allows us to bind textures to it later // --> this could be made into a function so that textures can be swapped / updated
+            square_mesh.addTexCoord(glm::vec2(x * (image_width / grid_width), y * (image_height / grid_height)));
+            square_mesh.addColor(ofColor(255, 255, 255));
+        }
+    }
+
+    //Set up triangles indices
+    for (int y = 0; y < grid_height - 1; y++) {
+        for (int x = 0; x < grid_width - 1; x++) {
+            int i1 = x + grid_width * y;
+            int i2 = x + 1 + grid_width * y;
+            int i3 = x + grid_width * (y + 1);
+            int i4 = x + 1 + grid_width * (y + 1);
+
+            square_mesh.addTriangle(i1, i2, i3);
+            square_mesh.addTriangle(i2, i4, i3);
+        }
+    }
+
+    // load du shader  
+    shader_tone_map.load("shader/tone_mapping_330_vs.glsl", "shader/tone_mapping_330_fs.glsl");
+
 }
 
 void TextureRenderer::updateRenderer() {
-   
 
+    //Change vertices pour le square mesh
+    for (int y = slider_2; y < grid_width; y++) {
+        for (int x = slider_1; x < grid_height; x++) {
+
+            //Vertex index
+            int i = x + grid_width * y;
+            ofPoint p = square_mesh.getVertex(i);
+
+            //Change z-coordinate of vertex
+            p.z = ofNoise(x * 0.05, y * 0.05, ofGetElapsedTimef() * 0.5) * slider_3;
+            square_mesh.setVertex(i, p);
+
+            //Change color of vertex
+            square_mesh.setColor(i, ofColor(255, 255, 255));
+        }
+    }
+
+   
+       
 }
 
 void TextureRenderer::generateDraw() {
@@ -82,15 +135,17 @@ void TextureRenderer::generateDraw() {
 
 void TextureRenderer::render() {   
     
-    //planetPicker();
-    
+      
+
     // faire apparaitre la sphere ou l'image
     if (display) ofDisableArbTex();
     else ofEnableArbTex();
           
     // si on veut afficher la sphere sur laquelle les textures sont appliquées 
-    if (mesh_sphere_toggle == true) {
-                
+    if (mesh_sphere_toggle) {
+        
+        //if (mesh_square_toggle) mesh_square_toggle = false;
+
         // pour sélectionner le type de tone-mapping
         if (tone_map_toggle) tone_map_toggle.setup("aces filmic", true)->getParameter();       
         else tone_map_toggle.setup("reinhard", false)->getParameter();    
@@ -115,16 +170,34 @@ void TextureRenderer::render() {
         image = image_destination;
     
 	    image.bind();
-	    if (!display) mesh.draw();
+        if (!display) sphere_mesh.draw();
+        
         
 	    ofPopMatrix();
 	    cam_tex.end();
-   
+
+    } 
+
+    if (mesh_square_toggle) {
+        
+        cam_tex.begin();
+        ofPushMatrix();
+        ofRotate(slider_4);
+        image.bind();
+        square_mesh.draw();
+        ofPopMatrix();
+        cam_tex.end();
+
+    }
+
+    if (mesh_sphere_toggle || mesh_square_toggle) {
         // draw instruction de controle filtre de convolution pour l'utilisateur 
         ofSetColor(200);
         string msg = "i: image originale\ne: filtre emboss\ns: filtre sharpen\nd: filtre edge detect";
         ofDrawBitmapString(msg, 400, 20);
-    } 
+    }
+    
+   
    
 }
 

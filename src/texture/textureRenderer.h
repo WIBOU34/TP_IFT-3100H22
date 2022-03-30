@@ -66,7 +66,8 @@ public:
 
 	// menu gui 
 	ofParameterGroup parameters;
-	ofxToggle mesh_sphere_toggle; 	
+	ofxToggle mesh_sphere_toggle; 
+	ofxToggle mesh_square_toggle;
 	ofxLabel identite_label;
 	ofxLabel emboss_label; 
 	ofxLabel sharpen_label; 
@@ -75,6 +76,7 @@ public:
 	ofParameter<float> slider_gamma;
 	ofxToggle tone_map_toggle;
 	ofxToggle display;
+	
 
 	ofxButton emboss_button;
 
@@ -83,9 +85,14 @@ public:
 	ofxButton mars_button; 
 	ofxButton venus_button;
 	ofxButton terre_button;
+	ofParameterGroup map_mesh;
+	ofParameter<float> slider_1;
+	ofParameter<float> slider_2; 
+	ofParameter<float> slider_3;
+	ofParameter<float> slider_4;
 
 	// sphere de mesh
-	ofMesh mesh;
+	ofMesh sphere_mesh;
 	ofEasyCam cam_tex;
 	ofImage image;
 	ofImage image_selection; 
@@ -103,6 +110,14 @@ public:
 
 	// mappage tonal 
 	ofShader shader_tone_map;
+
+	// square de mesh 
+	ofMesh square_mesh;
+	int grid_width;
+	int grid_height;
+	int mesh_size;
+	
+
 
 	
 	

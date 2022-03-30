@@ -55,8 +55,8 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(btnImportImgSetup);
 	//gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
 	//gui.add(sliderCurseur.set("Differents curseurs", 1, 0, 4));
-	gui.add(screenSize.setup("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
-	gui.add(mousePosition.setup("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
+	//gui.add(screenSize.setup("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
+	//gui.add(mousePosition.setup("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
 	gui.add(cameraRenderer.parameters);
 	gui.add(imageRenderer.parameters);
 	gui.add(dessinRenderer.parameters);
@@ -74,6 +74,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui_planet.setDefaultWidth(300);
 	gui_planet.setPosition(ofGetWindowWidth() - 310, 10);
 	gui_planet.add(textureRenderer.parameters_planet);
+	gui_planet.add(textureRenderer.map_mesh);
 	
 	
 	
@@ -109,7 +110,7 @@ void Application::draw() {
 	}
 
 	//curseurRenderer.draw();
-	if (textureRenderer.mesh_sphere_toggle) {
+	if (textureRenderer.mesh_sphere_toggle || textureRenderer.mesh_square_toggle) {
 		gui_planet.draw();
 	}
 }
@@ -134,12 +135,6 @@ void Application::keyPressed(int key) {
 		bHide = !bHide;
 	} else if (key == 'm') {
 		bSelection = !bSelection;
-	} else if (key == 'c') {
-		bShowCursor = !bShowCursor;
-		if (bShowCursor) {
-			ofShowCursor();
-		} else
-			ofHideCursor();
 	} else if (key == 'r' && illuminationRenderer.drawObjetcs) {
 		illuminationRenderer.reset();
 	}
@@ -213,7 +208,7 @@ void Application::mouseExited(int x, int y) {
 
 //--------------------------------------------------------------
 void Application::windowResized(int w, int h) {
-	screenSize = ofToString(w) + "x" + ofToString(h);
+	//screenSize = ofToString(w) + "x" + ofToString(h);
 }
 
 //--------------------------------------------------------------
