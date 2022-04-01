@@ -73,6 +73,7 @@ public:
 	ofPolyline line_renderer_2;
 
 	ofVec3f* selected_ctrl_point;
+	
 
 	ofVec3f ctrl_point1;
 	ofVec3f ctrl_point2;
@@ -126,13 +127,16 @@ public:
 	float time_last;
 	float time_elapsed;
 
-	bool is_key_press_up;
-	bool is_key_press_down;
-	bool is_key_press_left;
-	bool is_key_press_right;
+	bool is_key_press_up_topo;
+	bool is_key_press_down_topo;
+	bool is_key_press_left_topo;
+	bool is_key_press_right_topo;
 
 	bool same_point_4;
 	bool same_point_5;
+
+	bool hide_control_line;
+	bool noeud;
 
 	ofEasyCam cam;
 

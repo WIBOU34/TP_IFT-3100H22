@@ -39,7 +39,7 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     // slider pour le square mesh 
     map_mesh.setName("Effet de relief");
     map_mesh.add(slider_1.set("Position", 0.0f, 0.0f, 100.0f));
-    map_mesh.add(slider_2.set("Position", 0.0f, 0.0f, 100.0f));
+    map_mesh.add(slider_2.set("Positn", 0.0f, 0.0f, 100.0f));
     map_mesh.add(slider_3.set("Vagues", 5.0f, 0.0f, 100.0f));
     map_mesh.add(slider_4.set("Rotation", 0.0f, 0.0f, 420.0f));
     

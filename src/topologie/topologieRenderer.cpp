@@ -26,10 +26,10 @@ void TopologieRenderer::setupRenderer(const std::string& name) {
     ofSetSphereResolution(32);
     ofDisableDepthTest();
     
-    is_key_press_up = false;
-    is_key_press_down = false;
-    is_key_press_left = false;
-    is_key_press_right = false;
+    is_key_press_up_topo = false;
+    is_key_press_down_topo = false;
+    is_key_press_left_topo = false;
+    is_key_press_right_topo = false;
 
     // paramètres
     line_resolution = 100;
@@ -52,23 +52,17 @@ void TopologieRenderer::setupRenderer(const std::string& name) {
 }
 
 void TopologieRenderer::updateRenderer() {
-
-  
-    if (same_point_4) ctrl_point5 = ctrl_point4;
-    if (same_point_5) ctrl_point4 = ctrl_point5;   
+     
+    ctrl_point5 = ctrl_point4;
 
     time_current = ofGetElapsedTimef();
     time_elapsed = time_current - time_last;
     time_last = time_current;
 
-    if (is_key_press_up)
-        selected_ctrl_point->y -= delta_y * time_elapsed;
-    if (is_key_press_down)
-        selected_ctrl_point->y += delta_y * time_elapsed;
-    if (is_key_press_left)
-        selected_ctrl_point->x -= delta_x * time_elapsed;
-    if (is_key_press_right)
-        selected_ctrl_point->x += delta_x * time_elapsed;
+    if (is_key_press_up_topo) selected_ctrl_point->y -= delta_y * time_elapsed; 
+    if (is_key_press_down_topo) selected_ctrl_point->y += delta_y * time_elapsed;
+    if (is_key_press_left_topo) selected_ctrl_point->x -= delta_x * time_elapsed;
+    if (is_key_press_right_topo) selected_ctrl_point->x += delta_x * time_elapsed;
 
     
     for (index = 0; index <= line_resolution; ++index) {
@@ -103,34 +97,31 @@ void TopologieRenderer::render() {
 
 
     if (bezier_toggle) {
+       
         cam.begin();
         cam.setVFlip(true);
 
         ofFill();
 
-        // dessiner les positions initiales
-        ofSetColor(63, 63, 63);
-
-        //ofDrawEllipse(initial_position1.x, initial_position1.y, radius / 2.0f, radius / 2.0f);
-       // ofDrawEllipse(initial_position2.x, initial_position2.y, radius / 2.0f, radius / 2.0f);
-        //ofDrawEllipse(initial_position3.x, initial_position3.y, radius / 2.0f, radius / 2.0f);
-        //ofDrawEllipse(initial_position4.x, initial_position4.y, radius / 2.0f, radius / 2.0f);
-        //ofDrawEllipse(initial_position5.x, initial_position5.y, radius / 2.0f, radius / 2.0f);
-
         // dessiner la ligne contour
         ofSetColor(0, 0, 255);
         ofSetLineWidth(line_width_outline);
-        ofDrawLine(ctrl_point1.x, ctrl_point1.y, ctrl_point2.x, ctrl_point2.y);
-        ofDrawLine(ctrl_point3.x, ctrl_point3.y, ctrl_point4.x, ctrl_point4.y);
-        ofDrawLine(ctrl_point2.x, ctrl_point2.y, ctrl_point3.x, ctrl_point3.y);
-        ofDrawLine(ctrl_point4.x, ctrl_point4.y, ctrl_point1.x, ctrl_point1.y);
+        if (hide_control_line) {
+            ofDrawLine(ctrl_point1.x, ctrl_point1.y, ctrl_point2.x, ctrl_point2.y);
+            ofDrawLine(ctrl_point3.x, ctrl_point3.y, ctrl_point4.x, ctrl_point4.y);
+            ofDrawLine(ctrl_point2.x, ctrl_point2.y, ctrl_point3.x, ctrl_point3.y);
+            ofDrawLine(ctrl_point4.x, ctrl_point4.y, ctrl_point1.x, ctrl_point1.y);
+            ofDrawLine(ctrl_point5.x, ctrl_point5.y, ctrl_point6.x, ctrl_point6.y);
+            ofDrawLine(ctrl_point7.x, ctrl_point7.y, ctrl_point8.x, ctrl_point8.y);
+            ofDrawLine(ctrl_point6.x, ctrl_point6.y, ctrl_point7.x, ctrl_point7.y);
+            ofDrawLine(ctrl_point8.x, ctrl_point8.y, ctrl_point5.x, ctrl_point5.y);
+        }
+        
 
-
-        // dessiner la courbe originale 
+        // dessiner les deux courbes  
         ofSetColor(0, 255, 0);
-        ofSetLineWidth(line_width_curve);
         line_renderer.draw();
-
+        line_renderer_2.draw();
 
         // dessiner les points de contrôle
         ofSetColor(255, 0, 0);
@@ -151,71 +142,43 @@ void TopologieRenderer::render() {
         string e3 = "3";
         ofDrawBitmapString(e3, ctrl_point3.x - 9, ctrl_point3.y + 7);
 
-        //ofSetColor(255, 0, 0);
-        //ofDrawEllipse(ctrl_point4.x, ctrl_point4.y, radius, radius);
-        //ofSetColor(200);
-        //string e4 = "4";
-        //ofDrawBitmapString(e4, ctrl_point4.x - 9, ctrl_point4.y + 7);
-       
-       
-
-        //----------------------------------------------------------------------------------------------------------
-
-         // dessiner les positions initiales
-        ofSetColor(63, 63, 63);
-
-        //ofDrawEllipse(initial_position6.x + 770, initial_position6.y, radius / 2.0f, radius / 2.0f);
-        //ofDrawEllipse(initial_position7.x + 770, initial_position7.y, radius / 2.0f, radius / 2.0f);
-        //ofDrawEllipse(initial_position8.x+ 770, initial_position8.y, radius / 2.0f, radius / 2.0f);
-        //ofDrawEllipse(initial_position9.x + 770, initial_position9.y, radius / 2.0f, radius / 2.0f);
-        //ofDrawEllipse(initial_position10.x + 770, initial_position10.y, radius / 2.0f, radius / 2.0f);
-
-        // dessiner la ligne contour
-        ofSetColor(0, 0, 255);
-        ofSetLineWidth(line_width_outline);
-        ofDrawLine(ctrl_point5.x, ctrl_point5.y, ctrl_point6.x, ctrl_point6.y);
-        ofDrawLine(ctrl_point7.x, ctrl_point7.y, ctrl_point8.x, ctrl_point8.y);
-        ofDrawLine(ctrl_point6.x, ctrl_point6.y, ctrl_point7.x, ctrl_point7.y);
-        ofDrawLine(ctrl_point8.x, ctrl_point8.y, ctrl_point5.x, ctrl_point5.y);
-
-        // dessiner la courbe originale 
-        ofSetColor(0, 255, 0);
-        ofSetLineWidth(line_width_curve);
-        line_renderer_2.draw();
-
-
-        // dessiner les points de contrôle
-        ofSetColor(255, 0, 0);
-        ofDrawEllipse(ctrl_point5.x, ctrl_point5.y, radius, radius);
-        ofSetColor(200);
-        string e5 = "4";
-        ofDrawBitmapString(e5, ctrl_point5.x-9, ctrl_point5.y+7);
-
-        ofSetColor(255, 0, 0);
+         ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point6.x, ctrl_point6.y, radius, radius);
         ofSetColor(200);
-        string e6 = "5";
-        ofDrawBitmapString(e6, ctrl_point6.x - 9, ctrl_point6.y + 7);
+        string e4 = "4";
+        ofDrawBitmapString(e4, ctrl_point6.x - 9, ctrl_point6.y + 7);
 
         ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point7.x, ctrl_point7.y, radius, radius);
         ofSetColor(200);
-        string e7 = "6";
-        ofDrawBitmapString(e7, ctrl_point7.x - 9, ctrl_point7.y + 7);
+        string e5 = "5";
+        ofDrawBitmapString(e5, ctrl_point7.x - 9, ctrl_point7.y + 7);
 
         ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point8.x, ctrl_point8.y, radius, radius);
         ofSetColor(200);
-        string e8 = "7";
-        ofDrawBitmapString(e8, ctrl_point8.x - 9, ctrl_point8.y + 7);
+        string e6= "6";
+        ofDrawBitmapString(e6, ctrl_point8.x - 9, ctrl_point8.y + 7);
 
-        //----------------------------------------------------------------------------------------------------------
+        if (noeud) {        
+        ofSetColor(255, 0, 0);
+        ofDrawEllipse(ctrl_point4.x, ctrl_point4.y, radius, radius);
+        ofSetColor(200);
+        string noeud = "n";
+        ofDrawBitmapString(noeud, ctrl_point4.x - 9, ctrl_point4.y + 7);        
+        }
+
+        // dessiner la ligne contour
+        ofSetColor(0, 0, 255);
+        ofSetLineWidth(line_width_outline);  
 
         cam.end();
 
         // draw instruction de controle des points pour l'utilisateur 
         ofSetColor(200);
-        string msg = "Utiliser les touches 1 a 7 pour choisir un point de controle\net les fleches pour les deplacer\nr:reset";
+        string msg = "Utiliser les touches 1 a 6 pour choisir un point de controle\n"
+                     "et les fleches pour les deplacer\nr : reset\nc : afficher les lignes de controle\n"
+                     "n : afficher et controler le noeud";
         ofDrawBitmapString(msg, 400, 20);
 
     }
@@ -262,7 +225,7 @@ void TopologieRenderer::reset() {
 
     ctrl_point5 = ctrl_point4;
 
-    ctrl_point6.x = ctrl_point2.x + 770;
+    ctrl_point6.x = ctrl_point2.x + 1000;
     ctrl_point6.y = ctrl_point2.y + 770;
     ctrl_point6.z = ctrl_point2.z;
 
@@ -285,97 +248,90 @@ void TopologieRenderer::keyPressed(int key) {
     switch (key)
     {
     case OF_KEY_LEFT: // touche ←
-        is_key_press_left = true;
+        is_key_press_left_topo = true;
         break;
 
     case OF_KEY_UP: // touche ↑
-        is_key_press_up = true;
+        is_key_press_up_topo = true;
         break;
 
     case OF_KEY_RIGHT: // touche →
-        is_key_press_right = true;
+        is_key_press_right_topo = true;
         break;
 
     case OF_KEY_DOWN: // touche ↓
-        is_key_press_down = true;
+        is_key_press_down_topo = true;
         break;
 
     default:
         break;
-    }
+    }    
 }
 
 void TopologieRenderer::keyReleased(int key) {
     switch (key)
     {
-    case 48: // touche 0
-        ofLog() << "<0>";
-        break;
-
     case 49: // touche 1
         selected_ctrl_point = &ctrl_point1;
-        ofLog() << "<select control point 1>";
         break;
 
     case 50: // touche 2
         selected_ctrl_point = &ctrl_point2;
-        ofLog() << "<select control point 2>";
         break;
 
     case 51: // touche 3
         selected_ctrl_point = &ctrl_point3;
-        ofLog() << "<select control point 3>";
         break;
 
     case 52: // touche 4
-        selected_ctrl_point = &ctrl_point4;
-        same_point_4 = true;
-        same_point_5 = false;
-        ofLog() << "<select control point 4>";
+        selected_ctrl_point = &ctrl_point6;
+       
         break;
     case 53: // touche 5
-        //selected_ctrl_point = &ctrl_point5;
-        //same_point_4 = false;
-        //same_point_5 = true;
-        selected_ctrl_point = &ctrl_point6;
-        ofLog() << "<select control point 5>";
-        break;
-    case 54: // touche 5
         selected_ctrl_point = &ctrl_point7;
-        ofLog() << "<select control point 6>";
         break;
-    case 55: // touche 5
+
+    case 54: // touche 6
         selected_ctrl_point = &ctrl_point8;
-        ofLog() << "<select control point 7>";
         break;
-    //case 56: // touche 8
-        //selected_ctrl_point = &ctrl_point8;
-       // ofLog() << "<select control point 5>";
-       // break;
 
+    case 99: // touche c
+        if (!hide_control_line) hide_control_line = true;
+        else hide_control_line = false;
+        break;
 
-
+    case 110: // touche n
+        if (!noeud) {
+            noeud = true;
+            selected_ctrl_point = &ctrl_point4;
+        } else {
+            noeud = false;
+            selected_ctrl_point = &ctrl_point2;
+        }
+        break;
+    
     case 114: // touche r
         reset();
         break;
 
     case OF_KEY_LEFT: // touche ←
-        is_key_press_left = false;
+        is_key_press_left_topo = false;
         break;
 
     case OF_KEY_UP: // touche ↑
-        is_key_press_up = false;
+        is_key_press_up_topo = false;
         break;
 
     case OF_KEY_RIGHT: // touche →
-        is_key_press_right = false;
+        is_key_press_right_topo = false;
         break;
 
     case OF_KEY_DOWN: // touche ↓
-        is_key_press_down = false;
+        is_key_press_down_topo = false;
         break;
 
     default:
         break;
     }
+
 }
