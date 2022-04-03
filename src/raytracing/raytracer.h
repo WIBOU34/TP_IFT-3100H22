@@ -22,6 +22,10 @@
 #include <process.h>
 #include <windows.h>
 
+#include <limits>
+
+#include <ofMath.h>
+
 //namespace Raytracing {
 
 // types de matériau
@@ -86,6 +90,32 @@ struct Vector {
 	Vector& normalize() {
 		return *this = *this * (1.0 / sqrt(x * x + y * y + z * z));
 	}
+
+	//bool operator< (const Vector& other) const {
+	//	return this->x < other.x
+	//		|| this->y < other.y
+	//		|| this->z < other.z;
+	//}
+	//bool operator> (const Vector& other) const {
+	//	return this->x > other.x
+	//		|| this->y > other.y
+	//		|| this->z > other.z;
+	//}
+
+	double operator[] (const int& index) const {
+		switch (index) {
+		case 0:
+			return this->x;
+			break;
+		case 1:
+			return this->y;
+			break;
+		case 2:
+			return this->z;
+			break;
+		}
+		return 0;
+	}
 };
 
 // structure d'un rayon sous forme de droite paramétrique
@@ -93,21 +123,206 @@ struct Vector {
 struct Ray {
 	Vector origin;
 	Vector direction;
+	Vector invDir;
+	int sign[3];
 
-	Ray(Vector o, Vector d) : origin(o), direction(d) {}
+	Ray(Vector o, Vector d) : origin(o), direction(d) {
+		this->invDir = Vector(1 / direction.x, 1 / direction.y, 1 / direction.z);
+		sign[0] = (invDir.x < 0);
+		sign[1] = (invDir.y < 0);
+		sign[2] = (invDir.z < 0);
+	}
+};
+
+struct Primitive {
+public:
+	Vector position;
+	Vector emission; // couleur émissive du cube
+	Vector color;    // couleur diffuse du cube
+	SurfaceType material; // type de réflexion du cube
+	virtual double intersect(const Ray& ray) const = 0;
+};
+
+struct Cylinder : public Primitive {
+	Vector dimensions;
+
+	Cylinder(Vector position, Vector dimensions, Vector e, Vector c, SurfaceType m) {
+		this->emission = e;
+		this->color = c;
+		this->material = m;
+		this->position = position;
+		this->dimensions = dimensions;
+	}
+
+	double intersect(const Ray& ray) const {
+
+	}
+};
+
+struct Cube : public  Primitive {
+	//Vector position; // point du cube bas gauche avant
+	Vector dimensions; // width, height, depth
+	//Vector emission; // couleur émissive du cube
+	//Vector color;    // couleur diffuse du cube
+
+	//SurfaceType material; // type de réflexion du cube
+
+	//Vector pHautDroitAvant;
+	//Vector pBasGaucheAvant;
+	//Vector pHautGaucheAvant;
+	//Vector pBasDroitAvant;
+	//Vector pBasGaucheArriere;
+	//Vector pHautDroitArriere;
+	//Vector pBasDroitArriere;
+	//Vector pHautGaucheArriere;
+	Vector bounds[2];
+
+	Cube(Vector position, Vector dimensions, Vector e, Vector c, SurfaceType m) {
+		this->emission = e;
+		this->color = c;
+		this->material = m;
+		this->position = position;
+		this->dimensions = dimensions;
+		bounds[0] = position;
+		bounds[1] = positionHautDroitArriere();
+
+		//this->pHautDroitAvant = positionHautDroitAvant();
+		//this->pBasGaucheAvant = positionBasGaucheAvant();
+		//this->pHautGaucheAvant = positionHautGaucheAvant();
+		//this->pBasDroitAvant = positionBasDroitAvant();
+
+		//this->pBasGaucheArriere = positionBasGaucheArriere();
+		//this->pHautDroitArriere = positionHautDroitArriere();
+		//this->pBasDroitArriere = positionBasDroitArriere();
+		//this->pHautGaucheArriere = positionHautGaucheArriere();
+	}
+
+	double intersect(const Ray& ray) const {
+		double tmin, tmax, tymin, tymax, tzmin, tzmax;
+
+		tmin = (bounds[ray.sign[0]].x - ray.origin.x) * ray.invDir.x;
+		tmax = (bounds[1 - ray.sign[0]].x - ray.origin.x) * ray.invDir.x;
+		tymin = (bounds[ray.sign[1]].y - ray.origin.y) * ray.invDir.y;
+		tymax = (bounds[1 - ray.sign[1]].y - ray.origin.y) * ray.invDir.y;
+
+		if ((tmin > tymax) || (tymin > tmax))
+			return 0;
+
+		if (tymin > tmin)
+			tmin = tymin;
+		if (tymax < tmax)
+			tmax = tymax;
+
+		tzmin = (bounds[ray.sign[2]].z - ray.origin.z) * ray.invDir.z;
+		tzmax = (bounds[1 - ray.sign[2]].z - ray.origin.z) * ray.invDir.z;
+
+		if ((tmin > tzmax) || (tzmin > tmax))
+			return 0;
+
+		if (tzmin > tmin)
+			tmin = tzmin;
+		if (tzmax < tmax)
+			tmax = tzmax;
+
+		double distance = tmin;
+
+		if (distance < 0) {
+			distance = tmax;
+			if (distance < 0) return 0;
+		}
+
+		return distance;
+
+
+		//const double Sx = ray.origin.x;
+		//const double Rx = dimensions.x;
+		//const double Dx = ray.direction.x;
+		//const Vector pointA = position;
+		//const Vector pointB = positionHautDroitAvant();
+		//const Vector pointC = positionBasDroitAvant();
+		//const Vector AB = Vector(pointB.x - pointA.x, pointB.y - pointA.y, pointB.z - pointA.z);
+		//const Vector AC = Vector(pointC.x - pointA.x, pointC.y - pointA.y, pointC.z - pointA.z);
+		//Vector normal = AB.cross(AC).normalize();
+
+		//double prodScalaire = ray.direction.dot(normal);
+		//if (prodScalaire >= 0) {
+		//	return 0;
+		//} else {
+		//	double t = (Rx - Sx) / Dx;
+		//}
+	}
+
+	double dist(const Vector& point1, const Vector& point2) const {
+		return ofDist(point1.x, point1.y, point1.z, point2.x, point2.y, point2.z);
+	}
+	// Avant
+	Vector positionBasGaucheAvant() const {
+		return position;
+	}
+	Vector positionHautDroitAvant() const {
+		return Vector(
+			position.x + dimensions.x,
+			position.y + dimensions.y,
+			position.z);
+	}
+	Vector positionHautGaucheAvant() const {
+		return Vector(
+			position.x,
+			position.y + dimensions.y,
+			position.z);
+	}
+	Vector positionBasDroitAvant() const {
+		return Vector(
+			position.x + dimensions.x,
+			position.y,
+			position.z);
+	}
+	// Arriere
+	Vector positionBasGaucheArriere() const {
+		return Vector(
+			position.x,
+			position.y,
+			position.z + dimensions.z);
+	}
+	Vector positionHautDroitArriere() const {
+		return Vector(
+			position.x + dimensions.x,
+			position.y + dimensions.y,
+			position.z + dimensions.z);
+	}
+	Vector positionBasDroitArriere() const {
+		return Vector(
+			position.x + dimensions.x,
+			position.y,
+			position.z + dimensions.z);
+	}
+	Vector positionHautGaucheArriere() const {
+		return Vector(
+			position.x,
+			position.y + dimensions.y,
+			position.z + dimensions.z);
+	}
+
 };
 
 // type Sphere sous forme d'un point central et d'un rayon
-struct Sphere {
+struct Sphere : public Primitive {
 	double radius;   // rayon de la sphère
-	Vector position; // position du centre de la sphère
-	Vector emission; // couleur émissive de la sphère
-	Vector color;    // couleur diffuse de la sphère
+	//Vector position; // position du centre de la sphère
+	//Vector emission; // couleur émissive de la sphère
+	//Vector color;    // couleur diffuse de la sphère
 
-	SurfaceType material; // type de réflexion de la sphère
+	//SurfaceType material; // type de réflexion de la sphère
 
 	// constructeur
-	Sphere(double r, Vector p, Vector e, Vector c, SurfaceType m) : radius(r), position(p), emission(e), color(c), material(m) {}
+	//Sphere(double r, Vector p, Vector e, Vector c, SurfaceType m) : radius(r), position(p), emission(e), color(c), material(m) {}
+
+	Sphere(double r, Vector p, Vector e, Vector c, SurfaceType m) : radius(r) {
+		this->emission = e;
+		this->color = c;
+		this->material = m;
+		this->position = p;
+	}
 
 	// fonction d'intersection entre la sphère et un rayon
 	double intersect(const Ray& ray) const {
@@ -249,7 +464,7 @@ public:
 	// variables globales
 
 	// déclaration du graphe de scène
-	static std::vector<Sphere> scene;
+	static std::vector<Primitive*> scene;
 
 	// orientation initiale de la caméra
 	Vector camera_orientation = (Vector(0, -0.042612, -1).normalize());
@@ -264,6 +479,7 @@ public:
 	int raytracerExecute(const int& imageWidth, const int& imageHeight, const int& rayPerPixel, const int& nbrThreads);
 	//int raytracerExecute(int argc, char* argv[]);
 	//int main(int argc, char* argv[]);
+	//void setupCamera(const Vector& camPosition, const Vector& camOrientation, const double& fov, const Vector& axisX, const Vector& axisY, const Vector& axisZ);
 
 private:
 

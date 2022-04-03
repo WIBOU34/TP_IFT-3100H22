@@ -84,6 +84,7 @@ void Objects3DRenderer::updateRenderer() {
 			newObjSettings.object3D->length = sliderLengthPos;
 			newObjSettings.object3D->radius = sliderRadiusPos;
 			newObjSettings.object3D->fillColor = fillColorSelected;
+			newObjSettings.renderMode = selectedObj->getObject().renderMode;
 			selectedObj->createObject(
 				sliderXpos, sliderYpos, sliderZpos,
 				sliderWidthPos, sliderHeightPos, sliderLengthPos,
@@ -198,7 +199,7 @@ void Objects3DRenderer::cube(float x, float y, float z, float width, float heigh
 
 	VectorObjSettings objSet;
 	objSet.object3D = obj;
-	objSet.renderMode = MeshRenderMode::wireframe;
+	objSet.renderMode = MeshRenderMode::fill;
 
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cube " + ofToString(lstObjSettings.size())));
 
@@ -212,7 +213,7 @@ void Objects3DRenderer::sphere(float x, float y, float z, float r) {
 
 	VectorObjSettings objSet;
 	objSet.object3D = obj;
-	objSet.renderMode = MeshRenderMode::wireframe;
+	objSet.renderMode = MeshRenderMode::fill;
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Sphere " + ofToString(lstObjSettings.size())));
 }
 
@@ -224,7 +225,7 @@ void Objects3DRenderer::cone(float x, float y, float z, float r, float height) {
 
 	VectorObjSettings objSet;
 	objSet.object3D = obj;
-	objSet.renderMode = MeshRenderMode::wireframe;
+	objSet.renderMode = MeshRenderMode::fill;
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cone " + ofToString(lstObjSettings.size())));
 }
 
@@ -236,7 +237,7 @@ void Objects3DRenderer::cylinder(float x, float y, float z, float r, float heigh
 
 	VectorObjSettings objSet;
 	objSet.object3D = obj;
-	objSet.renderMode = MeshRenderMode::wireframe;
+	objSet.renderMode = MeshRenderMode::fill;
 	lstObjSettings.push_back(ObjectBase3D<VectorObjSettings>(obj->posStart.x, obj->posStart.y, obj->posStart.z, obj->width, obj->height, obj->length, objSet, "3D Object: Cylinder " + ofToString(lstObjSettings.size())));
 }
 // =======================================================

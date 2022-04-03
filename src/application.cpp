@@ -21,6 +21,7 @@ void Application::setup() {
 	illuminationRenderer.camera = cameraRenderer.camera;
 	raytracingManager.setup("Lancer de rayons");
 	raytracingManager.obj3Drenderer = &objects3DRenderer;
+	raytracingManager.camera = cameraRenderer.camera;
 	ofSetVerticalSync(true);
 
 	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
@@ -138,7 +139,7 @@ void Application::keyPressed(int key) {
 //--------------------------------------------------------------
 void Application::keyReleased(int key) {
 	cameraRenderer.keyReleased(key);
-	textureRenderer.keyReleased(key);
+	//textureRenderer.keyReleased(key);
 }
 
 //--------------------------------------------------------------

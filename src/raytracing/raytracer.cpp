@@ -5,6 +5,8 @@
 // run  : ./raytracer image_width image_height ray_per_pixel
 
 #include "raytracer.h"
+#include <glm/geometric.hpp>
+#include "ofMain.h"
 // traitement de la couleur d'un pixel
 int Raytracer::format_color_component(double value) {
 	// appliquer la correction gamma
@@ -24,18 +26,18 @@ bool Raytracer::raycast(const Ray& ray, double& distance, int& id) {
 	double d;
 
 	// initialiser la distance à une valeur suffisamment éloignée pour qu'on la considère comme l'infinie
-	double infinity = distance = 1e20;
+	const double infinity = distance = 1e20;
 
 	// nombre d'éléments dans la scène
-	int n = static_cast<int>(Raytracer::scene.size());
+	const int n = static_cast<int>(Raytracer::scene.size());
 
 	// parcourir tous les éléments de la scène
 	for (int index = 0; index < n; ++index) {
 		// test d'intersection entre le rayon et la géométrie à cet index
-		d = Raytracer::scene[index].intersect(ray);
+		d = Raytracer::scene[index]->intersect(ray);
 
 		// valider s'il y a eu intersection et si la distance est inférieure aux autres intersections
-		if (d && d < distance) {
+		if (d != 0 && d < distance) {
 			// nouvelle valeur courante de la distance et l'index de l'intersection la plus rapprochée de la caméra
 			distance = d;
 			id = index;
@@ -64,17 +66,17 @@ Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
 	if (!raycast(ray, distance, id))
 		return Vector(); // couleur par défault (noir)
 
-	  // référence sur une géométrie en intersection avec un rayon
-	const Sphere& obj = Raytracer::scene[id];
+	// référence sur une géométrie en intersection avec un rayon
+	const Primitive& obj = *Raytracer::scene[id];
 
 	// calculer les coordonnées du point d'intersection
-	Vector x = ray.origin + ray.direction * distance;
+	const Vector x = ray.origin + ray.direction * distance;
 
 	// calculer la normale au point d'intersection
-	Vector n = (x - obj.position).normalize();
+	const Vector n = (x - obj.position).normalize();
 
 	// ajustement de la direction de la normale
-	Vector na = n.dot(ray.direction) < 0 ? n : n * -1;
+	const Vector na = n.dot(ray.direction) < 0 ? n : n * -1;
 
 	// isoler la composante de couleur la plus puissante
 	Vector f = obj.color;
@@ -83,23 +85,23 @@ Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
 	// valider si la limite du nombre de récursions est atteinte
 	if (++depth > max_depth) {
 		// test de probabilité
-		if (doubleRand(0.0, 1.0) < threshold)
-			f = f * (1 / threshold);
-		else
-			return obj.emission;
+		//if (doubleRand(0.0, 1.0) < threshold)
+		//	f = f * (1 / threshold);
+		//else
+		return obj.emission;
 	}
 
 	if (obj.material == SurfaceType::diffuse) {
 		// matériau avec réflexion diffuse
 
-		double r1 = 2 * M_PI * doubleRand(0.0, 1.0);
-		double r2 = doubleRand(0.0, 1.0);
-		double r2s = sqrt(r2);
+		const double r1 = 2 * M_PI * doubleRand(0.0, 1.0);
+		const double r2 = doubleRand(0.0, 1.0);
+		const double r2s = sqrt(r2);
 
-		Vector w = na;
-		Vector u = ((fabs(w.x) > 0.1 ? Vector(0, 1) : Vector(1)).cross(w)).normalize();
-		Vector v = w.cross(u);
-		Vector d = (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalize();
+		const Vector w = na;
+		const Vector u = ((fabs(w.x) > 0.1 ? Vector(0, 1) : Vector(1)).cross(w)).normalize();
+		const Vector v = w.cross(u);
+		const Vector d = (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalize();
 
 		radiance = obj.emission + f.multiply(compute_radiance(Ray(x, d), depth));
 
@@ -107,22 +109,57 @@ Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
 	} else if (obj.material == SurfaceType::specular) {
 		// matériau avec réflexion spéculaire
 
-		radiance = obj.emission + f.multiply(compute_radiance(Ray(x, ray.direction - n * 2.0 * n.dot(ray.direction)), depth));
+		//Vector temp = glm::reflect<Vector>(ray.direction, n);
+		glm::dvec3 temp = glm::reflect<3, double, glm::qualifier::defaultp>(glm::dvec3(ray.direction.x, ray.direction.y, ray.direction.z), glm::dvec3(n.x, n.y, n.z));
+		radiance = obj.emission + f.multiply(compute_radiance(Ray(x, Vector(temp.x, temp.y, temp.z)), depth));
+		//radiance = obj.emission + f.multiply(compute_radiance(Ray(x, ray.direction - n * 2.0 * n.dot(ray.direction)), depth));
 
 		return radiance;
 	} else if (obj.material == SurfaceType::refraction) {
+
+		//const bool into = n.dot(na) > 0;
+		////const double ior = 1.5; // indice de réfraction du verre
+		//const double ior = 1.5; // indice de réfraction du verre
+		//const double nc = 1.0;
+		//const double nt = ior;
+		//const double nnt = into ? nc / nt : nt / nc;
+
+		//glm::dvec3 temp = glm::refract<3, double, glm::qualifier::defaultp>(glm::dvec3(ray.direction.x, ray.direction.y, ray.direction.z), glm::dvec3(n.x, n.y, n.z), nnt);
+		//Vector tdir = Vector(temp.x, temp.y, temp.z);
+		////if (temp.x == 0 && temp.y == 0 && temp.z == 0) {
+		//radiance = obj.emission + f.multiply(compute_radiance(Ray(x, tdir), depth));
+
+		//return radiance;
+		//} else {
+			// effet de fresnel
+		//	const double ddn = ray.direction.dot(na);
+		//	const double a = nt - nc;
+		//	const double b = nt + nc;
+		//	const double r0 = a * a / (b * b);
+		//	const double c = 1.0 - (into ? -ddn : tdir.dot(n));
+		//	const double re = r0 + (1.0 - r0) * c * c * c * c * c;
+		//	const double tr = 1 - re;
+		//	const double p = 0.25 + 0.5 * re;
+		//	const double rp = re / p;
+		//	const double tp = tr / (1.0 - p);
+
+		//	radiance = obj.emission + f.multiply(depth > 2 ? compute_radiance(Ray(x, tdir), depth) * tp : compute_radiance(Ray(x, tdir), depth) * tr);
+		//}
+		//radiance = obj.emission + f.multiply(depth > 2 ? compute_radiance(Ray(x, Vector(temp.x, temp.y, temp.z)), depth) : );
 		// matériau avec réflexion réfraction
 
 		Ray reflection_ray(x, ray.direction - n * 2.0 * n.dot(ray.direction));
 
-		bool into = n.dot(na) > 0;
+		const bool into = n.dot(na) > 0;
 
-		double ior = 1.5; // indice de réfraction du verre
-		double nc = 1.0;
-		double nt = ior;
-		double nnt = into ? nc / nt : nt / nc;
-		double ddn = ray.direction.dot(na);
+		const double ior = 1.5; // indice de réfraction du verre
+		const double nc = 1.0;
+		const double nt = ior;
+		const double nnt = into ? nc / nt : nt / nc;
+		const double ddn = ray.direction.dot(na);
 		double cos2t;
+
+		glm::dvec3 temp = glm::refract<3, double, glm::qualifier::defaultp>(glm::dvec3(ray.direction.x, ray.direction.y, ray.direction.z), glm::dvec3(n.x, n.y, n.z), ior);
 
 		if ((cos2t = 1.0 - nnt * nnt * (1.0 - ddn * ddn)) < 0.0) {
 			radiance = obj.emission + f.multiply(compute_radiance(reflection_ray, depth));
@@ -133,15 +170,15 @@ Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
 		Vector tdir = (ray.direction * nnt - n * ((into ? 1.0 : -1.0) * (ddn * nnt + sqrt(cos2t)))).normalize();
 
 		// effet de fresnel
-		double a = nt - nc;
-		double b = nt + nc;
-		double r0 = a * a / (b * b);
-		double c = 1.0 - (into ? -ddn : tdir.dot(n));
-		double re = r0 + (1.0 - r0) * c * c * c * c * c;
-		double tr = 1 - re;
-		double p = 0.25 + 0.5 * re;
-		double rp = re / p;
-		double tp = tr / (1.0 - p);
+		const double a = nt - nc;
+		const double b = nt + nc;
+		const double r0 = a * a / (b * b);
+		const double c = 1.0 - (into ? -ddn : tdir.dot(n));
+		const double re = r0 + (1.0 - r0) * c * c * c * c * c;
+		const double tr = 1 - re;
+		const double p = 0.25 + 0.5 * re;
+		const double rp = re / p;
+		const double tp = tr / (1.0 - p);
 
 		radiance = obj.emission + f.multiply(depth > 2 ? (doubleRand(0.0, 1.0) < p ?
 			compute_radiance(reflection_ray, depth) * rp : compute_radiance(Ray(x, tdir), depth) * tp) :
@@ -189,44 +226,44 @@ void Raytracer::save_image_file(int width, int height, int ray_per_pixel, const 
 void Raytracer::init() {
 	std::cout << "scene setup" << std::endl;
 
-	constexpr double anchor = 1e5;
-	constexpr double wall_radius = anchor;
+	//constexpr double anchor = 1e5;
+	//constexpr double wall_radius = anchor;
 
-	constexpr double box_size_x = 100.0;
-	constexpr double box_size_y = 81.6;
-	constexpr double box_size_z = 81.6;
+	//constexpr double box_size_x = 100.0;
+	//constexpr double box_size_y = 81.6;
+	//constexpr double box_size_z = 81.6;
 
-	constexpr double box_x_min = 0.0;
-	constexpr double box_x_max = box_size_x;
-	constexpr double box_y_min = 0.0;
-	constexpr double box_y_max = box_size_y;
-	constexpr double box_z_min = 0.0;
-	constexpr double box_z_max = box_size_z;
+	//constexpr double box_x_min = 0.0;
+	//constexpr double box_x_max = box_size_x;
+	//constexpr double box_y_min = 0.0;
+	//constexpr double box_y_max = box_size_y;
+	//constexpr double box_z_min = 0.0;
+	//constexpr double box_z_max = box_size_z;
 
-	constexpr double box_center_x = (box_x_max - box_x_min) / 2.0;
-	constexpr double box_center_y = (box_y_max - box_y_min) / 2.0;
-	constexpr double box_center_z = (box_z_max - box_z_min) / 2.0;
+	//constexpr double box_center_x = (box_x_max - box_x_min) / 2.0;
+	//constexpr double box_center_y = (box_y_max - box_y_min) / 2.0;
+	//constexpr double box_center_z = (box_z_max - box_z_min) / 2.0;
 
-	// vider la scène de son contenu
-	Raytracer::scene.clear();
+	//// vider la scène de son contenu
+	//Raytracer::scene.clear();
 
-	// génération du contenu de la scène
-	Raytracer::scene.insert(Raytracer::scene.begin(), {
+	//// génération du contenu de la scène
+	//Raytracer::scene.insert(Raytracer::scene.begin(), {
 
-		// approximation d'une boîte de Cornell avec des sphères surdimensionnées qui simulent des surfaces planes
-		Sphere(wall_radius, Vector(box_center_x,  anchor,            box_size_z),   Vector(), Vector(0.75, 0.75, 0.75), SurfaceType::diffuse),    // plancher
-		Sphere(wall_radius, Vector(box_center_x, -anchor + box_size_y, box_size_z),   Vector(), Vector(0.75, 0.75, 0.75), SurfaceType::diffuse),    // plafond
-		Sphere(wall_radius, Vector(anchor + 1,      box_center_y,      box_size_z),   Vector(), Vector(0.75, 0.25, 0.25), SurfaceType::diffuse),    // mur gauche
-		Sphere(wall_radius, Vector(box_center_x,  box_center_y,      anchor),       Vector(), Vector(0.25, 0.75, 0.25), SurfaceType::diffuse),    // mur arrière
-		Sphere(wall_radius, Vector(-anchor + 99,     box_center_y,      box_size_z),   Vector(), Vector(0.25, 0.25, 0.75), SurfaceType::diffuse),    // mur droit
-		Sphere(wall_radius, Vector(box_center_x,  box_center_y,     -anchor + 170),   Vector(), Vector(0.0,  0.0,  0.0),  SurfaceType::diffuse),    // mur avant
+	//	// approximation d'une boîte de Cornell avec des sphères surdimensionnées qui simulent des surfaces planes
+	//	Sphere(wall_radius, Vector(box_center_x,  anchor,            box_size_z),   Vector(), Vector(0.75, 0.75, 0.75), SurfaceType::diffuse),    // plancher
+	//	Sphere(wall_radius, Vector(box_center_x, -anchor + box_size_y, box_size_z),   Vector(), Vector(0.75, 0.75, 0.75), SurfaceType::diffuse),    // plafond
+	//	Sphere(wall_radius, Vector(anchor + 1,      box_center_y,      box_size_z),   Vector(), Vector(0.75, 0.25, 0.25), SurfaceType::diffuse),    // mur gauche
+	//	Sphere(wall_radius, Vector(box_center_x,  box_center_y,      anchor),       Vector(), Vector(0.25, 0.75, 0.25), SurfaceType::diffuse),    // mur arrière
+	//	Sphere(wall_radius, Vector(-anchor + 99,     box_center_y,      box_size_z),   Vector(), Vector(0.25, 0.25, 0.75), SurfaceType::diffuse),    // mur droit
+	//	Sphere(wall_radius, Vector(box_center_x,  box_center_y,     -anchor + 170),   Vector(), Vector(0.0,  0.0,  0.0),  SurfaceType::diffuse),    // mur avant
 
-		// ensemble des sphères situées à l'intérieur de la boîte de Cornell
-		Sphere(22.5,        Vector(30,            30,                40),           Vector(), Vector(1.0, 1.0, 1.0),    SurfaceType::specular),   // sphère mirroir
-		Sphere(17.5,        Vector(75,            40,                75),           Vector(), Vector(1.0, 1.0, 1.0),    SurfaceType::refraction), // sphère de verre
+	//	// ensemble des sphères situées à l'intérieur de la boîte de Cornell
+	//	Sphere(22.5,        Vector(30,            30,                40),           Vector(), Vector(1.0, 1.0, 1.0),    SurfaceType::specular),   // sphère mirroir
+	//	Sphere(17.5,        Vector(75,            40,                75),           Vector(), Vector(1.0, 1.0, 1.0),    SurfaceType::refraction), // sphère de verre
 
-		Sphere(600,  Vector(box_center_x, 600.0 + box_size_z - 0.27, box_size_z), Vector(15, 15, 15), Vector(0.0, 0.0, 0.0), SurfaceType::diffuse) // sphère lumineuse
-		});
+	//	Sphere(600,  Vector(box_center_x, 600.0 + box_size_z - 0.27, box_size_z), Vector(15, 15, 15), Vector(0.0, 0.0, 0.0), SurfaceType::diffuse) // sphère lumineuse
+	//	});
 
 	// allocation de la mémoire de l'image en fonction des paramètres du programme
 	Raytracer::image.resize(Raytracer::image_width, Raytracer::image_height);
@@ -235,6 +272,8 @@ void Raytracer::init() {
 
 	// calibration de la caméra
 	Raytracer::camera = CameraRaytracing(camera_position, camera_orientation);
+	//Raytracer::camera.position = camera_position;
+	//Raytracer::camera.orientation = camera_orientation;
 	Raytracer::camera.viewport_width = Raytracer::image.width;
 	Raytracer::camera.viewport_height = Raytracer::image.height;
 	Raytracer::camera.fov = camera_fov;
@@ -252,65 +291,6 @@ void Raytracer::post_render() {
 HANDLE imageMutex;
 // fonction de rendu de la scène
 void Raytracer::render() {
-	//std::cout << "render start" << std::endl;
-
-	//unsigned short x = 0;
-
-	//int index, y, s, sx, sy = 0;
-
-	//float progression = 0.0f;
-
-	//double r1, r2 = 0.0;
-	//double dx, dy = 0.0;
-
-	//Vector radiance;
-
-	//Vector distance;
-
-	//// itération sur les rangées de pixels
-	//for (y = 0; y < image_height; ++y) {
-	//	// calculer le pourcentage de progression
-	//	progression = 100.0f * y / (image_height - 1.0f);
-
-	//	// afficher le pourcentage de progression du rendu dans la console
-	//	fprintf(stderr, "\rraytracing (%d rays per pixel) : %4.1f %%", ray_per_pixel, progression);
-
-	//	// itération sur les colonnes de pixels
-	//	for (x = 0; x < image_width; ++x) {
-	//		// déterminer l'index du pixel
-	//		index = (image_height - y - 1) * image_width + x;
-
-	//		// itération sur les rangées du bloc de 2x2 échantillons
-	//		for (sy = 0; sy < 2; ++sy) {
-	//			// itération sur les colonnes du bloc de 2x2 échantillons
-	//			for (sx = 0; sx < 2; ++sx) {
-	//				// initialiser la radiance
-	//				radiance = Vector();
-
-	//				// itération des sur les rayons par pixel
-	//				for (s = 0; s < ray_per_pixel; ++s) {
-	//					// filtre de la tente
-	//					r1 = 2.0 * doubleRand(0.0, 1.0);
-	//					dx = r1 < 1.0 ? sqrt(r1) - 1.0 : 1.0 - sqrt(2.0 - r1);
-
-	//					r2 = 2.0 * doubleRand(0.0, 1.0);
-	//					dy = r2 < 1.0 ? sqrt(r2) - 1.0 : 1.0 - sqrt(2.0 - r2);
-
-	//					// calculer la distance de l'échantillon
-	//					distance = camera.axis_x * (((sx + 0.5 + dx) / 2.0 + x) / image_width - 0.5) +
-	//						camera.axis_y * (((sy + 0.5 + dy) / 2.0 + y) / image_height - 0.5) + camera.axis_z;
-
-	//					// appel récursif du calcul de la radiance
-	//					radiance = radiance + compute_radiance(Ray(camera.position + distance * 140, distance.normalize()), 0) * (1.0 / ray_per_pixel);
-	//				}
-
-	//				image.pixel[index] = image.pixel[index] + Vector(clamp(radiance.x), clamp(radiance.y), clamp(radiance.z)) * 0.25;
-	//			}
-	//		}
-	//	}
-	//}
-
-	//std::cout << "\nrender done" << std::endl;
 	std::cout << "render start" << std::endl;
 
 	Raytracer::progression = 0.0f;
@@ -332,7 +312,7 @@ void Raytracer::render() {
 void Raytracer::calcRayons(void* param) {
 	//ParamThread paramThread = (ParamThread)param;
 	// initialiser la radiance
-	int iThread = (int)param;
+	const int iThread = (int)param;
 
 	unsigned short x = 0;
 
@@ -439,6 +419,9 @@ int Raytracer::raytracerExecute(const int& imageWidth, const int& imageHeight, c
 
 	std::cout << "program init done" << std::endl;
 
+	//Cube cube = Cube(Vector(0,0,0), Vector(5,5,5), Vector(0.5,0.5,0.5), Vector(0.5,0.5,0.5), SurfaceType::diffuse);
+	//Ray ray = Ray(Vector(5,5,5), Vector(9,9,9));
+	//cube.intersect(ray);
 	// initialisation de la scène
 	init();
 
@@ -451,6 +434,16 @@ int Raytracer::raytracerExecute(const int& imageWidth, const int& imageHeight, c
 	return 0;
 }
 
+//void Raytracer::setupCamera(const Vector& camPosition, const Vector& camOrientation, const double& fov, const Vector& axisX, const Vector& axisY, const Vector& axisZ) {
+//	this->camera_position = camPosition;
+//	this->camera_orientation = camOrientation;
+//	this->camera_fov = fov;
+//	Raytracer::camera.axis_x = axisX;
+//	Raytracer::camera.axis_y = axisY;
+//	Raytracer::camera.axis_z = axisZ;
+//
+//}
+
 int Raytracer::image_width = 0;
 int Raytracer::image_height = 0;
 int Raytracer::ray_per_pixel = 0;
@@ -459,6 +452,6 @@ float Raytracer::progression = 0;
 unsigned int Raytracer::N_THREADS = 0;
 ImageRaytracing Raytracer::image = ImageRaytracing();
 CameraRaytracing Raytracer::camera = CameraRaytracing(Vector(), Vector());
-std::vector<Sphere> Raytracer::scene = std::vector<Sphere>();
+std::vector<Primitive*> Raytracer::scene = std::vector<Primitive*>();
 //HANDLE Raytracer::imageMutex = CreateMutex(NULL, FALSE, NULL);
 

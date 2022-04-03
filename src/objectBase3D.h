@@ -1,8 +1,12 @@
 #pragma once
 
 #include "ofColor.h"
+#include "ofMaterial.h"
+#include "ofMatrix3x3.h" // required for #include ofMaterial.h
 #include "ofVec3f.h"
+//#include "ofMain.h"
 #include <string>
+#include <raytracing/raytracer.h>
 
 // énumération des différents types de primitives vectorielles
 enum class VectorObject3DType { none, cube, sphere, cone, cylinder };
@@ -10,13 +14,15 @@ enum class MeshRenderMode { fill, wireframe, vertex };
 
 // structure d'un objet 3D
 struct VectorObj {
-	VectorObject3DType   type;				// 1 * 4 = 4  octets
+	VectorObject3DType	type;				// 1 * 4 = 4  octets
 	ofVec3f				posStart;			// 3 * 4 = 12  octets
 	float				width;				// 1 * 4 = 4  octets	x
 	float				height;				// 1 * 4 = 4  octets	y
 	float				length;				// 1 * 4 = 4  octets	z
 	float				radius = 0.0f;		// 1 * 4 = 4  octets	r
 	ofColor				fillColor = 200;	// 4 * 1 = 4  octets
+	ofMaterial			material;
+	SurfaceType			surfaceType;
 	bool operator==(const VectorObj& obj) const {
 		return obj.type == this->type
 			&& obj.posStart == this->posStart
