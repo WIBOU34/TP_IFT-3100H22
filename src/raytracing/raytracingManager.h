@@ -2,10 +2,11 @@
 
 #include "../renderer.h"
 #include "../objects3D/objects3DRenderer.h"
-#include "ofxAssimpModelLoader.h"
+//#include "ofxAssimpModelLoader.h"
 #include <list>
 #include "ofMath.h"
 #include "ofxGui.h"
+#include "gpu/smallptGPU.h"
 #include "raytracer.h"
 
 class RaytracingManager : public RendererBase {
@@ -22,6 +23,7 @@ public:
 	ofParameter<int> imageWidth;
 	ofParameter<int> imageHeight;
 	Raytracer raytracer;
+	RaytracerGpu raytracerGpu;
 
 protected:
 	void setupRenderer(const std::string& name);
@@ -34,6 +36,6 @@ private:
 	void setupBoiteCornell();
 	void setupTestBoite();
 	void transfer3DObjectsForRaytracing();
-	std::vector<Cube> cubeVector = std::vector<Cube>();
-	std::vector<Sphere> sphereVector = std::vector<Sphere>();
+	std::vector<CubeCpu> cubeVector = std::vector<CubeCpu>();
+	std::vector<SphereCpu> sphereVector = std::vector<SphereCpu>();
 };

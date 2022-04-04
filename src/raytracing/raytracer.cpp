@@ -21,7 +21,7 @@ int Raytracer::format_color_component(double value) {
 
 // fonction qui valide s'il y a intersection entre un rayon et les géométries de la scène
 // retourne l'intersection la plus près de la caméra (distance et index de l'élément)
-bool Raytracer::raycast(const Ray& ray, double& distance, int& id) {
+bool Raytracer::raycast(const RayCpu& ray, double& distance, int& id) {
 	// variable temporaire pour la distance d'une intersection entre un rayon et une sphère
 	double d;
 
@@ -52,7 +52,7 @@ bool Raytracer::raycast(const Ray& ray, double& distance, int& id) {
 }
 
 // fonction récursive qui calcule la radiance
-Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
+Vector Raytracer::compute_radiance(const RayCpu& ray, int depth) {
 	// valeur de la radiance
 	Vector radiance;
 
@@ -67,7 +67,7 @@ Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
 		return Vector(); // couleur par défault (noir)
 
 	// référence sur une géométrie en intersection avec un rayon
-	const Primitive& obj = *Raytracer::scene[id];
+	const PrimitiveCpu& obj = *Raytracer::scene[id];
 
 	// calculer les coordonnées du point d'intersection
 	const Vector x = ray.origin + ray.direction * distance;
@@ -103,7 +103,7 @@ Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
 		const Vector v = w.cross(u);
 		const Vector d = (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalize();
 
-		radiance = obj.emission + f.multiply(compute_radiance(Ray(x, d), depth));
+		radiance = obj.emission + f.multiply(compute_radiance(RayCpu(x, d), depth));
 
 		return radiance;
 	} else if (obj.material == SurfaceType::specular) {
@@ -111,7 +111,7 @@ Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
 
 		//Vector temp = glm::reflect<Vector>(ray.direction, n);
 		glm::dvec3 temp = glm::reflect<3, double, glm::qualifier::defaultp>(glm::dvec3(ray.direction.x, ray.direction.y, ray.direction.z), glm::dvec3(n.x, n.y, n.z));
-		radiance = obj.emission + f.multiply(compute_radiance(Ray(x, Vector(temp.x, temp.y, temp.z)), depth));
+		radiance = obj.emission + f.multiply(compute_radiance(RayCpu(x, Vector(temp.x, temp.y, temp.z)), depth));
 		//radiance = obj.emission + f.multiply(compute_radiance(Ray(x, ray.direction - n * 2.0 * n.dot(ray.direction)), depth));
 
 		return radiance;
@@ -148,7 +148,7 @@ Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
 		//radiance = obj.emission + f.multiply(depth > 2 ? compute_radiance(Ray(x, Vector(temp.x, temp.y, temp.z)), depth) : );
 		// matériau avec réflexion réfraction
 
-		Ray reflection_ray(x, ray.direction - n * 2.0 * n.dot(ray.direction));
+		RayCpu reflection_ray(x, ray.direction - n * 2.0 * n.dot(ray.direction));
 
 		const bool into = n.dot(na) > 0;
 
@@ -181,8 +181,8 @@ Vector Raytracer::compute_radiance(const Ray& ray, int depth) {
 		const double tp = tr / (1.0 - p);
 
 		radiance = obj.emission + f.multiply(depth > 2 ? (doubleRand(0.0, 1.0) < p ?
-			compute_radiance(reflection_ray, depth) * rp : compute_radiance(Ray(x, tdir), depth) * tp) :
-			compute_radiance(reflection_ray, depth) * re + compute_radiance(Ray(x, tdir), depth) * tr);
+			compute_radiance(reflection_ray, depth) * rp : compute_radiance(RayCpu(x, tdir), depth) * tp) :
+			compute_radiance(reflection_ray, depth) * re + compute_radiance(RayCpu(x, tdir), depth) * tr);
 
 		return radiance;
 	} else {
@@ -359,7 +359,7 @@ void Raytracer::calcRayons(void* param) {
 							camera.axis_y * (((sy + 0.5 + dy) / 2.0 + y) / image_height - 0.5) + camera.axis_z;
 
 						// appel récursif du calcul de la radiance
-						radiance = radiance + compute_radiance(Ray(camera.position + distance * 140, distance.normalize()), 0) * (1.0 / ray_per_pixel);
+						radiance = radiance + compute_radiance(RayCpu(camera.position + distance * 140, distance.normalize()), 0) * (1.0 / ray_per_pixel);
 					}
 					WaitForSingleObject(imageMutex, INFINITE);
 					Raytracer::image.pixel[index] = Raytracer::image.pixel[index] + Vector(clamp(radiance.x), clamp(radiance.y), clamp(radiance.z)) * 0.25;
@@ -452,6 +452,6 @@ float Raytracer::progression = 0;
 unsigned int Raytracer::N_THREADS = 0;
 ImageRaytracing Raytracer::image = ImageRaytracing();
 CameraRaytracing Raytracer::camera = CameraRaytracing(Vector(), Vector());
-std::vector<Primitive*> Raytracer::scene = std::vector<Primitive*>();
+std::vector<PrimitiveCpu*> Raytracer::scene = std::vector<PrimitiveCpu*>();
 //HANDLE Raytracer::imageMutex = CreateMutex(NULL, FALSE, NULL);
 

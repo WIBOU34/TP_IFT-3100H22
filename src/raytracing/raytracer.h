@@ -120,13 +120,13 @@ struct Vector {
 
 // structure d'un rayon sous forme de droite paramétrique
 // équation d'un rayon : p(t) = o + td
-struct Ray {
+struct RayCpu {
 	Vector origin;
 	Vector direction;
 	Vector invDir;
 	int sign[3];
 
-	Ray(Vector o, Vector d) : origin(o), direction(d) {
+	RayCpu(Vector o, Vector d) : origin(o), direction(d) {
 		this->invDir = Vector(1 / direction.x, 1 / direction.y, 1 / direction.z);
 		sign[0] = (invDir.x < 0);
 		sign[1] = (invDir.y < 0);
@@ -134,19 +134,19 @@ struct Ray {
 	}
 };
 
-struct Primitive {
+struct PrimitiveCpu {
 public:
 	Vector position;
 	Vector emission; // couleur émissive du cube
 	Vector color;    // couleur diffuse du cube
 	SurfaceType material; // type de réflexion du cube
-	virtual double intersect(const Ray& ray) const = 0;
+	virtual double intersect(const RayCpu& ray) const = 0;
 };
 
-struct Cylinder : public Primitive {
+struct CylinderCpu : public PrimitiveCpu {
 	Vector dimensions;
 
-	Cylinder(Vector position, Vector dimensions, Vector e, Vector c, SurfaceType m) {
+	CylinderCpu(Vector position, Vector dimensions, Vector e, Vector c, SurfaceType m) {
 		this->emission = e;
 		this->color = c;
 		this->material = m;
@@ -154,12 +154,12 @@ struct Cylinder : public Primitive {
 		this->dimensions = dimensions;
 	}
 
-	double intersect(const Ray& ray) const {
+	double intersect(const RayCpu& ray) const {
 
 	}
 };
 
-struct Cube : public  Primitive {
+struct CubeCpu : public  PrimitiveCpu {
 	//Vector position; // point du cube bas gauche avant
 	Vector dimensions; // width, height, depth
 	//Vector emission; // couleur émissive du cube
@@ -177,7 +177,7 @@ struct Cube : public  Primitive {
 	//Vector pHautGaucheArriere;
 	Vector bounds[2];
 
-	Cube(Vector position, Vector dimensions, Vector e, Vector c, SurfaceType m) {
+	CubeCpu(Vector position, Vector dimensions, Vector e, Vector c, SurfaceType m) {
 		this->emission = e;
 		this->color = c;
 		this->material = m;
@@ -197,7 +197,7 @@ struct Cube : public  Primitive {
 		//this->pHautGaucheArriere = positionHautGaucheArriere();
 	}
 
-	double intersect(const Ray& ray) const {
+	double intersect(const RayCpu& ray) const {
 		double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
 		tmin = (bounds[ray.sign[0]].x - ray.origin.x) * ray.invDir.x;
@@ -306,7 +306,7 @@ struct Cube : public  Primitive {
 };
 
 // type Sphere sous forme d'un point central et d'un rayon
-struct Sphere : public Primitive {
+struct SphereCpu : public PrimitiveCpu {
 	double radius;   // rayon de la sphère
 	//Vector position; // position du centre de la sphère
 	//Vector emission; // couleur émissive de la sphère
@@ -317,7 +317,7 @@ struct Sphere : public Primitive {
 	// constructeur
 	//Sphere(double r, Vector p, Vector e, Vector c, SurfaceType m) : radius(r), position(p), emission(e), color(c), material(m) {}
 
-	Sphere(double r, Vector p, Vector e, Vector c, SurfaceType m) : radius(r) {
+	SphereCpu(double r, Vector p, Vector e, Vector c, SurfaceType m) : radius(r) {
 		this->emission = e;
 		this->color = c;
 		this->material = m;
@@ -325,7 +325,7 @@ struct Sphere : public Primitive {
 	}
 
 	// fonction d'intersection entre la sphère et un rayon
-	double intersect(const Ray& ray) const {
+	double intersect(const RayCpu& ray) const {
 		// distance de l'intersection la plus près si elle existe
 		double distance;
 
@@ -464,7 +464,7 @@ public:
 	// variables globales
 
 	// déclaration du graphe de scène
-	static std::vector<Primitive*> scene;
+	static std::vector<PrimitiveCpu*> scene;
 
 	// orientation initiale de la caméra
 	Vector camera_orientation = (Vector(0, -0.042612, -1).normalize());
@@ -499,10 +499,10 @@ private:
 
 	// fonction qui valide s'il y a intersection entre un rayon et les géométries de la scène
 	// retourne l'intersection la plus près de la caméra (distance et index de l'élément)
-	static bool raycast(const Ray& ray, double& distance, int& id);
+	static bool raycast(const RayCpu& ray, double& distance, int& id);
 
 	// fonction récursive qui calcule la radiance
-	static Vector compute_radiance(const Ray& ray, int depth);
+	static Vector compute_radiance(const RayCpu& ray, int depth);
 
 	// fonction qui permet de sauvegarder des pixels dans un fichier image (format .ppm)
 	void save_image_file(int width, int height, int ray_per_pixel, const Vector* pixel);

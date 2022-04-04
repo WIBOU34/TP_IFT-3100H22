@@ -97,6 +97,18 @@
     <ClCompile Include="src\raytracing\raytracingManager.cpp">
       <Filter>src\raytracing</Filter>
     </ClCompile>
+    <ClCompile Include="src\raytracing\gpu\displayfunc.cpp">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\raytracing\gpu\renderconfig.cpp">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\raytracing\gpu\renderdevice.cpp">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\raytracing\gpu\smallptGPU.cpp">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -200,6 +212,9 @@
     </Filter>
     <Filter Include="src\raytracing">
       <UniqueIdentifier>{aeb64fb7-356d-4836-8ffc-715ff547f6d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\raytracing\gpu">
+      <UniqueIdentifier>{0c8775dc-c2c0-49d4-9839-0f417592fd57}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -575,8 +590,37 @@
     <ClInclude Include="src\raytracing\raytracer.h">
       <Filter>src\raytracing</Filter>
     </ClInclude>
+    <ClInclude Include="src\raytracing\gpu\camera.h">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\raytracing\gpu\displayfunc.h">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\raytracing\gpu\geom.h">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\raytracing\gpu\renderconfig.h">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\raytracing\gpu\renderdevice.h">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\raytracing\gpu\smallptGPU.h">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\raytracing\gpu\vec.h">
+      <Filter>src\raytracing\gpu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\raytracing\gpu\rendering_kernel.cl">
+      <Filter>src\raytracing\gpu</Filter>
+    </None>
+    <None Include="src\raytracing\gpu\scene_build_complex.pl">
+      <Filter>src\raytracing\gpu</Filter>
+    </None>
   </ItemGroup>
 </Project>
