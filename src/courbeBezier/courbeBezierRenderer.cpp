@@ -8,9 +8,9 @@
  */
 
 
-#include "topologieRenderer.h"
+#include "courbeBezierRenderer.h"
 
-void TopologieRenderer::setupRenderer(const std::string& name) {
+void CourbeBezierRenderer::setupRenderer(const std::string& name) {
 
 	parameters.clear();
 	parameters.setName(name);
@@ -22,8 +22,7 @@ void TopologieRenderer::setupRenderer(const std::string& name) {
     parameters.add(bezier_toggle.setup("Spline de bezier", false)->getParameter());
 
     ofSetFrameRate(60);
-    ofSetBackgroundColor(0);
-    ofSetSphereResolution(32);
+    ofSetBackgroundColor(0);    
     ofDisableDepthTest();
     
     is_key_press_up_topo = false;
@@ -51,7 +50,7 @@ void TopologieRenderer::setupRenderer(const std::string& name) {
 
 }
 
-void TopologieRenderer::updateRenderer() {
+void CourbeBezierRenderer::updateRenderer() {
      
     ctrl_point5 = ctrl_point4;
 
@@ -75,7 +74,7 @@ void TopologieRenderer::updateRenderer() {
             ctrl_point4.x, ctrl_point4.y, ctrl_point4.z,
             position.x, position.y, position.z);
 
-        bezier_cubic_2(
+        bezier_cubic(
             index / (float)line_resolution,
             ctrl_point5.x, ctrl_point5.y, ctrl_point5.z,
             ctrl_point6.x, ctrl_point6.y, ctrl_point6.z,
@@ -90,10 +89,10 @@ void TopologieRenderer::updateRenderer() {
     }
 }
 
-void TopologieRenderer::generateDraw() {
+void CourbeBezierRenderer::generateDraw() {
 }
 
-void TopologieRenderer::render() {
+void CourbeBezierRenderer::render() {
 
 
     if (bezier_toggle) {
@@ -105,7 +104,6 @@ void TopologieRenderer::render() {
 
         // dessiner la ligne contour
         ofSetColor(0, 0, 255);
-        ofSetLineWidth(line_width_outline);
         if (hide_control_line) {
             ofDrawLine(ctrl_point1.x, ctrl_point1.y, ctrl_point2.x, ctrl_point2.y);
             ofDrawLine(ctrl_point3.x, ctrl_point3.y, ctrl_point4.x, ctrl_point4.y);
@@ -126,51 +124,12 @@ void TopologieRenderer::render() {
         // dessiner les points de contrôle
         ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point1.x, ctrl_point1.y, radius, radius);
-        //ofSetColor(200);
-        //string e1 = "1";
-        //ofDrawBitmapString(e1, ctrl_point1.x -7, ctrl_point1.y+7);
-
-        //ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point2.x, ctrl_point2.y, radius, radius);
-        //ofSetColor(200);
-        //string e2 = "2";
-        //ofDrawBitmapString(e2, ctrl_point2.x -9, ctrl_point2.y+7);
-
-        //ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point3.x, ctrl_point3.y, radius, radius);
-        //ofSetColor(200);
-        //string e3 = "3";
-        //ofDrawBitmapString(e3, ctrl_point3.x - 9, ctrl_point3.y + 7);
-
-         //ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point6.x, ctrl_point6.y, radius, radius);
-        //ofSetColor(200);
-        //string e4 = "4";
-        //ofDrawBitmapString(e4, ctrl_point6.x - 9, ctrl_point6.y + 7);
-
-        //ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point7.x, ctrl_point7.y, radius, radius);
-        //ofSetColor(200);
-        //string e5 = "5";
-        //ofDrawBitmapString(e5, ctrl_point7.x - 9, ctrl_point7.y + 7);
-
-        //ofSetColor(255, 0, 0);
         ofDrawEllipse(ctrl_point8.x, ctrl_point8.y, radius, radius);
-        //ofSetColor(200);
-        //string e6= "6";
-        //ofDrawBitmapString(e6, ctrl_point8.x - 9, ctrl_point8.y + 7);
-
-        if (noeud) {        
-        //ofSetColor(255, 0, 0);
-        ofDrawEllipse(ctrl_point4.x, ctrl_point4.y, radius, radius);
-        //ofSetColor(200);
-        //string noeud = "n";
-        //ofDrawBitmapString(noeud, ctrl_point4.x - 9, ctrl_point4.y + 7);        
-        }
-
-        // dessiner la ligne contour
-        ofSetColor(0, 0, 255);
-        ofSetLineWidth(line_width_outline);  
+        if (noeud) ofDrawEllipse(ctrl_point4.x, ctrl_point4.y, radius, radius);
 
         cam.end();
 
@@ -180,13 +139,12 @@ void TopologieRenderer::render() {
                      "et les fleches pour les deplacer\nr : reset\nc : afficher les lignes de controle\n"
                      "n : afficher et controler le noeud";
         ofDrawBitmapString(msg, 400, 20);
-        
 
     }
 }
 
 
-void TopologieRenderer::reset() {
+void CourbeBezierRenderer::reset() {
 
     // initialisation des variables
     framebuffer_width = ofGetWidth();
@@ -245,7 +203,7 @@ void TopologieRenderer::reset() {
     ofLog() << "<reset>";
 }
 
-void TopologieRenderer::keyPressed(int key) {
+void CourbeBezierRenderer::keyPressed(int key) {
     switch (key)
     {
     case OF_KEY_LEFT: // touche ←
@@ -269,7 +227,7 @@ void TopologieRenderer::keyPressed(int key) {
     }    
 }
 
-void TopologieRenderer::keyReleased(int key) {
+void CourbeBezierRenderer::keyReleased(int key) {
     switch (key)
     {
     case 49: // touche 1

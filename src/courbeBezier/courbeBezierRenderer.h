@@ -16,7 +16,7 @@
 #include "ofxGui.h"
 
 
-class TopologieRenderer : public RendererBase {
+class CourbeBezierRenderer : public RendererBase {
 public : 
 
 	ofParameterGroup parameters;
@@ -44,36 +44,11 @@ public:
 		z = uuu * p1z + 3 * uu * t * p2z + 3 * u * tt * p3z + ttt * p4z;
 	}
 
-	// deuxième fonction d'évaluation d'une courbe de Bézier cubique 
-	inline void bezier_cubic_2(
-		float t,
-		float p5x, float p5y, float p5z,
-		float p6x, float p6y, float p6z,
-		float p7x, float p7y, float p7z,
-		float p8x, float p8y, float p8z,
-		float& x, float& y, float& z)
-	{
-		float u = 1 - t;
-		float uu = u * u;
-		float uuu = uu * u;
-		float tt = t * t;
-		float ttt = tt * t;
-
-		x = uuu * p5x + 3 * uu * t * p6x + 3 * u * tt * p7x + ttt * p8x;
-		y = uuu * p5y + 3 * uu * t * p6y + 3 * u * tt * p7y + ttt * p8y;
-		z = uuu * p5z + 3 * uu * t * p6z + 3 * u * tt * p7z + ttt * p8z;
-	}
-
-
-
-
-	string  curve_name;
 
 	ofPolyline line_renderer;
 	ofPolyline line_renderer_2;
 
-	ofVec3f* selected_ctrl_point;
-	
+	ofVec3f* selected_ctrl_point;	
 
 	ofVec3f ctrl_point1;
 	ofVec3f ctrl_point2;

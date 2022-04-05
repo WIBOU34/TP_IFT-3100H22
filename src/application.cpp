@@ -24,7 +24,8 @@ void Application::setup() {
 	//curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
 	textureRenderer.setup("Textures");
-	topologieRenderer.setup("Topologie");
+	courbeBezierRenderer.setup("Courbe de Bezier");
+	surfaceBezierRenderer.setup("Surface de Bezier");
 	illuminationRenderer.setup("Illumination");
 	illuminationRenderer.camera = cameraRenderer.camera;
 	ofSetVerticalSync(true);
@@ -63,7 +64,8 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(&objects3DRenderer.parameters3D);
 	gui.add(textureRenderer.parameters);
 	gui.add(&illuminationRenderer.parameters);
-	gui.add(topologieRenderer.parameters);
+	gui.add(courbeBezierRenderer.parameters);
+	gui.add(surfaceBezierRenderer.parameters);
 
 	gui.minimizeAll();
 	bHide = false;
@@ -89,7 +91,8 @@ void Application::update() {
 	objects3DRenderer.update();
 	textureRenderer.update();
 	illuminationRenderer.update();
-	topologieRenderer.update();
+	courbeBezierRenderer.update();
+	surfaceBezierRenderer.update();
 
 
 	//curseurRenderer.valCurseurSlider = sliderCurseur;
@@ -100,7 +103,8 @@ void Application::draw() {
 	imageRenderer.draw();
 	dessinRenderer.draw();
 	textureRenderer.draw();
-	topologieRenderer.draw();
+	courbeBezierRenderer.draw();
+	surfaceBezierRenderer.draw();
 	//illuminationRenderer.draw();
 	drawCamera();
 
@@ -139,14 +143,16 @@ void Application::keyPressed(int key) {
 		illuminationRenderer.reset();
 	}
 	cameraRenderer.keyPressed(key);
-	topologieRenderer.keyPressed(key);
+	courbeBezierRenderer.keyPressed(key);
+	surfaceBezierRenderer.keyPressed(key);
 }
 
 //--------------------------------------------------------------
 void Application::keyReleased(int key) {
 	cameraRenderer.keyReleased(key);
 	textureRenderer.keyReleased(key);
-	topologieRenderer.keyReleased(key);
+	courbeBezierRenderer.keyReleased(key);
+	surfaceBezierRenderer.keyReleased(key);
 }
 
 //--------------------------------------------------------------

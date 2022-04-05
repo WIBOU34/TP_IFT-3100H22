@@ -180,6 +180,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\courbeBezier\courbeBezierRenderer.cpp" />
     <ClCompile Include="src\illuminationClassique\illuminationRenderer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\application.cpp" />
@@ -208,12 +209,13 @@
     <ClCompile Include="..\..\..\addons\ofxSvg\src\ofxSvg.cpp" />
     <ClCompile Include="..\..\..\addons\ofxVectorGraphics\src\ofxVectorGraphics.cpp" />
     <ClCompile Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS.cpp" />
+    <ClCompile Include="src\surfaceBezier\surfaceBezierRenderer.cpp" />
     <ClCompile Include="src\texture\textureRenderer.cpp" />
-    <ClCompile Include="src\topologie\topologieRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application.h" />
     <ClInclude Include="src\camera\cameraRenderer.h" />
+    <ClInclude Include="src\courbeBezier\courbeBezierRenderer.h" />
     <ClInclude Include="src\curseur\curseurRenderer.h" />
     <ClInclude Include="src\dessin\dessinRenderer.h" />
     <ClInclude Include="src\illuminationClassique\illuminationRenderer.h" />
@@ -333,8 +335,8 @@
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\src\ofxVectorGraphics.h" />
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS.hpp" />
     <ClInclude Include="..\..\..\addons\ofxVectorGraphics\libs\CreEPS_Types.hpp" />
+    <ClInclude Include="src\surfaceBezier\surfaceBezierRenderer.h" />
     <ClInclude Include="src\texture\textureRenderer.h" />
-    <ClInclude Include="src\topologie\topologieRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

@@ -91,8 +91,11 @@
     <ClCompile Include="src\illuminationClassique\illuminationRenderer.cpp">
       <Filter>src\illuminationClassique</Filter>
     </ClCompile>
-    <ClCompile Include="src\topologie\topologieRenderer.cpp">
-      <Filter>src\topologie</Filter>
+    <ClCompile Include="src\courbeBezier\courbeBezierRenderer.cpp">
+      <Filter>src\courbeBezier</Filter>
+    </ClCompile>
+    <ClCompile Include="src\surfaceBezier\surfaceBezierRenderer.cpp">
+      <Filter>src\surfaceBezier</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -195,8 +198,11 @@
     <Filter Include="src\illuminationClassique">
       <UniqueIdentifier>{12db21c4-e213-4c77-9c6b-0384b2298242}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\topologie">
-      <UniqueIdentifier>{4bffaec2-a273-444d-9bd0-be282db54961}</UniqueIdentifier>
+    <Filter Include="src\courbeBezier">
+      <UniqueIdentifier>{8b2e6aed-20c9-4a8c-b761-2af8f25184b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\surfaceBezier">
+      <UniqueIdentifier>{c59352df-166a-4431-8a92-6308102c1917}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -566,8 +572,11 @@
     <ClInclude Include="src\illuminationClassique\illuminationRenderer.h">
       <Filter>src\illuminationClassique</Filter>
     </ClInclude>
-    <ClInclude Include="src\topologie\topologieRenderer.h">
-      <Filter>src\topologie</Filter>
+    <ClInclude Include="src\courbeBezier\courbeBezierRenderer.h">
+      <Filter>src\courbeBezier</Filter>
+    </ClInclude>
+    <ClInclude Include="src\surfaceBezier\surfaceBezierRenderer.h">
+      <Filter>src\surfaceBezier</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

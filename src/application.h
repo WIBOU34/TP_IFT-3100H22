@@ -21,7 +21,8 @@
 #include "illuminationClassique/illuminationRenderer.h"
 #include "ofxGui.h"
 #include "texture/textureRenderer.h"
-#include "topologie/topologieRenderer.h"
+#include "courbeBezier/courbeBezierRenderer.h"
+#include "surfaceBezier/surfaceBezierRenderer.h"
 
 class Application : public ofBaseApp {
 public:
@@ -33,7 +34,8 @@ public:
 	Objects3DRenderer objects3DRenderer;
 	TextureRenderer textureRenderer;
 	IlluminationRenderer illuminationRenderer;
-	TopologieRenderer topologieRenderer;
+	CourbeBezierRenderer courbeBezierRenderer;
+	SurfaceBezierRenderer surfaceBezierRenderer;
 
 	shared_ptr<ofAppBaseWindow> mainWindow;
 
