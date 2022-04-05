@@ -28,7 +28,7 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     perlinRange = 1.0;
     perlinHeight = 5.0;
 
-    ofBackground(31); // set the window background 
+    //ofBackground(31); // set the window background 
     mainCam.setPosition(0, 0, 30); // set initial position for easyCam 3D viewer
 
 
@@ -243,6 +243,8 @@ void SurfaceBezierRenderer::generateDraw() {
 void SurfaceBezierRenderer::render() {
 
     if (surface_bezier_toggle) {
+       
+        ofFill();
         ofEnableDepthTest();
         //light.enable();
         mainCam.begin();

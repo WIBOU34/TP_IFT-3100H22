@@ -17,6 +17,8 @@ void Application::setup() {
 	ofSetWindowTitle("Travail Pratique");
 
 	ofSetWindowShape(1280, 728);
+	ofBackground(31);
+	ofSetFrameRate(60);
 
 	imageRenderer.setup("Images");
 	dessinRenderer.setup("Dessin");

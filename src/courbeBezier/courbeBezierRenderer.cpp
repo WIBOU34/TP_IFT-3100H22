@@ -21,8 +21,8 @@ void CourbeBezierRenderer::setupRenderer(const std::string& name) {
     // menu gui pour la topologie
     parameters.add(bezier_toggle.setup("Spline de bezier", false)->getParameter());
 
-    ofSetFrameRate(60);
-    ofSetBackgroundColor(0);    
+    //ofSetFrameRate(60);
+    //ofSetBackgroundColor(0);    
     ofDisableDepthTest();
     
     is_key_press_up_topo = false;
