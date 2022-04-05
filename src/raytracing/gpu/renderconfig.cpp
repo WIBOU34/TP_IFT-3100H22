@@ -86,10 +86,11 @@ void RenderConfig::ReadScene(const char* fileName) {
 	for (i = 0; i < sphereCount; i++) {
 		Sphere* s = &spheres[i];
 		int mat;
+		Vec dimensionsOuRadius = Vec();;
 		char typePrimitive [10];
-		int c = fscanf(f, "%s %f  %f %f %f  %f %f %f  %f %f %f  %d\n",
+		int c = fscanf(f, "%s %f %f %f  %f %f %f  %f %f %f  %f %f %f  %d\n",
 			typePrimitive,
-			&s->rad,
+			&dimensionsOuRadius.x, &dimensionsOuRadius.y, &dimensionsOuRadius.z,
 			&s->p.x, &s->p.y, &s->p.z,
 			&s->e.x, &s->e.y, &s->e.z,
 			&s->c.x, &s->c.y, &s->c.z,
@@ -111,10 +112,12 @@ void RenderConfig::ReadScene(const char* fileName) {
 		}
 		if (strcmp(typePrimitive, "sphere") == 0) {
 			s->type = TypePrimitive::SPHERE;
+			s->rad = dimensionsOuRadius.x;
 		} else if (strcmp(typePrimitive, "cube") == 0) {
 			s->type = TypePrimitive::CUBE;
+			s->dimensions = dimensionsOuRadius;
 		}
-		if (c != 12) {
+		if (c != 14) {
 			fprintf(stderr, "Failed to read sphere #%d: %d\n", i, c);
 			exit(-1);
 		}

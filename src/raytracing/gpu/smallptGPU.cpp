@@ -32,7 +32,7 @@
 using namespace std;
 
 //int main(int argc, char *argv[]) {
-int RaytracerGpu::executeGPURaytracer(const unsigned int& width, const unsigned int& height, const unsigned int& rayPerPixel) {
+int RaytracerGpu::executeGPURaytracer(const unsigned int& width, const unsigned int& height, const unsigned int& rayPerPixel, const string& sceneName) {
 	try {
 		//cerr << "Usage: " << argv[0] << endl;
 		//cerr << "Usage: " << argv[0] << " <use CPU devices (0 or 1)> <use GPU devices (0 or 1)> <GPU workgroup size (0=default value or anything > 0 and power of 2)> <window width> <window height> <scene file>" << endl;
@@ -57,7 +57,8 @@ int RaytracerGpu::executeGPURaytracer(const unsigned int& width, const unsigned 
 		//	config = new RenderConfig(argv[6], width, height,
 		//			(atoi(argv[1]) == 1), (atoi(argv[2]) == 1), atoi(argv[3]));
 		//else if (argc == 1)
-		config = new RenderConfig("data/scenes/cornell.scn", width, height, true, true, 0);
+		//config = new RenderConfig("data/scenes/test.scn", width, height, true, true, 0);
+		config = new RenderConfig("data/scenes/" + sceneName, width, height, true, true, 0);
 		//else
 		//	exit(-1);
 

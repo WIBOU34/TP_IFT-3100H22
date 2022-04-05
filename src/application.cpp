@@ -80,6 +80,7 @@ void Application::update() {
 	objects3DRenderer.update();
 	textureRenderer.update();
 	illuminationRenderer.update();
+	raytracingManager.update();
 
 
 	//curseurRenderer.valCurseurSlider = sliderCurseur;

@@ -153,6 +153,50 @@ static float SphereIntersect(
 			else
 				return 0.f;
 		}
+	} else if (s->type == CUBE) {
+		Vec bounds[2];
+		bounds[0] = s->p;
+		vinit(bounds[1], s->p.x + s->dimensions.x, s->p.y + s->dimensions.y, s->p.z + s->dimensions.z)
+
+		Vec invDir;
+		vinit(invDir, 1 / r->d.x, 1 / r->d.y, 1 / r->d.z);
+		int sign[3];
+		sign[0] = (invDir.x < 0);
+		sign[1] = (invDir.y < 0);
+		sign[2] = (invDir.z < 0);
+
+
+		float tmin = (bounds[sign[0]].x - r->o.x) * invDir.x;
+		float tmax = (bounds[1 - sign[0]].x - r->o.x) * invDir.x;
+		float tymin = (bounds[sign[1]].y - r->o.y) * invDir.y;
+		float tymax = (bounds[1 - sign[1]].y - r->o.y) * invDir.y;
+
+		if ((tmin > tymax) || (tymin > tmax))
+			return 0;
+
+		if (tymin > tmin)
+			tmin = tymin;
+		if (tymax < tmax)
+			tmax = tymax;
+
+		float tzmin = (bounds[sign[2]].z - r->o.z) * invDir.z;
+		float tzmax = (bounds[1 - sign[2]].z - r->o.z) * invDir.z;
+
+		if ((tmin > tzmax) || (tzmin > tmax))
+			return 0;
+
+		if (tzmin > tmin)
+			tmin = tzmin;
+		if (tzmax < tmax)
+			tmax = tzmax;
+
+		float distance = tmin;
+		if (distance < 0) {
+			distance = tmax;
+			if (distance < 0) return 0;
+		}
+
+		return distance;
 	}
 }
 
