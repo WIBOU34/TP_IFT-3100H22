@@ -38,8 +38,8 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 
     // slider pour le square mesh 
     map_mesh.setName("Effet de relief");
-    map_mesh.add(slider_1.set("Position", 0.0f, 0.0f, 100.0f));
-    map_mesh.add(slider_2.set("Positn", 0.0f, 0.0f, 100.0f));
+    //map_mesh.add(slider_1.set("Position", 0.0f, 0.0f, 100.0f));
+    //map_mesh.add(slider_2.set("Positn", 0.0f, 0.0f, 100.0f));
     map_mesh.add(slider_3.set("Vagues", 5.0f, 0.0f, 100.0f));
     map_mesh.add(slider_4.set("Rotation", 0.0f, 0.0f, 420.0f));
     
@@ -133,9 +133,7 @@ void TextureRenderer::generateDraw() {
 
 }
 
-void TextureRenderer::render() {   
-    
-      
+void TextureRenderer::render() { 
 
     // faire apparaitre la sphere ou l'image
     if (display) ofDisableArbTex();
@@ -364,40 +362,41 @@ void TextureRenderer::buttonTerrePicker() {
 }
 
 void TextureRenderer::keyReleased(int key) {
-    
-    image = image_selection; // permet de revenir a l'image d'origine et ne pas emplier les filtres 
+    if (mesh_sphere_toggle) {
+        image = image_selection; // permet de revenir a l'image d'origine et ne pas emplier les filtres 
 
-    switch (key) {
-        
-    case 'i': // touche 1 
-        kernel_type = ConvolutionKernel::identity;
-        kernel_name = "identity";
-        break;
+        switch (key) {
 
-    case 'e': // touche 2
-        kernel_type = ConvolutionKernel::emboss;
-        kernel_name = "emboss";
-        break;
+        case 'i': // touche 1 
+            kernel_type = ConvolutionKernel::identity;
+            kernel_name = "identity";
+            break;
 
-    case 's': // touche 3
-        kernel_type = ConvolutionKernel::sharpen;
-        kernel_name = "sharpen";
-        break;
+        case 'e': // touche 2
+            kernel_type = ConvolutionKernel::emboss;
+            kernel_name = "emboss";
+            break;
 
-    case 'd': // touche 4
-        kernel_type = ConvolutionKernel::edge_detect;
-        kernel_name = "edge_detect";        
-        break;
+        case 's': // touche 3
+            kernel_type = ConvolutionKernel::sharpen;
+            kernel_name = "sharpen";
+            break;
 
-    default:
-        break;
+        case 'd': // touche 4
+            kernel_type = ConvolutionKernel::edge_detect;
+            kernel_name = "edge_detect";
+            break;
 
-    }
-   
+        default:
+            break;
+
+        }
+
     
    
     // appliquer le filtre de convolution 
     filter();
+    }
 }
 
 

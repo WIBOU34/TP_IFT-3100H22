@@ -204,93 +204,97 @@ void CourbeBezierRenderer::reset() {
 }
 
 void CourbeBezierRenderer::keyPressed(int key) {
-    switch (key)
-    {
-    case OF_KEY_LEFT: // touche ←
-        is_key_press_left_topo = true;
-        break;
+    if (bezier_toggle) {
+        switch (key)
+        {
+        case OF_KEY_LEFT: // touche ←
+            is_key_press_left_topo = true;
+            break;
 
-    case OF_KEY_UP: // touche ↑
-        is_key_press_up_topo = true;
-        break;
+        case OF_KEY_UP: // touche ↑
+            is_key_press_up_topo = true;
+            break;
 
-    case OF_KEY_RIGHT: // touche →
-        is_key_press_right_topo = true;
-        break;
+        case OF_KEY_RIGHT: // touche →
+            is_key_press_right_topo = true;
+            break;
 
-    case OF_KEY_DOWN: // touche ↓
-        is_key_press_down_topo = true;
-        break;
+        case OF_KEY_DOWN: // touche ↓
+            is_key_press_down_topo = true;
+            break;
 
-    default:
-        break;
-    }    
+        default:
+            break;
+        }
+    }
 }
 
 void CourbeBezierRenderer::keyReleased(int key) {
-    switch (key)
-    {
-    case 49: // touche 1
-        selected_ctrl_point = &ctrl_point1;
-        break;
+    if (bezier_toggle) {
+        switch (key)
+        {
+        case 49: // touche 1
+            selected_ctrl_point = &ctrl_point1;
+            break;
 
-    case 50: // touche 2
-        selected_ctrl_point = &ctrl_point2;
-        break;
-
-    case 51: // touche 3
-        selected_ctrl_point = &ctrl_point3;
-        break;
-
-    case 52: // touche 4
-        selected_ctrl_point = &ctrl_point6;
-       
-        break;
-    case 53: // touche 5
-        selected_ctrl_point = &ctrl_point7;
-        break;
-
-    case 54: // touche 6
-        selected_ctrl_point = &ctrl_point8;
-        break;
-
-    case 99: // touche c
-        if (!hide_control_line) hide_control_line = true;
-        else hide_control_line = false;
-        break;
-
-    case 110: // touche n
-        if (!noeud) {
-            noeud = true;
-            selected_ctrl_point = &ctrl_point4;
-        } else {
-            noeud = false;
+        case 50: // touche 2
             selected_ctrl_point = &ctrl_point2;
+            break;
+
+        case 51: // touche 3
+            selected_ctrl_point = &ctrl_point3;
+            break;
+
+        case 52: // touche 4
+            selected_ctrl_point = &ctrl_point6;
+
+            break;
+        case 53: // touche 5
+            selected_ctrl_point = &ctrl_point7;
+            break;
+
+        case 54: // touche 6
+            selected_ctrl_point = &ctrl_point8;
+            break;
+
+        case 99: // touche c
+            if (!hide_control_line) hide_control_line = true;
+            else hide_control_line = false;
+            break;
+
+        case 110: // touche n
+            if (!noeud) {
+                noeud = true;
+                selected_ctrl_point = &ctrl_point4;
+            }
+            else {
+                noeud = false;
+                selected_ctrl_point = &ctrl_point2;
+            }
+            break;
+
+        case 114: // touche r
+            reset();
+            break;
+
+        case OF_KEY_LEFT: // touche ←
+            is_key_press_left_topo = false;
+            break;
+
+        case OF_KEY_UP: // touche ↑
+            is_key_press_up_topo = false;
+            break;
+
+        case OF_KEY_RIGHT: // touche →
+            is_key_press_right_topo = false;
+            break;
+
+        case OF_KEY_DOWN: // touche ↓
+            is_key_press_down_topo = false;
+            break;
+
+        default:
+            break;
         }
-        break;
-    
-    case 114: // touche r
-        reset();
-        break;
-
-    case OF_KEY_LEFT: // touche ←
-        is_key_press_left_topo = false;
-        break;
-
-    case OF_KEY_UP: // touche ↑
-        is_key_press_up_topo = false;
-        break;
-
-    case OF_KEY_RIGHT: // touche →
-        is_key_press_right_topo = false;
-        break;
-
-    case OF_KEY_DOWN: // touche ↓
-        is_key_press_down_topo = false;
-        break;
-
-    default:
-        break;
     }
-
 }
