@@ -20,10 +20,29 @@ class SurfaceBezierRenderer : public RendererBase {
 public : 
 	ofParameterGroup parameters;
 	ofxToggle surface_bezier_toggle;
+
+	ofParameterGroup parameters_point_controle;
+	ofxButton point_1; 
+	ofxButton point_2; 
+	ofxButton point_3; 
+	ofxButton point_4; 
+	ofxButton point_5; 
+	ofxButton point_6; 
+	ofxButton point_7; 
+	ofxButton point_8; 
+	ofxButton point_9; 
+	ofxButton point_10; 
+	ofxButton point_11; 
+	ofxButton point_12; 
+	ofxButton point_13; 
+	ofxButton point_14; 
+	ofxButton point_15; 
+	ofxButton point_16; 
 	
 	void reset();
 	void keyPressed(int key);
 	void keyReleased(int key);
+	void buttonSelectionPointControle();
 
 	// make a new mesh object
 	ofMesh mainMesh;
@@ -64,8 +83,9 @@ public :
 	ofPolyline line_renderer_6;
 	ofPolyline line_renderer_7;
 	ofPolyline line_renderer_8;
+	ofPolyline line_int_1;
 
-	ofVec3f* selected_ctrl_point;
+	ofVec3f* selected_ctrl_point;	
 	ofVec3f ctrl_point1;
 	ofVec3f ctrl_point2;
 	ofVec3f ctrl_point3;
@@ -106,6 +126,11 @@ public :
 	ofVec3f ctrl_point31;
 	ofVec3f ctrl_point32;
 
+	ofVec3f ctrl_point33;
+	ofVec3f ctrl_point34;
+	ofVec3f ctrl_point35;
+	ofVec3f ctrl_point36;
+
 	ofVec3f initial_position1;
 	ofVec3f initial_position2;
 	ofVec3f initial_position3;
@@ -140,6 +165,11 @@ public :
 	ofVec3f initial_position31;
 	ofVec3f initial_position32;
 
+	ofVec3f initial_position33;
+	ofVec3f initial_position34;
+	ofVec3f initial_position35;
+	ofVec3f initial_position36;
+
 	ofVec3f position;
 	ofVec3f position_2;
 	ofVec3f position_3;
@@ -148,6 +178,10 @@ public :
 	ofVec3f position_6;
 	ofVec3f position_7;
 	ofVec3f position_8;
+	
+	ofVec3f position_9;
+
+
 
 	ofVec3f tangent1;
 
@@ -169,13 +203,7 @@ public :
 	int line_resolution;
 
 	int index;
-	int index_2;
-	int index_3;
-	int index_4;
-	int index_5;
-	int index_6;
-	int index_7;
-	int index_8;
+	
 
 	float time_current;
 	float time_last;
@@ -200,8 +228,13 @@ public :
 	std::vector<float> vertex_bezier_6;
 	std::vector<float> vertex_bezier_7;
 	std::vector<float> vertex_bezier_8;
+	
+	std::vector<float> vertex_bezier_int_1;
+
+	
 
 	ofLight light;
+
 
 
 protected:

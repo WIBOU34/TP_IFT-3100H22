@@ -77,6 +77,7 @@ public:
 
 	ofxPanel gui;
 	ofxPanel gui_planet;
+	ofxPanel gui_surface_bezier;
 
 private:
 	//void createNewWindow(const Camera& type);

@@ -80,6 +80,12 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui_planet.add(textureRenderer.parameters_planet);
 	gui_planet.add(textureRenderer.map_mesh);
 	
+	// gui pour sélectionner un point de controle pour la surface de bezier 
+	gui_surface_bezier.setup("Selection point controle");
+	gui_surface_bezier.setDefaultWidth(300);
+	gui_surface_bezier.setPosition(ofGetWindowWidth() - 310, 10);
+	gui_surface_bezier.add(surfaceBezierRenderer.parameters_point_controle);
+	
 	
 	
 
@@ -118,6 +124,10 @@ void Application::draw() {
 	//curseurRenderer.draw();
 	if (textureRenderer.mesh_sphere_toggle || textureRenderer.mesh_square_toggle) {
 		gui_planet.draw();
+	}
+
+	if (surfaceBezierRenderer.surface_bezier_toggle) {
+		gui_surface_bezier.draw();
 	}
 }
 

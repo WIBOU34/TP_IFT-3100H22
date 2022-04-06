@@ -17,6 +17,43 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     // menu gui pour la topologie
     parameters.add(surface_bezier_toggle.setup("Afficher la surface", false)->getParameter());
 
+    // menu pour selectionner point de controle 
+    parameters_point_controle.setName("Point");    
+    
+    point_1.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_1.setup("Point 1")->getParameter());
+    point_2.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_2.setup("Point 2")->getParameter());
+    point_3.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_3.setup("Point 3")->getParameter());
+    point_4.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_4.setup("Point 4")->getParameter());
+    point_5.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_5.setup("Point 5")->getParameter());
+    point_6.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_6.setup("Point 6")->getParameter());
+    point_7.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_7.setup("Point 7")->getParameter());
+    point_8.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_8.setup("Point 8")->getParameter());
+    point_9.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_9.setup("Point 9")->getParameter());
+    point_10.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_10.setup("Point 10")->getParameter());
+    point_11.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_11.setup("Point 11")->getParameter());
+    point_12.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_12.setup("Point 12")->getParameter());
+    point_13.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_13.setup("Point 13")->getParameter());
+    point_14.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_14.setup("Point 14")->getParameter());
+    point_15.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_15.setup("Point 15")->getParameter());
+    point_16.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    parameters_point_controle.add(point_16.setup("Point 16")->getParameter());
+
+
     //set the width and height for our mesh and initial rendering values
     width = 20;
     height = 20;
@@ -83,6 +120,8 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
         line_renderer_7.addVertex(ofPoint());
         line_renderer_8.addVertex(ofPoint());
 
+        line_int_1.addVertex(ofPoint());
+
     }
 
     vertex_bezier_1 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
@@ -94,6 +133,8 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     vertex_bezier_7 = { 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259 };
     vertex_bezier_8 = { 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159 };
 
+
+    vertex_bezier_int_1 = { 1, 21, 41, 61, 81, 101, 121, 141, 161, 181, 201, 221, 241, 261, 281, 301, 321, 341, 361, 381 };
 
 
 
@@ -126,21 +167,21 @@ void SurfaceBezierRenderer::updateRenderer() {
     ctrl_point22 = ctrl_point31;
     ctrl_point14 = ctrl_point32;
 
+   
 
     // key movement assignation
     if (is_key_press_up) {
-
-        selected_ctrl_point->z += delta_y * time_elapsed;
-
-        //ofVec3f test(mainMesh.getVertex(126).x, mainMesh.getVertex(126).y , mainMesh.getVertex(126).z);
-       // mainMesh.setVertex(125, test);
+        selected_ctrl_point->z += delta_y * time_elapsed; 
     }
     if (is_key_press_down) {
-
         selected_ctrl_point->z -= delta_y * time_elapsed;
     }
-    if (is_key_press_left) selected_ctrl_point->x -= delta_x * time_elapsed;
-    if (is_key_press_right) selected_ctrl_point->x += delta_x * time_elapsed;
+    if (is_key_press_left) {
+        selected_ctrl_point->x -= delta_x * time_elapsed;
+    }
+    if (is_key_press_right) {
+        selected_ctrl_point->x += delta_x * time_elapsed;
+    }
 
 
 
@@ -170,7 +211,15 @@ void SurfaceBezierRenderer::updateRenderer() {
             ctrl_point11.x, ctrl_point11.y, ctrl_point11.z,
             ctrl_point12.x, ctrl_point12.y, ctrl_point12.z,
             position_3.x, position_3.y, position_3.z);
-
+        //test
+        /*bezier_cubic(
+            index / (float)line_resolution,
+            ctrl_point9.x, ctrl_point9.y, ctrl_point9.z,
+            ctrl_point10.x, ctrl_point10.y, ctrl_point10.z,
+            ctrl_point11.x, ctrl_point11.y, ctrl_point11.z,
+            ctrl_point12.x, ctrl_point12.y, ctrl_point12.z,
+            position_9.x, position_9.y, position_9.z);*/
+        //
         bezier_cubic(
             index / (float)line_resolution,
             ctrl_point13.x, ctrl_point13.y, ctrl_point13.z,
@@ -211,6 +260,15 @@ void SurfaceBezierRenderer::updateRenderer() {
             ctrl_point32.x, ctrl_point32.y, ctrl_point32.z,
             position_8.x, position_8.y, position_8.z);
 
+        bezier_cubic(
+            index / (float)line_resolution,
+            ctrl_point33.x, ctrl_point33.y, ctrl_point33.z,
+            ctrl_point34.x, ctrl_point34.y, ctrl_point34.z,
+            ctrl_point35.x, ctrl_point35.y, ctrl_point35.z,
+            ctrl_point36.x, ctrl_point36.y, ctrl_point36.z,
+            position_9.x, position_9.y, position_9.z);
+
+
         // affecter les positions des points sur la courbe
         line_renderer[index] = position;
         line_renderer_2[index] = position_2;
@@ -220,19 +278,34 @@ void SurfaceBezierRenderer::updateRenderer() {
         line_renderer_6[index] = position_6;
         line_renderer_7[index] = position_7;
         line_renderer_8[index] = position_8;
+        line_int_1[index] = position_9;
     }
 
     // affecter les positions des mesh sur la courbe 
     for (int i = 0; i < 20; i++) {
         mainMesh.setVertex(vertex_bezier_1[i], line_renderer[i]);
         mainMesh.setVertex(vertex_bezier_2[i], line_renderer_2[i]);
-        mainMesh.setVertex(vertex_bezier_3[i], line_renderer_3[i]);
+        mainMesh.setVertex(vertex_bezier_3[i], line_renderer_3[i]);        
         mainMesh.setVertex(vertex_bezier_4[i], line_renderer_4[i]);
         mainMesh.setVertex(vertex_bezier_5[i], line_renderer_5[i]);
         mainMesh.setVertex(vertex_bezier_6[i], line_renderer_6[i]);
         mainMesh.setVertex(vertex_bezier_7[i], line_renderer_7[i]);
         mainMesh.setVertex(vertex_bezier_8[i], line_renderer_8[i]);
+        mainMesh.setVertex(vertex_bezier_int_1[i], line_int_1[i]);
+
+       
+        //ofVec3f t(line_int_1[i].x, line_int_1[i].y, line_int_1[i].z);
+        
+        //line_int_1.addVertex(mainMesh.getVertex(vertex_bezier_int_1[i]));
+       
+        
+        //mainMesh.setVertex(vertex_bezier_int_1[i], line_int_1[i]);
+        
     }
+
+    
+    
+
 }
 
 void SurfaceBezierRenderer::generateDraw() {
@@ -246,7 +319,6 @@ void SurfaceBezierRenderer::render() {
        
         ofFill();
         ofEnableDepthTest();
-        //light.enable();
         mainCam.begin();
 
 
@@ -310,6 +382,8 @@ void SurfaceBezierRenderer::render() {
         line_renderer_7.draw();
         line_renderer_8.draw();
 
+        //line_int_1.draw();
+
         // dessiner les points de contrôle
         ofSetColor(255, 0, 0);
         if (control_line) {
@@ -355,21 +429,16 @@ void SurfaceBezierRenderer::render() {
 
         }
 
-        // dessiner la surface convexe 
-        //ofSetColor(255, 255, 255);
+        
 
-        //ofVec3f test(mainMesh.getVertex(125).x, mainMesh.getVertex(125).y, mainMesh.getVertex(125).z);
-        //mainMesh.setVertex(125, test);
-
-
-        mainCam.end();
-        //light.disable();
+        mainCam.end();       
         ofDisableDepthTest();
 
-        //draw the controls as text on the screen
-        //ofSetColor(100);
-        //string msg = "f: toggle full screen, spacebar: random z-value in meshvertices, w: draw wireframe or point cloud \np: use PerlinNoise for z-value in meshvertices\nUp-key Down-key: increase/decrease PerlinNoise input range \nRight-key Left-key: increase/decrease amplitude of Perlin Noise distortion \nclick and drag in window to move camera";
-        //ofDrawBitmapString(msg, 10, 20);
+       
+        ofSetColor(200);
+        string msg = "Utiliser les fleches pour deplacer les points de controle\nr : reset\nq : afficher les lignes de controle\n"
+            "w : afficher les vertex";
+        ofDrawBitmapString(msg, 400, 20);
 
     }
 }
@@ -476,6 +545,11 @@ void SurfaceBezierRenderer::reset() {
     ctrl_point32 = initial_position32;
     //--------------------------------------------------------------
 
+    ctrl_point33 = { -9, -10, 0 };
+    ctrl_point34 = { -9, -3, 0 };
+    ctrl_point35 = { -9, 3, 0 };
+    ctrl_point36 = { -9, 9, 0 };
+
     selected_ctrl_point = &ctrl_point2;
 
     delta_x = motion_speed;
@@ -559,6 +633,7 @@ void SurfaceBezierRenderer::keyReleased(int key) {
 
         case 51: // touche 3
             selected_ctrl_point = &ctrl_point30;
+           
             break;
 
         case 52: // touche 4
@@ -582,4 +657,9 @@ void SurfaceBezierRenderer::keyReleased(int key) {
             break;
         }
     }
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle() {
+    
+    ofLog() << "test ok !";
 }
