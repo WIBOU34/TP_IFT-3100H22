@@ -67,7 +67,7 @@ public :
 	float perlinRange, perlinHeight;
 
 	ofImage image;
-	ofTexture imageTexture;
+	ofTexture texture;
 
 
 	inline void bezier_cubic(
@@ -233,6 +233,8 @@ public :
 	bool same_point_5;
 
 	bool control_line;
+	bool bez_line;
+	bool affiche_image; 
 
 
 	std::vector<float> vertex_bezier_1;

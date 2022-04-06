@@ -55,6 +55,14 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     point_16.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_16);
     parameters_point_controle.add(point_16.setup("Point 16")->getParameter());
 
+    //set the width and height for our mesh and initial rendering values
+    
+    ofDisableArbTex();
+    image.load("paper.jpg");
+    image.resize(400, 400);
+    texture.clear();
+    texture.allocate(400, 400, GL_RGB);
+    texture.loadData(image.getPixels());
 
     //set the width and height for our mesh and initial rendering values
     width = 20;
@@ -67,34 +75,11 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     perlinRange = 1.0;
     perlinHeight = 5.0;
 
-    //ofBackground(31); // set the window background 
-    mainCam.setPosition(0, 0, 30); // set initial position for easyCam 3D viewer
+    // set initial position for easyCam 3D viewer
+    mainCam.setPosition(0, 0, 550); 
 
-
-    // here we make the points inside our mesh
-    // add one vertex to the mesh across our width and height
-    // we use these x and y values to set the x and y co-ordinates of the mesh, adding a z value of zero to complete the 3d location of each vertex
-    // source -> https://openframeworks.cc/documentation/3d/ofMesh/
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            mainMesh.addVertex(ofPoint(x - width / 2, y - height / 2, 0));    // make a new vertex
-            mainMesh.addColor(ofFloatColor(0, 100, 0));  // add a color at that vertex
-        }
-    }
-
-    // here we loop through and join the vertices together as indices to make rows of triangles to make the wireframe grid
-    // source -> https://openframeworks.cc/documentation/3d/ofMesh/
-    for (int y = 0; y < height - 1; y++) {
-        for (int x = 0; x < width - 1; x++) {
-            mainMesh.addIndex(x + y * width);                  // 0
-            mainMesh.addIndex((x + 1) + y * width);            // 1
-            mainMesh.addIndex(x + (y + 1) * width);            // 10
-
-            mainMesh.addIndex((x + 1) + y * width);            // 1
-            mainMesh.addIndex((x + 1) + (y + 1) * width);      // 11
-            mainMesh.addIndex(x + (y + 1) * width);            // 10
-        }
-    }
+    // création du mesh 
+    mainMesh = ofMesh::plane(400, 400, 4, 4);
 
 
     // courbe de bezier 
@@ -106,10 +91,10 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     line_resolution = 20;
     line_width_outline = 4.0f;
     line_width_curve = 8.0f;
-    radius = 0.5f;
+    radius = 5.0f;
     scale = 10.0f;
     offset = 64.0f;
-    motion_speed = 10.0f;
+    motion_speed = 40.0f;
 
     // initialisation des sommets des lignes
     for (index = 0; index <= line_resolution; ++index) {
@@ -126,18 +111,14 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
 
     }
 
-    vertex_bezier_1 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
-    vertex_bezier_2 = { 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399 };
-    vertex_bezier_3 = { 0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360, 380 };
-    vertex_bezier_4 = { 19, 39, 59, 79, 99, 119, 139, 159, 179, 199, 219, 239, 259, 279, 299, 319, 339, 359, 379, 399 };
-    vertex_bezier_5 = { 6, 26, 46, 66, 86, 106, 126, 146, 166, 186, 206, 226, 246, 266, 286, 306, 326, 346, 366, 386 };
-    vertex_bezier_6 = { 13, 33, 53, 73,  93, 113, 133, 153, 173, 193, 213, 233, 253, 273, 293, 313, 333, 353, 373, 393 };
-    vertex_bezier_7 = { 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259 };
-    vertex_bezier_8 = { 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159 };
-
-
-    vertex_bezier_int_1 = { 1, 21, 41, 61, 81, 101, 121, 141, 161, 181, 201, 221, 241, 261, 281, 301, 321, 341, 361, 381 };
-
+    vertex_bezier_1 = { 0, 1, 2, 3 };
+    vertex_bezier_2 = { 12, 13, 14, 15 };
+    vertex_bezier_3 = { 0, 4, 8, 12 };
+    vertex_bezier_4 = { 3, 7, 11, 15 };
+    vertex_bezier_5 = { 1, 5, 9, 13 };
+    vertex_bezier_6 = { 2, 6, 10, 14 };
+    vertex_bezier_7 = { 8, 9, 10, 11 };
+    vertex_bezier_8 = { 4, 5, 6, 7 };
 
 
     // initialisation de la scène
@@ -276,26 +257,48 @@ void SurfaceBezierRenderer::updateRenderer() {
     }
 
     // affecter les positions des mesh sur la courbe 
-    for (int i = 0; i < 20; i++) {
-        mainMesh.setVertex(vertex_bezier_1[i], line_renderer[i]);
-        mainMesh.setVertex(vertex_bezier_2[i], line_renderer_2[i]);
-        mainMesh.setVertex(vertex_bezier_3[i], line_renderer_3[i]);        
-        mainMesh.setVertex(vertex_bezier_4[i], line_renderer_4[i]);
-        mainMesh.setVertex(vertex_bezier_5[i], line_renderer_5[i]);
-        mainMesh.setVertex(vertex_bezier_6[i], line_renderer_6[i]);
-        mainMesh.setVertex(vertex_bezier_7[i], line_renderer_7[i]);
-        mainMesh.setVertex(vertex_bezier_8[i], line_renderer_8[i]);
-        mainMesh.setVertex(vertex_bezier_int_1[i], line_int_1[i]);
 
-       
-        //ofVec3f t(line_int_1[i].x, line_int_1[i].y, line_int_1[i].z);
-        
-        //line_int_1.addVertex(mainMesh.getVertex(vertex_bezier_int_1[i]));
-       
-        
-        //mainMesh.setVertex(vertex_bezier_int_1[i], line_int_1[i]);
-        
-    }
+
+    mainMesh.setVertex(vertex_bezier_1[0], line_renderer[0]);
+    mainMesh.setVertex(vertex_bezier_1[1], line_renderer[7]);
+    mainMesh.setVertex(vertex_bezier_1[2], line_renderer[14]);
+    mainMesh.setVertex(vertex_bezier_1[3], line_renderer[20]);
+
+    mainMesh.setVertex(vertex_bezier_2[0], line_renderer_2[0]);
+    mainMesh.setVertex(vertex_bezier_2[1], line_renderer_2[7]);
+    mainMesh.setVertex(vertex_bezier_2[2], line_renderer_2[14]);
+    mainMesh.setVertex(vertex_bezier_2[3], line_renderer_2[20]);
+
+    mainMesh.setVertex(vertex_bezier_3[0], line_renderer_3[0]);
+    mainMesh.setVertex(vertex_bezier_3[1], line_renderer_3[7]);
+    mainMesh.setVertex(vertex_bezier_3[2], line_renderer_3[14]);
+    mainMesh.setVertex(vertex_bezier_3[3], line_renderer_3[20]);
+
+    mainMesh.setVertex(vertex_bezier_4[0], line_renderer_4[0]);
+    mainMesh.setVertex(vertex_bezier_4[1], line_renderer_4[7]);
+    mainMesh.setVertex(vertex_bezier_4[2], line_renderer_4[14]);
+    mainMesh.setVertex(vertex_bezier_4[3], line_renderer_4[20]);
+
+    mainMesh.setVertex(vertex_bezier_5[0], line_renderer_5[0]);
+    mainMesh.setVertex(vertex_bezier_5[1], line_renderer_5[7]);
+    mainMesh.setVertex(vertex_bezier_5[2], line_renderer_5[14]);
+    mainMesh.setVertex(vertex_bezier_5[3], line_renderer_5[20]);
+
+    mainMesh.setVertex(vertex_bezier_6[0], line_renderer_6[0]);
+    mainMesh.setVertex(vertex_bezier_6[1], line_renderer_6[7]);
+    mainMesh.setVertex(vertex_bezier_6[2], line_renderer_6[14]);
+    mainMesh.setVertex(vertex_bezier_6[3], line_renderer_6[20]);
+
+    mainMesh.setVertex(vertex_bezier_7[0], line_renderer_7[0]);
+    mainMesh.setVertex(vertex_bezier_7[1], line_renderer_7[7]);
+    mainMesh.setVertex(vertex_bezier_7[2], line_renderer_7[13]);
+    mainMesh.setVertex(vertex_bezier_7[3], line_renderer_7[20]);
+
+    mainMesh.setVertex(vertex_bezier_8[0], line_renderer_8[0]);
+    mainMesh.setVertex(vertex_bezier_8[1], line_renderer_8[7]);
+    mainMesh.setVertex(vertex_bezier_8[2], line_renderer_8[13]);
+    mainMesh.setVertex(vertex_bezier_8[3], line_renderer_8[20]);
+
 
     
     
@@ -315,14 +318,19 @@ void SurfaceBezierRenderer::render() {
         ofEnableDepthTest();
         mainCam.begin();
 
-
+        texture.bind();
+        ofSetColor(0, 255, 0);
         // choose to draw our mesh as wireframe or point cloud
         if (b_drawWireFrame) mainMesh.drawWireframe();
         else mainMesh.drawVertices();
 
+        if (affiche_image) mainMesh.draw();
+
         // dessiner la ligne contour
-        ofSetColor(0, 0, 255);
+
         if (control_line) {
+
+            ofSetColor(0, 0, 255);
             ofDrawLine(ctrl_point1.x, ctrl_point1.y, ctrl_point1.z, ctrl_point2.x, ctrl_point2.y, ctrl_point2.z);
             ofDrawLine(ctrl_point3.x, ctrl_point3.y, ctrl_point3.z, ctrl_point4.x, ctrl_point4.y, ctrl_point4.z);
             ofDrawLine(ctrl_point2.x, ctrl_point2.y, ctrl_point2.z, ctrl_point3.x, ctrl_point3.y, ctrl_point3.z);
@@ -364,23 +372,26 @@ void SurfaceBezierRenderer::render() {
             ofDrawLine(ctrl_point32.x, ctrl_point32.y, ctrl_point32.z, ctrl_point29.x, ctrl_point29.y, ctrl_point29.z);
         }
         // dessiner la courbe 
-        ofSetColor(0, 255, 0);
-        line_renderer.draw();
-        line_renderer_2.draw();
-        line_renderer_3.draw();
-        line_renderer_4.draw();
-        line_renderer_5.draw();
-        line_renderer_6.draw();
-        line_renderer_7.draw();
-        line_renderer_8.draw();
 
-        //line_int_1.draw();
+        if (bez_line) {
+
+            ofSetColor(0, 255, 0);
+            line_renderer.draw();
+            line_renderer_2.draw();
+            line_renderer_3.draw();
+            line_renderer_4.draw();
+            line_renderer_5.draw();
+            line_renderer_6.draw();
+            line_renderer_7.draw();
+            line_renderer_8.draw();
+
+
+        }
+
 
         // dessiner les points de contrôle
-        ofSetColor(255, 255, 255);
+        ofSetColor(255, 0, 0);
         if (control_line) {
-            
-            ofSetColor(255, 0, 0);
             ofDrawEllipse(ctrl_point1.x, ctrl_point1.y, ctrl_point1.z, radius, radius);
             ofDrawEllipse(ctrl_point2.x, ctrl_point2.y, ctrl_point2.z, radius, radius);
             ofDrawEllipse(ctrl_point3.x, ctrl_point3.y, ctrl_point3.z, radius, radius);
@@ -391,7 +402,7 @@ void SurfaceBezierRenderer::render() {
             ofDrawEllipse(ctrl_point7.x, ctrl_point7.y, ctrl_point7.z, radius, radius);
             ofDrawEllipse(ctrl_point8.x, ctrl_point8.y, ctrl_point8.z, radius, radius);
 
-            //ofDrawEllipse(ctrl_point9.x, ctrl_point9.y, ctrl_point9.z, radius, radius);
+            ofDrawEllipse(ctrl_point9.x, ctrl_point9.y, ctrl_point9.z, radius, radius);
             ofDrawEllipse(ctrl_point10.x, ctrl_point10.y, ctrl_point10.z, radius, radius);
             ofDrawEllipse(ctrl_point11.x, ctrl_point11.y, ctrl_point11.z, radius, radius);
             ofDrawEllipse(ctrl_point12.x, ctrl_point12.y, ctrl_point12.z, radius, radius);
@@ -423,15 +434,13 @@ void SurfaceBezierRenderer::render() {
 
         }
 
-        
 
-        mainCam.end();       
+        mainCam.end();
         ofDisableDepthTest();
-
        
         ofSetColor(200);
         string msg = "Utiliser les fleches pour deplacer les points de controle\nr : reset\nq : afficher les lignes de controle\n"
-            "w : afficher les vertex";
+            "w : afficher les vertex / triangulation\na : afficher les courbes de Bezier\ns : afficher image en texture";
         ofDrawBitmapString(msg, 400, 20);
 
     }
@@ -442,12 +451,12 @@ void SurfaceBezierRenderer::reset() {
 
     // initialisation des variables
 
-    //  BAS --------------------------------------------------------------
+   //  BAS --------------------------------------------------------------
 
-    initial_position1 = { -10, -10, 0 };
-    initial_position2 = { -4, -10, 0 };
-    initial_position3 = { 3, -10, 0 };
-    initial_position4 = { 9, -10, 0 };
+    initial_position1 = { -200, -200, 0 };
+    initial_position2 = { -66.6667, -200, 0 };
+    initial_position3 = { 66.6667, -200, 0 };
+    initial_position4 = { 200, -200, 0 };
 
     ctrl_point1 = initial_position1;
     ctrl_point2 = initial_position2;
@@ -456,10 +465,11 @@ void SurfaceBezierRenderer::reset() {
 
     // HAUT --------------------------------------------------------------
 
-    initial_position5 = { -10, 9, 0 };
-    initial_position6 = { -4, 9, 0 };
-    initial_position7 = { 3, 9, 0 };
-    initial_position8 = { 9, 9, 0 };
+
+    initial_position5 = { -200, 200, 0 };
+    initial_position6 = { -66.6667, 200, 0 };
+    initial_position7 = { 66.6667, 200, 0 };
+    initial_position8 = { 200, 200, 0 };
 
     ctrl_point5 = initial_position5;
     ctrl_point6 = initial_position6;
@@ -468,10 +478,12 @@ void SurfaceBezierRenderer::reset() {
 
     // GAUCHE --------------------------------------------------------------
 
-    initial_position9 = { -10, -10, 0 };
-    initial_position10 = { -10, -3, 0 };
-    initial_position11 = { -10, 3, 0 };
-    initial_position12 = { -10, 9, 0 };
+
+
+    initial_position9 = { -200, -200, 0 };
+    initial_position10 = { -200, -66.6667, 0 };
+    initial_position11 = { -200, 66.6667, 0 };
+    initial_position12 = { -200, 200, 0 };
 
     ctrl_point9 = initial_position9;
     ctrl_point10 = initial_position10;
@@ -480,10 +492,10 @@ void SurfaceBezierRenderer::reset() {
 
     // DROIT --------------------------------------------------------------
 
-    initial_position13 = { 10, -10, 0 };
-    initial_position14 = { 9, -3, 0 };
-    initial_position15 = { 9, 3, 0 };
-    initial_position16 = { 10, 9, 0 };
+    initial_position13 = { 200, -200, 0 };
+    initial_position14 = { 200, -66.6667, 0 };
+    initial_position15 = { 200, 66.6667, 0 };
+    initial_position16 = { 200, 200, 0 };
 
     ctrl_point13 = initial_position13;
     ctrl_point14 = initial_position14;
@@ -492,10 +504,10 @@ void SurfaceBezierRenderer::reset() {
 
     // MILIEU VERTICALE GAUCHE --------------------------------------------------------------
 
-    initial_position17 = { -4, -10, 0 };
-    initial_position18 = { -4, -3, 0 };
-    initial_position19 = { -4, 3, 0 };
-    initial_position20 = { -4, 9, 0 };
+    initial_position17 = { -66.6667, -200, 0 };
+    initial_position18 = { -66.6667, -66.6667, 0 };
+    initial_position19 = { -66.6667, 66.6667, 0 };
+    initial_position20 = { -66.6667, 200, 0 };
 
     ctrl_point17 = initial_position17;
     ctrl_point18 = initial_position18;
@@ -504,10 +516,10 @@ void SurfaceBezierRenderer::reset() {
 
     // MILIEU VERTICALE DROIT --------------------------------------------------------------
 
-    initial_position21 = { 3, -10, 0 };
-    initial_position22 = { 3, -3, 0 };
-    initial_position23 = { 3, 3, 0 };
-    initial_position24 = { 3, 9, 0 };
+    initial_position21 = { 66.6667, -200, 0 };
+    initial_position22 = { 66.6667, -66.6667, 0 };
+    initial_position23 = { 66.6667, 66.6667, 0 };
+    initial_position24 = { 66.6667, 200, 0 };
 
     ctrl_point21 = initial_position21;
     ctrl_point22 = initial_position22;
@@ -516,22 +528,26 @@ void SurfaceBezierRenderer::reset() {
 
     // MILIEU HORIZONTALE HAUT -------------------------------------------------------------- 
 
-    initial_position25 = { -10, 2, 0 };
-    initial_position26 = { -4, 2, 0 };
-    initial_position27 = { 3, 2, 0 };
-    initial_position28 = { 9, 2, 0 };
+    initial_position25 = { -200, 66.6667, 0 };
+    initial_position26 = { -66.6667, 66.6667, 0 };
+    initial_position27 = { 66.6667, 66.6667, 0 };
+    initial_position28 = { 200, 66.6667, 0 };
 
     ctrl_point25 = initial_position25;
     ctrl_point26 = initial_position26;
     ctrl_point27 = initial_position27;
     ctrl_point28 = initial_position28;
 
-    // MILIEU HORIZONTALE -------------------------------------------------------------- 
+    // MILIEU HORIZONTALE BAS-------------------------------------------------------------- 
 
-    initial_position29 = { -10, -3, 0 };
-    initial_position30 = { -4, -3, 0 };
-    initial_position31 = { 3, -3, 0 };
-    initial_position32 = { 9, -3, 0 };
+    std::cout << mainMesh.getVertex(4).x << "+" << mainMesh.getVertex(4).y << "+" << mainMesh.getVertex(4).z << std::endl;
+    std::cout << mainMesh.getVertex(5).x << "+" << mainMesh.getVertex(5).y << "+" << mainMesh.getVertex(5).z << std::endl;
+    std::cout << mainMesh.getVertex(6).x << "+" << mainMesh.getVertex(6).y << "+" << mainMesh.getVertex(6).z << std::endl;
+    std::cout << mainMesh.getVertex(7).x << "+" << mainMesh.getVertex(7).y << "+" << mainMesh.getVertex(7).z << std::endl;
+    initial_position29 = { -200, -66.6667, 0 };
+    initial_position30 = { -66.6667, -66.6667, 0 };
+    initial_position31 = { 66.6667, -66.6667, 0 };
+    initial_position32 = { 200, -66.6667, 0 };
 
     ctrl_point29 = initial_position29;
     ctrl_point30 = initial_position30;
@@ -539,16 +555,12 @@ void SurfaceBezierRenderer::reset() {
     ctrl_point32 = initial_position32;
     //--------------------------------------------------------------
 
-    ctrl_point33 = { -9, -10, 0 };
-    ctrl_point34 = { -9, -3, 0 };
-    ctrl_point35 = { -9, 3, 0 };
-    ctrl_point36 = { -9, 9, 0 };
-
     selected_ctrl_point = &ctrl_point2;
 
     delta_x = motion_speed;
     delta_y = motion_speed;
 
+   
     ofLog() << "<reset>";
 }
 
@@ -574,7 +586,16 @@ void SurfaceBezierRenderer::keyPressed(int key) {
         case 'q': // touche q
             if (!control_line) control_line = true;
             else control_line = false;
+            break;
 
+        case 'a': // touche a       
+            if (!bez_line) bez_line = true;
+            else bez_line = false;
+            break;
+
+        case 's': // touche s       
+            if (!affiche_image) affiche_image = true;
+            else affiche_image = false;
             break;
         
         case OF_KEY_LEFT: // touche ←
