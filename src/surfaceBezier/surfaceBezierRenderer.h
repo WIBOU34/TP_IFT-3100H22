@@ -42,7 +42,22 @@ public :
 	void reset();
 	void keyPressed(int key);
 	void keyReleased(int key);
-	void buttonSelectionPointControle();
+	void buttonSelectionPointControle_1();
+	void buttonSelectionPointControle_2();
+	void buttonSelectionPointControle_3();
+	void buttonSelectionPointControle_4();
+	void buttonSelectionPointControle_5();
+	void buttonSelectionPointControle_6();
+	void buttonSelectionPointControle_7();
+	void buttonSelectionPointControle_8();
+	void buttonSelectionPointControle_9();
+	void buttonSelectionPointControle_10();
+	void buttonSelectionPointControle_11();
+	void buttonSelectionPointControle_12();
+	void buttonSelectionPointControle_13();
+	void buttonSelectionPointControle_14();
+	void buttonSelectionPointControle_15();
+	void buttonSelectionPointControle_16();
 
 	// make a new mesh object
 	ofMesh mainMesh;
@@ -232,9 +247,7 @@ public :
 	std::vector<float> vertex_bezier_int_1;
 
 	
-
-	ofLight light;
-
+	
 
 
 protected:

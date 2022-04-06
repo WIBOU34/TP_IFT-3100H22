@@ -10,6 +10,8 @@
 
 #include "surfaceBezierRenderer.h"
 
+
+
 void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
 	parameters.setName(name);
@@ -20,37 +22,37 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     // menu pour selectionner point de controle 
     parameters_point_controle.setName("Point");    
     
-    point_1.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_1.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_1);
     parameters_point_controle.add(point_1.setup("Point 1")->getParameter());
-    point_2.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_2.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_2);
     parameters_point_controle.add(point_2.setup("Point 2")->getParameter());
-    point_3.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_3.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_3);
     parameters_point_controle.add(point_3.setup("Point 3")->getParameter());
-    point_4.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_4.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_4);
     parameters_point_controle.add(point_4.setup("Point 4")->getParameter());
-    point_5.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_5.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_5);
     parameters_point_controle.add(point_5.setup("Point 5")->getParameter());
-    point_6.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_6.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_6);
     parameters_point_controle.add(point_6.setup("Point 6")->getParameter());
-    point_7.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_7.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_7);
     parameters_point_controle.add(point_7.setup("Point 7")->getParameter());
-    point_8.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_8.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_8);
     parameters_point_controle.add(point_8.setup("Point 8")->getParameter());
-    point_9.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_9.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_9);
     parameters_point_controle.add(point_9.setup("Point 9")->getParameter());
-    point_10.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_10.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_10);
     parameters_point_controle.add(point_10.setup("Point 10")->getParameter());
-    point_11.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_11.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_11);
     parameters_point_controle.add(point_11.setup("Point 11")->getParameter());
-    point_12.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_12.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_12);
     parameters_point_controle.add(point_12.setup("Point 12")->getParameter());
-    point_13.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_13.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_13);
     parameters_point_controle.add(point_13.setup("Point 13")->getParameter());
-    point_14.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_14.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_14);
     parameters_point_controle.add(point_14.setup("Point 14")->getParameter());
-    point_15.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_15.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_15);
     parameters_point_controle.add(point_15.setup("Point 15")->getParameter());
-    point_16.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle);
+    point_16.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_16);
     parameters_point_controle.add(point_16.setup("Point 16")->getParameter());
 
 
@@ -211,15 +213,7 @@ void SurfaceBezierRenderer::updateRenderer() {
             ctrl_point11.x, ctrl_point11.y, ctrl_point11.z,
             ctrl_point12.x, ctrl_point12.y, ctrl_point12.z,
             position_3.x, position_3.y, position_3.z);
-        //test
-        /*bezier_cubic(
-            index / (float)line_resolution,
-            ctrl_point9.x, ctrl_point9.y, ctrl_point9.z,
-            ctrl_point10.x, ctrl_point10.y, ctrl_point10.z,
-            ctrl_point11.x, ctrl_point11.y, ctrl_point11.z,
-            ctrl_point12.x, ctrl_point12.y, ctrl_point12.z,
-            position_9.x, position_9.y, position_9.z);*/
-        //
+        
         bezier_cubic(
             index / (float)line_resolution,
             ctrl_point13.x, ctrl_point13.y, ctrl_point13.z,
@@ -329,8 +323,6 @@ void SurfaceBezierRenderer::render() {
         // dessiner la ligne contour
         ofSetColor(0, 0, 255);
         if (control_line) {
-
-
             ofDrawLine(ctrl_point1.x, ctrl_point1.y, ctrl_point1.z, ctrl_point2.x, ctrl_point2.y, ctrl_point2.z);
             ofDrawLine(ctrl_point3.x, ctrl_point3.y, ctrl_point3.z, ctrl_point4.x, ctrl_point4.y, ctrl_point4.z);
             ofDrawLine(ctrl_point2.x, ctrl_point2.y, ctrl_point2.z, ctrl_point3.x, ctrl_point3.y, ctrl_point3.z);
@@ -385,8 +377,10 @@ void SurfaceBezierRenderer::render() {
         //line_int_1.draw();
 
         // dessiner les points de contrôle
-        ofSetColor(255, 0, 0);
+        ofSetColor(255, 255, 255);
         if (control_line) {
+            
+            ofSetColor(255, 0, 0);
             ofDrawEllipse(ctrl_point1.x, ctrl_point1.y, ctrl_point1.z, radius, radius);
             ofDrawEllipse(ctrl_point2.x, ctrl_point2.y, ctrl_point2.z, radius, radius);
             ofDrawEllipse(ctrl_point3.x, ctrl_point3.y, ctrl_point3.z, radius, radius);
@@ -397,7 +391,7 @@ void SurfaceBezierRenderer::render() {
             ofDrawEllipse(ctrl_point7.x, ctrl_point7.y, ctrl_point7.z, radius, radius);
             ofDrawEllipse(ctrl_point8.x, ctrl_point8.y, ctrl_point8.z, radius, radius);
 
-            ofDrawEllipse(ctrl_point9.x, ctrl_point9.y, ctrl_point9.z, radius, radius);
+            //ofDrawEllipse(ctrl_point9.x, ctrl_point9.y, ctrl_point9.z, radius, radius);
             ofDrawEllipse(ctrl_point10.x, ctrl_point10.y, ctrl_point10.z, radius, radius);
             ofDrawEllipse(ctrl_point11.x, ctrl_point11.y, ctrl_point11.z, radius, radius);
             ofDrawEllipse(ctrl_point12.x, ctrl_point12.y, ctrl_point12.z, radius, radius);
@@ -577,19 +571,12 @@ void SurfaceBezierRenderer::keyPressed(int key) {
             b_perlinMesh = !b_perlinMesh;
             break;
 
-
         case 'q': // touche q
             if (!control_line) control_line = true;
             else control_line = false;
 
             break;
-
-        case 97: // touche a
-
-
-            break;
-
-
+        
         case OF_KEY_LEFT: // touche ←
             is_key_press_left = true;
             break;
@@ -623,23 +610,6 @@ void SurfaceBezierRenderer::keyReleased(int key) {
             reset();
             break;
 
-        case 49: // touche 1
-            selected_ctrl_point = &ctrl_point17;
-            break;
-
-        case 50: // touche 2
-            selected_ctrl_point = &ctrl_point21;
-            break;
-
-        case 51: // touche 3
-            selected_ctrl_point = &ctrl_point30;
-           
-            break;
-
-        case 52: // touche 4
-            selected_ctrl_point = &ctrl_point31;
-            break;
-
         case OF_KEY_LEFT: // touche ←
             is_key_press_left = false;
             break;
@@ -659,7 +629,68 @@ void SurfaceBezierRenderer::keyReleased(int key) {
     }
 }
 
-void SurfaceBezierRenderer::buttonSelectionPointControle() {
-    
-    ofLog() << "test ok !";
+void SurfaceBezierRenderer::buttonSelectionPointControle_1() {
+    selected_ctrl_point = &ctrl_point1;
 }
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_2() {
+    selected_ctrl_point = &ctrl_point17;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_3() {
+    selected_ctrl_point = &ctrl_point21;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_4() {
+    selected_ctrl_point = &ctrl_point4;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_5() {
+    selected_ctrl_point = &ctrl_point5;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_6() {
+    selected_ctrl_point = &ctrl_point20;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_7() {
+    selected_ctrl_point = &ctrl_point24;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_8() {
+    selected_ctrl_point = &ctrl_point8;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_9() {
+    selected_ctrl_point = &ctrl_point1;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_10() {
+    selected_ctrl_point = &ctrl_point29;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_11() {
+    selected_ctrl_point = &ctrl_point25;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_12() {
+    selected_ctrl_point = &ctrl_point5;
+
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_13() {
+    selected_ctrl_point = &ctrl_point4;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_14() {
+    selected_ctrl_point = &ctrl_point14;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_15() {
+    selected_ctrl_point = &ctrl_point28;
+}
+
+void SurfaceBezierRenderer::buttonSelectionPointControle_16() {
+    selected_ctrl_point = &ctrl_point8;
+}
+
