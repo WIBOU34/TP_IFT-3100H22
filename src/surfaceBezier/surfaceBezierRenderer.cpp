@@ -1,16 +1,13 @@
 ﻿/**
  * \IFT3100H21 
- * \file topologieRenderer.cpp
+ * \file surfaceBezierRenderer.cpp
  * \author Stéphane Boulanger
  * \brief Classe responsable de la surface de Bezier de l'application
  * \version 0.1
  * \date 2022-04-05
  */
 
-
 #include "surfaceBezierRenderer.h"
-
-
 
 void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
@@ -20,7 +17,7 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     parameters.add(surface_bezier_toggle.setup("Afficher la surface", false)->getParameter());
 
     // menu pour selectionner point de controle 
-    parameters_point_controle.setName("Point");    
+    parameters_point_controle.setName("Point"); 
     
     point_1.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_1);
     parameters_point_controle.add(point_1.setup("Bas gauche")->getParameter());
@@ -55,8 +52,7 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     point_16.addListener(this, &SurfaceBezierRenderer::buttonSelectionPointControle_16);
     parameters_point_controle.add(point_16.setup("Milieu bas droit")->getParameter());
 
-    //set the width and height for our mesh and initial rendering values
-    
+    // initialisation des valeurs et paramètres de l'image sur la texture du mesh  
     ofDisableArbTex();
     image.load("paper.jpg");
     image.resize(400, 400);
@@ -64,55 +60,42 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     texture.allocate(400, 400, GL_RGB);
     texture.loadData(image.getPixels());
 
-    //set the width and height for our mesh and initial rendering values
+    // initialisation de width et height pour le mesh 
     width = 20;
     height = 20;
     
-    // set our rendering styles 
-    b_messyMesh = false;
-    b_perlinMesh = false;
-    b_drawWireFrame = false;
-    affiche_image = true;
-    // set the initial values to use for our perlinNoise
-    perlinRange = 1.0;
-    perlinHeight = 5.0;
-
-    // set initial position for easyCam 3D viewer
-    mainCam.setPosition(0, 0, 550); 
-
     // création du mesh 
     mainMesh = ofMesh::plane(400, 400, 4, 4);
 
-
-    // courbe de bezier 
+    // parametres de l'affichage à l'ouverture de l'application    
+    draw_wireframe = false;
+    affiche_image = true;   
     is_key_press_up = false;
     is_key_press_down = false;
     is_key_press_left = false;
     is_key_press_right = false;
 
-    line_resolution = 20;
-    line_width_outline = 4.0f;
-    line_width_curve = 8.0f;
-    radius = 5.0f;
-    scale = 10.0f;
-    offset = 64.0f;
+    // parametre pour set la position de la EasyCam 
+    mainCam.setPosition(0, 0, 550);        
+   
+    // courbe de bezier 
+    line_resolution = 20; 
+    radius = 5.0f;    
     motion_speed = 40.0f;
 
     // initialisation des sommets des lignes
     for (index = 0; index <= line_resolution; ++index) {
-        line_renderer.addVertex(ofPoint());
+        line_renderer_1.addVertex(ofPoint());
         line_renderer_2.addVertex(ofPoint());
         line_renderer_3.addVertex(ofPoint());
         line_renderer_4.addVertex(ofPoint());
         line_renderer_5.addVertex(ofPoint());
         line_renderer_6.addVertex(ofPoint());
         line_renderer_7.addVertex(ofPoint());
-        line_renderer_8.addVertex(ofPoint());
-
-        line_int_1.addVertex(ofPoint());
-
+        line_renderer_8.addVertex(ofPoint()); 
     }
 
+    // initialisation des vertex dans sa courbe de Bezier 
     vertex_bezier_1 = { 0, 1, 2, 3 };
     vertex_bezier_2 = { 12, 13, 14, 15 };
     vertex_bezier_3 = { 0, 4, 8, 12 };
@@ -121,7 +104,6 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
     vertex_bezier_6 = { 2, 6, 10, 14 };
     vertex_bezier_7 = { 8, 9, 10, 11 };
     vertex_bezier_8 = { 4, 5, 6, 7 };
-
 
     // initialisation de la scène
     reset();
@@ -134,7 +116,7 @@ void SurfaceBezierRenderer::updateRenderer() {
     time_elapsed = time_current - time_last;
     time_last = time_current;
 
-    // unir les coins communs
+    // unir les points de contoles communs
     ctrl_point9 = ctrl_point1;
     ctrl_point12 = ctrl_point5;
     ctrl_point16 = ctrl_point8;
@@ -150,28 +132,23 @@ void SurfaceBezierRenderer::updateRenderer() {
     ctrl_point10 = ctrl_point29;
     ctrl_point18 = ctrl_point30;
     ctrl_point22 = ctrl_point31;
-    ctrl_point14 = ctrl_point32;
+    ctrl_point14 = ctrl_point32;   
 
-   
-
-    // key movement assignation
+    // assignation des key pours le mouvement des courbes 
     if (is_key_press_up) selected_ctrl_point->z += delta_y * time_elapsed; 
     if (is_key_press_down) selected_ctrl_point->z -= delta_y * time_elapsed;
     if (is_key_press_left) selected_ctrl_point->x -= delta_x * time_elapsed;
     if (is_key_press_right) selected_ctrl_point->x += delta_x * time_elapsed;
 
-
-
-    // bezier parameter 
+    // parametres des courbes  
     for (index = 0; index <= line_resolution; ++index) {
-
         bezier_cubic(
             index / (float)line_resolution,
             ctrl_point1.x, ctrl_point1.y, ctrl_point1.z,
             ctrl_point2.x, ctrl_point2.y, ctrl_point2.z,
             ctrl_point3.x, ctrl_point3.y, ctrl_point3.z,
             ctrl_point4.x, ctrl_point4.y, ctrl_point4.z,
-            position.x, position.y, position.z);
+            position_1.x, position_1.y, position_1.z);
 
         bezier_cubic(
             index / (float)line_resolution,
@@ -239,24 +216,21 @@ void SurfaceBezierRenderer::updateRenderer() {
 
 
         // affecter les positions des points sur la courbe
-        line_renderer[index] = position;
+        line_renderer_1[index] = position_1;
         line_renderer_2[index] = position_2;
         line_renderer_3[index] = position_3;
         line_renderer_4[index] = position_4;
         line_renderer_5[index] = position_5;
         line_renderer_6[index] = position_6;
         line_renderer_7[index] = position_7;
-        line_renderer_8[index] = position_8;
-        line_int_1[index] = position_9;
+        line_renderer_8[index] = position_8;        
     }
 
-    // affecter les positions des mesh sur la courbe 
-
-
-    mainMesh.setVertex(vertex_bezier_1[0], line_renderer[0]);
-    mainMesh.setVertex(vertex_bezier_1[1], line_renderer[7]);
-    mainMesh.setVertex(vertex_bezier_1[2], line_renderer[14]);
-    mainMesh.setVertex(vertex_bezier_1[3], line_renderer[20]);
+    // affecter les positions des vertex sur la courbe 
+    mainMesh.setVertex(vertex_bezier_1[0], line_renderer_1[0]);
+    mainMesh.setVertex(vertex_bezier_1[1], line_renderer_1[7]);
+    mainMesh.setVertex(vertex_bezier_1[2], line_renderer_1[14]);
+    mainMesh.setVertex(vertex_bezier_1[3], line_renderer_1[20]);
 
     mainMesh.setVertex(vertex_bezier_2[0], line_renderer_2[0]);
     mainMesh.setVertex(vertex_bezier_2[1], line_renderer_2[7]);
@@ -293,16 +267,9 @@ void SurfaceBezierRenderer::updateRenderer() {
     mainMesh.setVertex(vertex_bezier_8[2], line_renderer_8[13]);
     mainMesh.setVertex(vertex_bezier_8[3], line_renderer_8[20]);
 
-
-    
-    
-
 }
 
-void SurfaceBezierRenderer::generateDraw() {
-
-
-}
+void SurfaceBezierRenderer::generateDraw() { }
 
 void SurfaceBezierRenderer::render() {
 
@@ -311,19 +278,16 @@ void SurfaceBezierRenderer::render() {
         ofFill();
         ofEnableDepthTest();
         mainCam.begin();
-
         texture.bind();
         ofSetColor(0, 255, 0);
-        // choose to draw our mesh as wireframe or point cloud
-        if (b_drawWireFrame) mainMesh.drawWireframe();
-        else mainMesh.drawVertices();
 
+        // draw mesh en wireframe, les vertex points ou l'image en texture 
+        if (draw_wireframe) mainMesh.drawWireframe();
+        else mainMesh.drawVertices();
         if (affiche_image) mainMesh.draw();
 
-        // dessiner la ligne contour
-
+        // dessiner les lignes de contour
         if (control_line) {
-
             ofSetColor(0, 0, 255);
             ofDrawLine(ctrl_point1.x, ctrl_point1.y, ctrl_point1.z, ctrl_point2.x, ctrl_point2.y, ctrl_point2.z);
             ofDrawLine(ctrl_point3.x, ctrl_point3.y, ctrl_point3.z, ctrl_point4.x, ctrl_point4.y, ctrl_point4.z);
@@ -365,12 +329,11 @@ void SurfaceBezierRenderer::render() {
             ofDrawLine(ctrl_point30.x, ctrl_point30.y, ctrl_point30.z, ctrl_point31.x, ctrl_point31.y, ctrl_point31.z);
             ofDrawLine(ctrl_point32.x, ctrl_point32.y, ctrl_point32.z, ctrl_point29.x, ctrl_point29.y, ctrl_point29.z);
         }
-        // dessiner la courbe 
-
+        
+        // dessiner la courbe ofPolyline
         if (bez_line) {
-
             ofSetColor(0, 255, 0);
-            line_renderer.draw();
+            line_renderer_1.draw();
             line_renderer_2.draw();
             line_renderer_3.draw();
             line_renderer_4.draw();
@@ -378,10 +341,7 @@ void SurfaceBezierRenderer::render() {
             line_renderer_6.draw();
             line_renderer_7.draw();
             line_renderer_8.draw();
-
-
         }
-
 
         // dessiner les points de contrôle
         ofSetColor(255, 0, 0);
@@ -428,23 +388,21 @@ void SurfaceBezierRenderer::render() {
 
         }
 
-
         mainCam.end();
         ofDisableDepthTest();
        
+        // afficher instructions pour l'utilisateur 
         ofSetColor(200);
         string msg = "Utiliser les fleches pour deplacer les points de controle\nr : reset\nq : afficher les lignes de controle\n"
             "w : afficher les vertex / triangulation\na : afficher les courbes de Bezier\ns : afficher image en texture";
         ofDrawBitmapString(msg, 400, 20);
-
     }
 }
 
 void SurfaceBezierRenderer::reset() {
 
-
-    // initialisation des variables
-
+   // initialisation des variables
+    
    //  BAS --------------------------------------------------------------
 
     initial_position1 = { -200, -200, 0 };
@@ -459,7 +417,6 @@ void SurfaceBezierRenderer::reset() {
 
     // HAUT --------------------------------------------------------------
 
-
     initial_position5 = { -200, 200, 0 };
     initial_position6 = { -66.6667, 200, 0 };
     initial_position7 = { 66.6667, 200, 0 };
@@ -471,8 +428,6 @@ void SurfaceBezierRenderer::reset() {
     ctrl_point8 = initial_position8;
 
     // GAUCHE --------------------------------------------------------------
-
-
 
     initial_position9 = { -200, -200, 0 };
     initial_position10 = { -200, -66.6667, 0 };
@@ -534,10 +489,6 @@ void SurfaceBezierRenderer::reset() {
 
     // MILIEU HORIZONTALE BAS-------------------------------------------------------------- 
 
-    std::cout << mainMesh.getVertex(4).x << "+" << mainMesh.getVertex(4).y << "+" << mainMesh.getVertex(4).z << std::endl;
-    std::cout << mainMesh.getVertex(5).x << "+" << mainMesh.getVertex(5).y << "+" << mainMesh.getVertex(5).z << std::endl;
-    std::cout << mainMesh.getVertex(6).x << "+" << mainMesh.getVertex(6).y << "+" << mainMesh.getVertex(6).z << std::endl;
-    std::cout << mainMesh.getVertex(7).x << "+" << mainMesh.getVertex(7).y << "+" << mainMesh.getVertex(7).z << std::endl;
     initial_position29 = { -200, -66.6667, 0 };
     initial_position30 = { -66.6667, -66.6667, 0 };
     initial_position31 = { 66.6667, -66.6667, 0 };
@@ -547,34 +498,22 @@ void SurfaceBezierRenderer::reset() {
     ctrl_point30 = initial_position30;
     ctrl_point31 = initial_position31;
     ctrl_point32 = initial_position32;
+
     //--------------------------------------------------------------
 
     selected_ctrl_point = &ctrl_point2;
 
     delta_x = motion_speed;
-    delta_y = motion_speed;
+    delta_y = motion_speed; 
 
-   
-    ofLog() << "<reset>";
 }
 
 void SurfaceBezierRenderer::keyPressed(int key) {
     if (surface_bezier_toggle) {
-        switch (key) { // use a switch statement to evaluate which key is pressed
-        case 'f':
-            ofToggleFullscreen();
-            break;
-
-        case ' ':
-            b_messyMesh = !b_messyMesh;
-            break;
+        switch (key) { 
 
         case 'w':
-            b_drawWireFrame = !b_drawWireFrame;
-            break;
-
-        case 'p':
-            b_perlinMesh = !b_perlinMesh;
+            draw_wireframe = !draw_wireframe;
             break;
 
         case 'q': // touche q
@@ -610,7 +549,6 @@ void SurfaceBezierRenderer::keyPressed(int key) {
 
         default:
             break;
-
 
         }
     }

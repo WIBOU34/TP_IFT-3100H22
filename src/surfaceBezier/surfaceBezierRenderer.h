@@ -1,12 +1,11 @@
 /**
  * \IFT3100H21
- * \file topologieRenderer.h
+ * \file surfaceBezierRenderer.h
  * \author Stéphane Boulanger
  * \brief Classe responsable de la surface de Bezier de l'application
  * \version 0.1
  * \date 2022-04-05
  */
-
 
 #pragma once
 
@@ -15,60 +14,8 @@
 #include "../objectBase3D.h"
 #include "ofxGui.h"
 
-
 class SurfaceBezierRenderer : public RendererBase {
 public : 
-	ofParameterGroup parameters;
-	ofxToggle surface_bezier_toggle;
-
-	ofParameterGroup parameters_point_controle;
-	ofxButton point_1; 
-	ofxButton point_2; 
-	ofxButton point_3; 
-	ofxButton point_4; 
-	ofxButton point_5; 
-	ofxButton point_6; 
-	ofxButton point_7; 
-	ofxButton point_8; 
-	ofxButton point_9; 
-	ofxButton point_10; 
-	ofxButton point_11; 
-	ofxButton point_12; 
-	ofxButton point_13; 
-	ofxButton point_14; 
-	ofxButton point_15; 
-	ofxButton point_16; 
-	
-	void reset();
-	void keyPressed(int key);
-	void keyReleased(int key);
-	void buttonSelectionPointControle_1();
-	void buttonSelectionPointControle_2();
-	void buttonSelectionPointControle_3();
-	void buttonSelectionPointControle_4();
-	void buttonSelectionPointControle_5();
-	void buttonSelectionPointControle_6();
-	void buttonSelectionPointControle_7();
-	void buttonSelectionPointControle_8();
-	void buttonSelectionPointControle_9();
-	void buttonSelectionPointControle_10();
-	void buttonSelectionPointControle_11();
-	void buttonSelectionPointControle_12();
-	void buttonSelectionPointControle_13();
-	void buttonSelectionPointControle_14();
-	void buttonSelectionPointControle_15();
-	void buttonSelectionPointControle_16();
-
-	// make a new mesh object
-	ofMesh mainMesh;
-	ofEasyCam mainCam;
-	int width, height;
-	bool b_messyMesh, b_perlinMesh, b_drawWireFrame;
-	float perlinRange, perlinHeight;
-
-	ofImage image;
-	ofTexture texture;
-
 
 	inline void bezier_cubic(
 		float t,
@@ -90,57 +37,95 @@ public :
 	}
 
 
-	ofPolyline line_renderer;
+	void reset();
+	void keyPressed(int key);
+	void keyReleased(int key);
+	void buttonSelectionPointControle_1();
+	void buttonSelectionPointControle_2();
+	void buttonSelectionPointControle_3();
+	void buttonSelectionPointControle_4();
+	void buttonSelectionPointControle_5();
+	void buttonSelectionPointControle_6();
+	void buttonSelectionPointControle_7();
+	void buttonSelectionPointControle_8();
+	void buttonSelectionPointControle_9();
+	void buttonSelectionPointControle_10();
+	void buttonSelectionPointControle_11();
+	void buttonSelectionPointControle_12();
+	void buttonSelectionPointControle_13();
+	void buttonSelectionPointControle_14();
+	void buttonSelectionPointControle_15();
+	void buttonSelectionPointControle_16();
+
+	// menu gui 
+	ofParameterGroup parameters;
+	ofxToggle surface_bezier_toggle;
+
+	ofParameterGroup parameters_point_controle;
+	ofxButton point_1; 
+	ofxButton point_2; 
+	ofxButton point_3; 
+	ofxButton point_4; 
+	ofxButton point_5; 
+	ofxButton point_6; 
+	ofxButton point_7; 
+	ofxButton point_8; 
+	ofxButton point_9; 
+	ofxButton point_10; 
+	ofxButton point_11; 
+	ofxButton point_12; 
+	ofxButton point_13; 
+	ofxButton point_14; 
+	ofxButton point_15; 
+	ofxButton point_16; 	
+		
+	ofMesh mainMesh;
+	ofEasyCam mainCam;
+	ofImage image;
+	ofTexture texture;
+
+	ofPolyline line_renderer_1;
 	ofPolyline line_renderer_2;
 	ofPolyline line_renderer_3;
 	ofPolyline line_renderer_4;
 	ofPolyline line_renderer_5;
 	ofPolyline line_renderer_6;
 	ofPolyline line_renderer_7;
-	ofPolyline line_renderer_8;
-	ofPolyline line_int_1;
+	ofPolyline line_renderer_8;	
 
 	ofVec3f* selected_ctrl_point;	
 	ofVec3f ctrl_point1;
 	ofVec3f ctrl_point2;
 	ofVec3f ctrl_point3;
 	ofVec3f ctrl_point4;
-
 	ofVec3f ctrl_point5;
 	ofVec3f ctrl_point6;
 	ofVec3f ctrl_point7;
 	ofVec3f ctrl_point8;
-
 	ofVec3f ctrl_point9;
 	ofVec3f ctrl_point10;
 	ofVec3f ctrl_point11;
 	ofVec3f ctrl_point12;
-
 	ofVec3f ctrl_point13;
 	ofVec3f ctrl_point14;
 	ofVec3f ctrl_point15;
 	ofVec3f ctrl_point16;
-
 	ofVec3f ctrl_point17;
 	ofVec3f ctrl_point18;
 	ofVec3f ctrl_point19;
 	ofVec3f ctrl_point20;
-
 	ofVec3f ctrl_point21;
 	ofVec3f ctrl_point22;
 	ofVec3f ctrl_point23;
 	ofVec3f ctrl_point24;
-
 	ofVec3f ctrl_point25;
 	ofVec3f ctrl_point26;
 	ofVec3f ctrl_point27;
 	ofVec3f ctrl_point28;
-
 	ofVec3f ctrl_point29;
 	ofVec3f ctrl_point30;
 	ofVec3f ctrl_point31;
 	ofVec3f ctrl_point32;
-
 	ofVec3f ctrl_point33;
 	ofVec3f ctrl_point34;
 	ofVec3f ctrl_point35;
@@ -174,51 +159,35 @@ public :
 	ofVec3f initial_position26;
 	ofVec3f initial_position27;
 	ofVec3f initial_position28;
-
 	ofVec3f initial_position29;
 	ofVec3f initial_position30;
 	ofVec3f initial_position31;
 	ofVec3f initial_position32;
-
 	ofVec3f initial_position33;
 	ofVec3f initial_position34;
 	ofVec3f initial_position35;
 	ofVec3f initial_position36;
 
-	ofVec3f position;
+	ofVec3f position_1;
 	ofVec3f position_2;
 	ofVec3f position_3;
 	ofVec3f position_4;
 	ofVec3f position_5;
 	ofVec3f position_6;
 	ofVec3f position_7;
-	ofVec3f position_8;
-	
+	ofVec3f position_8;	
 	ofVec3f position_9;
 
-
-
-	ofVec3f tangent1;
-
-	float line_width_outline;
-	float line_width_curve;
-
-	float radius;
-	float scale;
-	float offset;
-
+	int line_resolution;
+	float radius;	
+	
 	float delta_x;
 	float delta_y;
-
-	float motion_speed;
-
-	int framebuffer_width;
-	int framebuffer_height;
-
-	int line_resolution;
+	float motion_speed;	
 
 	int index;
-	
+	int width;
+	int height;
 
 	float time_current;
 	float time_last;
@@ -227,15 +196,12 @@ public :
 	bool is_key_press_up;
 	bool is_key_press_down;
 	bool is_key_press_left;
-	bool is_key_press_right;
+	bool is_key_press_right;		
 
-	bool same_point_4;
-	bool same_point_5;
-
+	bool draw_wireframe;
 	bool control_line;
 	bool bez_line;
 	bool affiche_image; 
-
 
 	std::vector<float> vertex_bezier_1;
 	std::vector<float> vertex_bezier_2;
@@ -245,12 +211,6 @@ public :
 	std::vector<float> vertex_bezier_6;
 	std::vector<float> vertex_bezier_7;
 	std::vector<float> vertex_bezier_8;
-	
-	std::vector<float> vertex_bezier_int_1;
-
-	
-	
-
 
 protected:
 	void setupRenderer(const std::string& name);
