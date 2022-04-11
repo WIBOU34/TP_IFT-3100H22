@@ -23,6 +23,7 @@
 #include "texture/textureRenderer.h"
 #include "courbeBezier/courbeBezierRenderer.h"
 #include "surfaceBezier/surfaceBezierRenderer.h"
+#include "tessellation/tessellationRenderer.h"
 
 class Application : public ofBaseApp {
 public:
@@ -36,6 +37,7 @@ public:
 	IlluminationRenderer illuminationRenderer;
 	CourbeBezierRenderer courbeBezierRenderer;
 	SurfaceBezierRenderer surfaceBezierRenderer;
+	TessellationRenderer tessellationRenderer;
 
 	shared_ptr<ofAppBaseWindow> mainWindow;
 

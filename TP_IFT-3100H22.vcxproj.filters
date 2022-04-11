@@ -97,6 +97,9 @@
     <ClCompile Include="src\surfaceBezier\surfaceBezierRenderer.cpp">
       <Filter>src\surfaceBezier</Filter>
     </ClCompile>
+    <ClCompile Include="src\tessellation\tessellationRenderer.cpp">
+      <Filter>src\tessellation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -203,6 +206,9 @@
     </Filter>
     <Filter Include="src\surfaceBezier">
       <UniqueIdentifier>{c59352df-166a-4431-8a92-6308102c1917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tessellation">
+      <UniqueIdentifier>{b8dac0f2-76b9-4731-b4bf-51c6e27caf54}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -577,6 +583,9 @@
     </ClInclude>
     <ClInclude Include="src\surfaceBezier\surfaceBezierRenderer.h">
       <Filter>src\surfaceBezier</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tessellation\tessellationRenderer.h">
+      <Filter>src\tessellation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

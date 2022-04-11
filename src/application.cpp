@@ -25,11 +25,12 @@ void Application::setup() {
 	objects3DRenderer.setup("Objets 3D");
 	//curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
-	textureRenderer.setup("Textures & Tessellation");
+	textureRenderer.setup("Textures");
 	courbeBezierRenderer.setup("Courbe de Bezier");
 	surfaceBezierRenderer.setup("Surface de Bezier");
 	illuminationRenderer.setup("Illumination");
 	illuminationRenderer.camera = cameraRenderer.camera;
+	tessellationRenderer.setup("Tessellation");
 	ofSetVerticalSync(true);
 
 	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
@@ -68,6 +69,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(&illuminationRenderer.parameters);
 	gui.add(courbeBezierRenderer.parameters);
 	gui.add(surfaceBezierRenderer.parameters);
+	gui.add(tessellationRenderer.parameters);
 
 	gui.minimizeAll();
 	bHide = false;
@@ -103,6 +105,7 @@ void Application::update() {
 	illuminationRenderer.update();
 	courbeBezierRenderer.update();
 	surfaceBezierRenderer.update();
+	tessellationRenderer.update();
 
 
 	//curseurRenderer.valCurseurSlider = sliderCurseur;
@@ -115,6 +118,7 @@ void Application::draw() {
 	textureRenderer.draw();
 	courbeBezierRenderer.draw();
 	surfaceBezierRenderer.draw();
+	tessellationRenderer.draw();
 	//illuminationRenderer.draw();
 	drawCamera();
 
