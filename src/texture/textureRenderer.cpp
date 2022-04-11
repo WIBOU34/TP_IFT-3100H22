@@ -17,7 +17,7 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     // menu gui pour la texture   
     parameters.add(mesh_sphere_toggle.setup("Afficher la planete", false)->getParameter()); 
     parameters.add(mesh_square_toggle.setup("Relief de la planete", false)->getParameter());
-    parameters.add(tessellation_toggle.setup("Tessellation", false)->getParameter());
+    
     parameters.add(display.setup("Texture planete", false)->getParameter());
     parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());
     parameters.add(slider_exposure.set("Exposure",1.0f, 0.0f, 5.0f));
@@ -58,13 +58,13 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     map_mesh.add(slider_4.set("Rotation", 0.0f, 0.0f, 420.0f));
    
     // panel pour la tesselation
-    parameters_tessellation.setName("Parametres");
+    /*parameters_tessellation.setName("Parametres");
 
     shader_tess_button.addListener(this, &TextureRenderer::buttonShaderTessellation);
     parameters_tessellation.add(shader_tess_button.setup("Shader")->getParameter());
 
     parameters_tessellation.add(tess_level_slider.set("Niveau tessellation", 1.0, 1.0, 5.0));
-    parameters_tessellation.add(tess_resolution_slider.set("Resolution", 4.0, 2.0, 10.0));
+    parameters_tessellation.add(tess_resolution_slider.set("Resolution", 4.0, 2.0, 10.0));*/
    
     // loader image de départ                                           
     image.load("earth.jpg"); // https://www.wallpaperflare.com/teal-nebula-galaxy-wallpaper-planets-light-swirl-abstract-wallpaper-daa
@@ -125,10 +125,10 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     shader_tone_map.load("shader/tone_mapping_330_vs.glsl", "shader/tone_mapping_330_fs.glsl");
 
     // setup de la tessellation
-    shader_tess.setGeometryInputType(GL_TRIANGLES);
-    shader_tess.setGeometryOutputType(GL_LINE_STRIP);
-    shader_tess.setGeometryOutputCount(4);
-    glPatchParameteri(GL_PATCH_VERTICES, 2);   
+    //shader_tess.setGeometryInputType(GL_TRIANGLES);
+   //shader_tess.setGeometryOutputType(GL_LINE_STRIP);
+   // shader_tess.setGeometryOutputCount(4);
+   // glPatchParameteri(GL_PATCH_VERTICES, 2);   
 
 }
 
@@ -152,11 +152,11 @@ void TextureRenderer::updateRenderer() {
     }
 
     // tessellation
-    radius = 180.f;
-    sphere.setRadius(radius);
-    sphere.setResolution(tess_resolution_slider);
-    sphereMesh = sphere.getMesh();
-    sphereVbo.setMesh(sphereMesh, GL_DYNAMIC_DRAW);
+    //radius = 180.f;
+    //sphere.setRadius(radius);
+    //sphere.setResolution(tess_resolution_slider);
+    //sphereMesh = sphere.getMesh();
+    //sphereVbo.setMesh(sphereMesh, GL_DYNAMIC_DRAW);
        
 }
 
@@ -217,7 +217,7 @@ void TextureRenderer::render() {
 
     }
 
-    if (tessellation_toggle) {
+    /*if (tessellation_toggle) {
 
         ofSetColor(ofColor::green);
         ofSetBackgroundColor(0);
@@ -244,7 +244,7 @@ void TextureRenderer::render() {
        
        
 
-    }
+    }*/
 
     if (mesh_sphere_toggle || mesh_square_toggle) {
         // draw instruction de controle filtre de convolution pour l'utilisateur 
@@ -477,7 +477,7 @@ void TextureRenderer::buttonUranusPicker() {
 
 }
 
-void TextureRenderer::buttonShaderTessellation() {
+/*void TextureRenderer::buttonShaderTessellation() {
     if (!load_shader) {
         load_shader = true;
         shader_tess.setupShaderFromFile(GL_VERTEX_SHADER, "shader/tess_410_vert.glsl");
@@ -497,7 +497,7 @@ void TextureRenderer::buttonShaderTessellation() {
     }
 
    
-}
+}*/
 
 void TextureRenderer::keyReleased(int key) {
     if (mesh_sphere_toggle) {

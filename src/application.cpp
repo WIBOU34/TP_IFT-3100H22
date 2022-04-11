@@ -92,7 +92,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui_tessellation.setup("Tessellation");
 	gui_tessellation.setDefaultWidth(300);
 	gui_tessellation.setPosition(ofGetWindowWidth() - 310, 10);
-	gui_tessellation.add(textureRenderer.parameters_tessellation);
+	gui_tessellation.add(tessellationRenderer.parameters_tessellation);
 }
 
 // fonction de mise à jour de la logique de l'application
@@ -132,7 +132,7 @@ void Application::draw() {
 		gui_planet.draw();
 	}
 	
-	if (textureRenderer.tessellation_toggle) gui_tessellation.draw();
+	if (tessellationRenderer.tessellation_toggle) gui_tessellation.draw();
 	
 	if (surfaceBezierRenderer.surface_bezier_toggle) gui_surface_bezier.draw();
 

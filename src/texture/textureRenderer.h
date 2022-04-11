@@ -66,7 +66,7 @@ public:
 	ofParameterGroup parameters;
 	ofxToggle mesh_sphere_toggle; 
 	ofxToggle mesh_square_toggle;
-	ofxToggle tessellation_toggle;
+	
 	ofxLabel identite_label;
 	ofxLabel emboss_label; 
 	ofxLabel sharpen_label; 
@@ -90,10 +90,10 @@ public:
 	ofParameter<float> slider_4;
 
 	// menu gui tessellation 
-	ofParameterGroup parameters_tessellation;
-	ofxButton shader_tess_button;
-	ofParameter<int> tess_level_slider;
-	ofParameter<int> tess_resolution_slider;
+	// parameters_tessellation;
+	//ofxButton shader_tess_button;
+	//ofParameter<int> tess_level_slider;
+	//ofParameter<int> tess_resolution_slider;
 
 	// sphere de mesh
 	ofMesh sphere_mesh;
@@ -122,12 +122,12 @@ public:
 	int mesh_size;
 	
 	// tessallation
-	ofShader shader_tess;
-	ofVbo sphereVbo;
-	ofVboMesh sphereMesh;
-	ofSpherePrimitive sphere;
-	float radius;
-	bool load_shader;
+	//ofShader shader_tess;
+	//ofVbo sphereVbo;
+	//ofVboMesh sphereMesh;
+	//ofSpherePrimitive sphere;
+	//float radius;
+	//bool load_shader;
 	
 	
 	
@@ -139,7 +139,7 @@ public:
 	void buttonSaturnPicker();
 	void buttonMercurePicker();
 	void buttonUranusPicker();
-	void buttonShaderTessellation();
+	//void buttonShaderTessellation();
 	
 	
 
