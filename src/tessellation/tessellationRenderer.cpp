@@ -1,6 +1,6 @@
 ﻿/**
  * \IFT3100H21 
- * \file surfaceBezierRenderer.cpp
+ * \file tessellationRenderer.cpp
  * \author Stéphane Boulanger
  * \brief Classe responsable de la tessellation de l'application
  * \version 0.1
@@ -8,26 +8,6 @@
  */
 
 #include "tessellationRenderer.h"
-
-void TessellationRenderer::buttonShaderTessellation() {
-    if (!load_shader) {
-        load_shader = true;
-        shader_tess.setupShaderFromFile(GL_VERTEX_SHADER, "shader/tess_410_vert.glsl");
-        shader_tess.setupShaderFromFile(GL_FRAGMENT_SHADER, "shader/tess_410_frag.glsl");
-        shader_tess.setupShaderFromFile(GL_GEOMETRY_SHADER_EXT, "shader/tess_410_geom.glsl");
-        shader_tess.setupShaderFromFile(GL_TESS_CONTROL_SHADER, "shader/tess_410_cont.glsl");
-        shader_tess.setupShaderFromFile(GL_TESS_EVALUATION_SHADER, "shader/tess_410_eval.glsl");
-        shader_tess.linkProgram();
-        glPatchParameteri(GL_PATCH_VERTICES, 4);
-
-        ofLog() << "SHADER IS LOADED";
-    }
-    else {
-        load_shader = false;
-        shader_tess.unload();
-        ofLog() << "SHADER UNLOADED";
-    }
-}
 
 void TessellationRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
@@ -93,5 +73,23 @@ void TessellationRenderer::render() {
 
 
 
+    }
+}
+
+void TessellationRenderer::buttonShaderTessellation() {
+    if (!load_shader) {
+        load_shader = true;
+        shader_tess.setupShaderFromFile(GL_VERTEX_SHADER, "shader/tess_410_vert.glsl");
+        shader_tess.setupShaderFromFile(GL_FRAGMENT_SHADER, "shader/tess_410_frag.glsl");
+        shader_tess.setupShaderFromFile(GL_GEOMETRY_SHADER_EXT, "shader/tess_410_geom.glsl");
+        shader_tess.setupShaderFromFile(GL_TESS_CONTROL_SHADER, "shader/tess_410_cont.glsl");
+        shader_tess.setupShaderFromFile(GL_TESS_EVALUATION_SHADER, "shader/tess_410_eval.glsl");
+        shader_tess.linkProgram();
+        glPatchParameteri(GL_PATCH_VERTICES, 4);
+               
+    }
+    else {
+        load_shader = false;
+        shader_tess.unload();        
     }
 }

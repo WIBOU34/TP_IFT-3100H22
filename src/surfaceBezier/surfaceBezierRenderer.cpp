@@ -54,7 +54,7 @@ void SurfaceBezierRenderer::setupRenderer(const std::string& name) {
 
     // initialisation des valeurs et paramètres de l'image sur la texture du mesh  
     ofDisableArbTex();
-    image.load("paper.jpg");
+    image.load("images/paper.jpg");
     image.resize(400, 400);
     texture.clear();
     texture.allocate(400, 400, GL_RGB);

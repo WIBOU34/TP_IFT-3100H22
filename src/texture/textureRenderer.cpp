@@ -16,8 +16,7 @@ void TextureRenderer::setupRenderer(const std::string& name) {
 
     // menu gui pour la texture   
     parameters.add(mesh_sphere_toggle.setup("Afficher la planete", false)->getParameter()); 
-    parameters.add(mesh_square_toggle.setup("Relief de la planete", false)->getParameter());
-    
+    parameters.add(mesh_square_toggle.setup("Relief de la planete", false)->getParameter());    
     parameters.add(display.setup("Texture planete", false)->getParameter());
     parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());
     parameters.add(slider_exposure.set("Exposure",1.0f, 0.0f, 5.0f));
@@ -49,25 +48,20 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     uranus_button.addListener(this, &TextureRenderer::buttonUranusPicker);
     parameters_planet.add(uranus_button.setup("Uranus")->getParameter());
 
-    // TODO NEPTUNE
-    // TODO PLUTON
+    neptune_button.addListener(this, &TextureRenderer::buttonNeptunePicker);
+    parameters_planet.add(neptune_button.setup("Neptune")->getParameter());
+
+    pluton_button.addListener(this, &TextureRenderer::buttonPlutonPicker);
+    parameters_planet.add(pluton_button.setup("Pluton")->getParameter());
+    
 
     // slider pour le square mesh 
     map_mesh.setName("Effet de relief");   
     map_mesh.add(slider_3.set("Vagues", 5.0f, 0.0f, 100.0f));
-    map_mesh.add(slider_4.set("Rotation", 0.0f, 0.0f, 420.0f));
-   
-    // panel pour la tesselation
-    /*parameters_tessellation.setName("Parametres");
-
-    shader_tess_button.addListener(this, &TextureRenderer::buttonShaderTessellation);
-    parameters_tessellation.add(shader_tess_button.setup("Shader")->getParameter());
-
-    parameters_tessellation.add(tess_level_slider.set("Niveau tessellation", 1.0, 1.0, 5.0));
-    parameters_tessellation.add(tess_resolution_slider.set("Resolution", 4.0, 2.0, 10.0));*/
+    map_mesh.add(slider_4.set("Rotation", 0.0f, 0.0f, 420.0f));  
    
     // loader image de départ                                           
-    image.load("earth.jpg"); // https://www.wallpaperflare.com/teal-nebula-galaxy-wallpaper-planets-light-swirl-abstract-wallpaper-daa
+    image.load("images/earth.jpg"); // https://www.wallpaperflare.com/teal-nebula-galaxy-wallpaper-planets-light-swirl-abstract-wallpaper-daa
 
     // assigner l'image originale a une variable pour conserver son état d'origine
     image_selection = image; 
@@ -124,12 +118,7 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     // load du shader pour le tone mapping
     shader_tone_map.load("shader/tone_mapping_330_vs.glsl", "shader/tone_mapping_330_fs.glsl");
 
-    // setup de la tessellation
-    //shader_tess.setGeometryInputType(GL_TRIANGLES);
-   //shader_tess.setGeometryOutputType(GL_LINE_STRIP);
-   // shader_tess.setGeometryOutputCount(4);
-   // glPatchParameteri(GL_PATCH_VERTICES, 2);   
-
+   
 }
 
 void TextureRenderer::updateRenderer() {
@@ -151,13 +140,7 @@ void TextureRenderer::updateRenderer() {
         }
     }
 
-    // tessellation
-    //radius = 180.f;
-    //sphere.setRadius(radius);
-    //sphere.setResolution(tess_resolution_slider);
-    //sphereMesh = sphere.getMesh();
-    //sphereVbo.setMesh(sphereMesh, GL_DYNAMIC_DRAW);
-       
+   
 }
 
 void TextureRenderer::generateDraw() {
@@ -216,45 +199,13 @@ void TextureRenderer::render() {
         cam_tex.end();
 
     }
-
-    /*if (tessellation_toggle) {
-
-        ofSetColor(ofColor::green);
-        ofSetBackgroundColor(0);
-        
-        ofEnableDepthTest();
-        cam_tex.begin();
-
-        shader_tess.begin();
-
-        shader_tess.setUniform1f("u_tessLevelOuter", tess_level_slider);
-
-        ofPushMatrix();
-        ofRotate(ofGetElapsedTimef() * 10, 0, 1, 0);
-        sphereVbo.drawElements(GL_PATCHES, sphereVbo.getNumIndices());
-        ofPopMatrix();
-
-        shader_tess.end();
-        
-        cam_tex.end();
-        ofDisableDepthTest();
-       
-       
-           
-       
-       
-
-    }*/
-
+  
     if (mesh_sphere_toggle || mesh_square_toggle) {
         // draw instruction de controle filtre de convolution pour l'utilisateur 
         ofSetColor(200);
         string msg = "i: image originale\ne: filtre emboss\ns: filtre sharpen\nd: filtre edge detect";
         ofDrawBitmapString(msg, 400, 20);
-    }
-    
-   
-   
+    } 
 }
 
 void TextureRenderer::filter()
@@ -382,7 +333,7 @@ void TextureRenderer::filter()
 
 void TextureRenderer::buttonMarsPicker() {   
 
-    image.load("mars.jpg");   
+    image.load("images/mars.jpg");   
     image.update();    
     image_selection = image; 
     image_selection.update();
@@ -395,7 +346,7 @@ void TextureRenderer::buttonMarsPicker() {
 
 void TextureRenderer::buttonVenusPicker() {
 
-    image.load("venus.jpg");  
+    image.load("images/venus.jpg");  
     image.resize(500, 300);
     image.update();
     image_selection = image;
@@ -409,7 +360,7 @@ void TextureRenderer::buttonVenusPicker() {
 
 void TextureRenderer::buttonTerrePicker() {
 
-    image.load("earth.jpg"); 
+    image.load("images/earth.jpg"); 
     image.update();
     image_selection = image;
     image_selection.update();
@@ -422,7 +373,7 @@ void TextureRenderer::buttonTerrePicker() {
 
 void TextureRenderer::buttonJupiterPicker() {
 
-    image.load("jupiter.jpg");
+    image.load("images/jupiter.jpg");
     image.resize(500, 300);
     image.update();
     image_selection = image;
@@ -436,7 +387,7 @@ void TextureRenderer::buttonJupiterPicker() {
 
 void TextureRenderer::buttonSaturnPicker() {
 
-    image.load("saturn.jpg");
+    image.load("images/saturn.jpg");
     image.resize(500, 300);
     image.update();
     image_selection = image;
@@ -450,7 +401,7 @@ void TextureRenderer::buttonSaturnPicker() {
 
 void TextureRenderer::buttonMercurePicker() {
 
-    image.load("mercure.jpg");
+    image.load("images/mercure.jpg");
     image.resize(500, 250);
     image.update();
     image_selection = image;
@@ -464,7 +415,7 @@ void TextureRenderer::buttonMercurePicker() {
 
 void TextureRenderer::buttonUranusPicker() {
 
-    image.load("uranus.jpg");
+    image.load("images/uranus.jpg");
     image.resize(500, 250);
     image.update();
     image_selection = image;
@@ -477,27 +428,33 @@ void TextureRenderer::buttonUranusPicker() {
 
 }
 
-/*void TextureRenderer::buttonShaderTessellation() {
-    if (!load_shader) {
-        load_shader = true;
-        shader_tess.setupShaderFromFile(GL_VERTEX_SHADER, "shader/tess_410_vert.glsl");
-        shader_tess.setupShaderFromFile(GL_FRAGMENT_SHADER, "shader/tess_410_frag.glsl");
-        shader_tess.setupShaderFromFile(GL_GEOMETRY_SHADER_EXT, "shader/tess_410_geom.glsl");
-        shader_tess.setupShaderFromFile(GL_TESS_CONTROL_SHADER, "shader/tess_410_cont.glsl");
-        shader_tess.setupShaderFromFile(GL_TESS_EVALUATION_SHADER, "shader/tess_410_eval.glsl");
-        shader_tess.linkProgram();
-        glPatchParameteri(GL_PATCH_VERTICES, 4);
-       
-        ofLog() << "SHADER IS LOADED";
-    }
-    else {
-        load_shader = false; 
-        shader_tess.unload();
-        ofLog() << "SHADER UNLOADED";
-    }
+void TextureRenderer::buttonNeptunePicker() {
 
-   
-}*/
+    image.load("images/neptune.jpg");
+    image.resize(500, 250);
+    image.update();
+    image_selection = image;
+    image_selection.update();
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
+    image_destination.update();
+    filter();
+}
+
+void TextureRenderer::buttonPlutonPicker() {
+
+    image.load("images/pluton.jpg");
+    image.resize(504, 252);
+    image.update();
+    image_selection = image;
+    image_selection.update();
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
+    image_destination.update();
+    filter();
+}
 
 void TextureRenderer::keyReleased(int key) {
     if (mesh_sphere_toggle) {

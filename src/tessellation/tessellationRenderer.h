@@ -1,8 +1,8 @@
 /**
  * \IFT3100H21
- * \file surfaceBezierRenderer.h
+ * \file tessellationsRenderer.h
  * \author Stéphane Boulanger
- * \brief Classe responsable de la surface de la tessellation de l'application
+ * \brief Classe responsable de la tessellation de l'application
  * \version 0.1
  * \date 2022-04-05
  */
