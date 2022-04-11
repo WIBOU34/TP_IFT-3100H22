@@ -17,37 +17,57 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     // menu gui pour la texture   
     parameters.add(mesh_sphere_toggle.setup("Afficher la planete", false)->getParameter()); 
     parameters.add(mesh_square_toggle.setup("Relief de la planete", false)->getParameter());
+    parameters.add(tessellation_toggle.setup("Tessellation", false)->getParameter());
     parameters.add(display.setup("Texture planete", false)->getParameter());
     parameters.add(tone_map_toggle.setup("Tone map", true)->getParameter());
     parameters.add(slider_exposure.set("Exposure",1.0f, 0.0f, 5.0f));
     parameters.add(slider_gamma.set("Gamma", 2.2f, 0.0f, 5.0f)); 
   
 
-     // panel pour choisir la planete
-    parameters_planet.setName("Voie lactée"); 
+    // panel pour choisir la planete
+    parameters_planet.setName("Systeme solaire"); 
 
 	// boutons pour le planet picker 
-    mars_button.addListener(this, &TextureRenderer::buttonMarsPicker);
-    parameters_planet.add(mars_button.setup("Mars")->getParameter());
+    mercure_button.addListener(this, &TextureRenderer::buttonMercurePicker);
+    parameters_planet.add(mercure_button.setup("Mercure")->getParameter());
 
     venus_button.addListener(this, &TextureRenderer::buttonVenusPicker);
     parameters_planet.add(venus_button.setup("Venus")->getParameter());
 
     terre_button.addListener(this, &TextureRenderer::buttonTerrePicker);
-    parameters_planet.add(terre_button.setup("Terre")->getParameter());
+    parameters_planet.add(terre_button.setup("Terre")->getParameter());  
+
+    mars_button.addListener(this, &TextureRenderer::buttonMarsPicker);
+    parameters_planet.add(mars_button.setup("Mars")->getParameter());
+    
+    jupiter_button.addListener(this, &TextureRenderer::buttonJupiterPicker);
+    parameters_planet.add(jupiter_button.setup("Jupiter")->getParameter()); 
+
+    saturn_button.addListener(this, &TextureRenderer::buttonSaturnPicker);
+    parameters_planet.add(saturn_button.setup("Saturne")->getParameter());
+
+    uranus_button.addListener(this, &TextureRenderer::buttonUranusPicker);
+    parameters_planet.add(uranus_button.setup("Uranus")->getParameter());
+
+    // TODO NEPTUNE
+    // TODO PLUTON
 
     // slider pour le square mesh 
-    map_mesh.setName("Effet de relief");
-    //map_mesh.add(slider_1.set("Position", 0.0f, 0.0f, 100.0f));
-    //map_mesh.add(slider_2.set("Positn", 0.0f, 0.0f, 100.0f));
+    map_mesh.setName("Effet de relief");   
     map_mesh.add(slider_3.set("Vagues", 5.0f, 0.0f, 100.0f));
     map_mesh.add(slider_4.set("Rotation", 0.0f, 0.0f, 420.0f));
-    
+   
+    // panel pour la tesselation
+    parameters_tessellation.setName("Parametres");
+
+    shader_tess_button.addListener(this, &TextureRenderer::buttonShaderTessellation);
+    parameters_tessellation.add(shader_tess_button.setup("Shader")->getParameter());
+
+    parameters_tessellation.add(tess_level_slider.set("Niveau tessellation", 1.0, 1.0, 5.0));
+    parameters_tessellation.add(tess_resolution_slider.set("Resolution", 4.0, 2.0, 10.0));
    
     // loader image de départ                                           
     image.load("earth.jpg"); // https://www.wallpaperflare.com/teal-nebula-galaxy-wallpaper-planets-light-swirl-abstract-wallpaper-daa
-    //mars.load("mars.jpg");
-    //terre.load("venus.jpg");
 
     // assigner l'image originale a une variable pour conserver son état d'origine
     image_selection = image; 
@@ -101,31 +121,42 @@ void TextureRenderer::setupRenderer(const std::string& name) {
         }
     }
 
-    // load du shader  
+    // load du shader pour le tone mapping
     shader_tone_map.load("shader/tone_mapping_330_vs.glsl", "shader/tone_mapping_330_fs.glsl");
+
+    // setup de la tessellation
+    shader_tess.setGeometryInputType(GL_TRIANGLES);
+    shader_tess.setGeometryOutputType(GL_LINE_STRIP);
+    shader_tess.setGeometryOutputCount(4);
+    glPatchParameteri(GL_PATCH_VERTICES, 2);   
 
 }
 
 void TextureRenderer::updateRenderer() {
 
-    //Change vertices pour le square mesh
-    for (int y = slider_2; y < grid_width; y++) {
-        for (int x = slider_1; x < grid_height; x++) {
+    // change vertices pour le square mesh
+    for (int y = 0; y < grid_width; y++) {
+        for (int x = 0; x < grid_height; x++) {
 
-            //Vertex index
+            // Vertex index
             int i = x + grid_width * y;
             ofPoint p = square_mesh.getVertex(i);
 
-            //Change z-coordinate of vertex
+            // Change z-coordinate pour vertex
             p.z = ofNoise(x * 0.05, y * 0.05, ofGetElapsedTimef() * 0.5) * slider_3;
             square_mesh.setVertex(i, p);
 
-            //Change color of vertex
+            // Change color pour vertex
             square_mesh.setColor(i, ofColor(255, 255, 255));
         }
     }
 
-   
+    // tessellation
+    radius = 180.f;
+    sphere.setRadius(radius);
+    sphere.setResolution(tess_resolution_slider);
+    sphereMesh = sphere.getMesh();
+    sphereVbo.setMesh(sphereMesh, GL_DYNAMIC_DRAW);
        
 }
 
@@ -141,8 +172,6 @@ void TextureRenderer::render() {
           
     // si on veut afficher la sphere sur laquelle les textures sont appliquées 
     if (mesh_sphere_toggle) {
-        
-        //if (mesh_square_toggle) mesh_square_toggle = false;
 
         // pour sélectionner le type de tone-mapping
         if (tone_map_toggle) tone_map_toggle.setup("aces filmic", true)->getParameter();       
@@ -185,6 +214,35 @@ void TextureRenderer::render() {
         square_mesh.draw();
         ofPopMatrix();
         cam_tex.end();
+
+    }
+
+    if (tessellation_toggle) {
+
+        ofSetColor(ofColor::green);
+        ofSetBackgroundColor(0);
+        
+        ofEnableDepthTest();
+        cam_tex.begin();
+
+        shader_tess.begin();
+
+        shader_tess.setUniform1f("u_tessLevelOuter", tess_level_slider);
+
+        ofPushMatrix();
+        ofRotate(ofGetElapsedTimef() * 10, 0, 1, 0);
+        sphereVbo.drawElements(GL_PATCHES, sphereVbo.getNumIndices());
+        ofPopMatrix();
+
+        shader_tess.end();
+        
+        cam_tex.end();
+        ofDisableDepthTest();
+       
+       
+           
+       
+       
 
     }
 
@@ -337,7 +395,8 @@ void TextureRenderer::buttonMarsPicker() {
 
 void TextureRenderer::buttonVenusPicker() {
 
-    image.load("venus.jpg");    
+    image.load("venus.jpg");  
+    image.resize(500, 300);
     image.update();
     image_selection = image;
     image_selection.update();
@@ -359,6 +418,85 @@ void TextureRenderer::buttonTerrePicker() {
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
     image_destination.update();
     filter();
+}
+
+void TextureRenderer::buttonJupiterPicker() {
+
+    image.load("jupiter.jpg");
+    image.resize(500, 300);
+    image.update();
+    image_selection = image;
+    image_selection.update();
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
+    image_destination.update();
+    filter();
+}
+
+void TextureRenderer::buttonSaturnPicker() {
+
+    image.load("saturn.jpg");
+    image.resize(500, 300);
+    image.update();
+    image_selection = image;
+    image_selection.update();
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
+    image_destination.update();
+    filter();
+}
+
+void TextureRenderer::buttonMercurePicker() {
+
+    image.load("mercure.jpg");
+    image.resize(500, 250);
+    image.update();
+    image_selection = image;
+    image_selection.update();
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
+    image_destination.update();
+    filter();
+}
+
+void TextureRenderer::buttonUranusPicker() {
+
+    image.load("uranus.jpg");
+    image.resize(500, 250);
+    image.update();
+    image_selection = image;
+    image_selection.update();
+    image_width = image.getWidth();
+    image_height = image.getHeight();
+    image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
+    image_destination.update();
+    filter();
+
+}
+
+void TextureRenderer::buttonShaderTessellation() {
+    if (!load_shader) {
+        load_shader = true;
+        shader_tess.setupShaderFromFile(GL_VERTEX_SHADER, "shader/tess_410_vert.glsl");
+        shader_tess.setupShaderFromFile(GL_FRAGMENT_SHADER, "shader/tess_410_frag.glsl");
+        shader_tess.setupShaderFromFile(GL_GEOMETRY_SHADER_EXT, "shader/tess_410_geom.glsl");
+        shader_tess.setupShaderFromFile(GL_TESS_CONTROL_SHADER, "shader/tess_410_cont.glsl");
+        shader_tess.setupShaderFromFile(GL_TESS_EVALUATION_SHADER, "shader/tess_410_eval.glsl");
+        shader_tess.linkProgram();
+        glPatchParameteri(GL_PATCH_VERTICES, 4);
+       
+        ofLog() << "SHADER IS LOADED";
+    }
+    else {
+        load_shader = false; 
+        shader_tess.unload();
+        ofLog() << "SHADER UNLOADED";
+    }
+
+   
 }
 
 void TextureRenderer::keyReleased(int key) {

@@ -1,5 +1,11 @@
-// IFT3100H21
-// Classe responsable des textures de l'application.
+/**
+ * \IFT3100H21
+ * \file textureRenderer.h
+ * \author Stéphane Boulanger
+ * \brief Classe responsable des textures de l'application
+ * \version 0.1
+ * \date 2022-03-27
+ */
 
 #pragma once
 
@@ -52,14 +58,6 @@ const std::array<float, 9> convolution_kernel_edge_detect
 
 
 
-/**
- * \IFT3100H21
- * \file textureRenderer.h
- * \author Stéphane Boulanger
- * \brief Classe responsable des textures de l'application
- * \version 0.1
- * \date 2022-03-27
- */
 
 class TextureRenderer : public RendererBase {
 public:
@@ -68,6 +66,7 @@ public:
 	ofParameterGroup parameters;
 	ofxToggle mesh_sphere_toggle; 
 	ofxToggle mesh_square_toggle;
+	ofxToggle tessellation_toggle;
 	ofxLabel identite_label;
 	ofxLabel emboss_label; 
 	ofxLabel sharpen_label; 
@@ -77,19 +76,24 @@ public:
 	ofxToggle tone_map_toggle;
 	ofxToggle display;
 	
-
-	ofxButton emboss_button;
-
 	// menu gui planet 
 	ofParameterGroup parameters_planet;
 	ofxButton mars_button; 
 	ofxButton venus_button;
-	ofxButton terre_button;
-	ofParameterGroup map_mesh;
-	ofParameter<float> slider_1;
-	ofParameter<float> slider_2; 
+	ofxButton terre_button;	
+	ofxButton jupiter_button;	
+	ofxButton saturn_button;	
+	ofxButton mercure_button;	
+	ofxButton uranus_button;	
+	ofParameterGroup map_mesh;	
 	ofParameter<float> slider_3;
 	ofParameter<float> slider_4;
+
+	// menu gui tessellation 
+	ofParameterGroup parameters_tessellation;
+	ofxButton shader_tess_button;
+	ofParameter<int> tess_level_slider;
+	ofParameter<int> tess_resolution_slider;
 
 	// sphere de mesh
 	ofMesh sphere_mesh;
@@ -117,14 +121,26 @@ public:
 	int grid_height;
 	int mesh_size;
 	
-
-
+	// tessallation
+	ofShader shader_tess;
+	ofVbo sphereVbo;
+	ofVboMesh sphereMesh;
+	ofSpherePrimitive sphere;
+	float radius;
+	bool load_shader;
+	
 	
 	
 	void keyReleased(int key);
 	void buttonMarsPicker();
 	void buttonVenusPicker();
 	void buttonTerrePicker();
+	void buttonJupiterPicker();
+	void buttonSaturnPicker();
+	void buttonMercurePicker();
+	void buttonUranusPicker();
+	void buttonShaderTessellation();
+	
 	
 
 protected:

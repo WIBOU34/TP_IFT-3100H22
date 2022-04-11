@@ -25,7 +25,7 @@ void Application::setup() {
 	objects3DRenderer.setup("Objets 3D");
 	//curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
-	textureRenderer.setup("Textures");
+	textureRenderer.setup("Textures & Tessellation");
 	courbeBezierRenderer.setup("Courbe de Bezier");
 	surfaceBezierRenderer.setup("Surface de Bezier");
 	illuminationRenderer.setup("Illumination");
@@ -86,9 +86,11 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui_surface_bezier.setPosition(ofGetWindowWidth() - 310, 10);
 	gui_surface_bezier.add(surfaceBezierRenderer.parameters_point_controle);
 	
-	
-	
-
+	// gui pour la tessellation 
+	gui_tessellation.setup("Tessellation");
+	gui_tessellation.setDefaultWidth(300);
+	gui_tessellation.setPosition(ofGetWindowWidth() - 310, 10);
+	gui_tessellation.add(textureRenderer.parameters_tessellation);
 }
 
 // fonction de mise à jour de la logique de l'application
@@ -125,10 +127,12 @@ void Application::draw() {
 	if (textureRenderer.mesh_sphere_toggle || textureRenderer.mesh_square_toggle) {
 		gui_planet.draw();
 	}
+	
+	if (textureRenderer.tessellation_toggle) gui_tessellation.draw();
+	
+	if (surfaceBezierRenderer.surface_bezier_toggle) gui_surface_bezier.draw();
 
-	if (surfaceBezierRenderer.surface_bezier_toggle) {
-		gui_surface_bezier.draw();
-	}
+
 }
 
 // fonction pour dessiner les éléments qui seront affectés par la caméra

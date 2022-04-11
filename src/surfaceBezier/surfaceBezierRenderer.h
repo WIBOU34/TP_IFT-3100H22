@@ -2,7 +2,7 @@
  * \IFT3100H21
  * \file surfaceBezierRenderer.h
  * \author Stéphane Boulanger
- * \brief Classe responsable de la surface de Bezier de l'application
+ * \brief Classe responsable de la surface de Bézier de l'application
  * \version 0.1
  * \date 2022-04-05
  */
