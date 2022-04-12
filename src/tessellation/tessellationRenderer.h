@@ -16,26 +16,40 @@
 
 class TessellationRenderer : public RendererBase {
 public : 
-	ofParameterGroup parameters;
-	
+	ofParameterGroup parameters;	
 	ofxToggle tessellation_toggle;
-
-	// menu gui tessellation 
+		
 	ofParameterGroup parameters_tessellation;
-	ofxButton shader_tess_button;
+	ofxButton box_tess_button;
+	ofxButton sphere_tess_button;
 	ofParameter<int> tess_level_slider;
 	ofParameter<int> tess_resolution_slider;
+	ofParameter<int> patch_vertice_slider;
 
-	ofEasyCam cam_tex;
-
+	ofEasyCam cam_tess;
 	ofShader shader_tess;
+	
+	// sphere
 	ofVbo sphereVbo;
 	ofVboMesh sphereMesh;
 	ofSpherePrimitive sphere;
 	float radius;
-	bool load_shader;
+	
+	// box
+	ofVbo boxVbo;
+	ofVboMesh boxMesh;
+	ofBoxPrimitive box;
 
-	void buttonShaderTessellation();
+	// plane 
+	ofVbo planeVbo;
+	ofVboMesh planeMesh;
+	ofPlanePrimitive plane;
+
+	bool sphere_active;
+	bool box_active;
+
+	void buttonBoxTessellation();
+	void buttonSphereTessellation();
 
 protected:
 	void setupRenderer(const std::string& name);

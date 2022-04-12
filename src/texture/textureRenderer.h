@@ -24,8 +24,7 @@ enum class ConvolutionKernel
 };
 
 // kernel identité
-const std::array<float, 9> convolution_kernel_identity
-{
+const std::array<float, 9> convolution_kernel_identity {
   0.0f,  0.0f,  0.0f,
   0.0f,  1.0f,  0.0f,
   0.0f,  0.0f,  0.0f
@@ -33,24 +32,21 @@ const std::array<float, 9> convolution_kernel_identity
 
 
 // kernel emboss
-const std::array<float, 9> convolution_kernel_emboss
-{
+const std::array<float, 9> convolution_kernel_emboss {
 	-2.0, -1.0f, 0.0f, 
 	-1.0f, 1.0f, 1.0f, 
 	 0.0f, 1.0f, 2.0f
 };
 
 // kernel sharpen
-const std::array<float, 9> convolution_kernel_sharpen
-{
+const std::array<float, 9> convolution_kernel_sharpen {
 	 0.0, -1.0f, 0.0f,
 	-1.0f, 5.0f, -1.0f,
 	 0.0f, -1.0f, 0.0f
 };
 
 // kernel edge_detect
-const std::array<float, 9> convolution_kernel_edge_detect
-{
+const std::array<float, 9> convolution_kernel_edge_detect {
 	 0.0,  1.0f, 0.0f,
 	 1.0f, 1.0f, 1.0f,
 	 0.0f, -1.0f, 0.0f
@@ -88,8 +84,7 @@ public:
 	ofxButton pluton_button;	
 	ofParameterGroup map_mesh;	
 	ofParameter<float> slider_3;
-	ofParameter<float> slider_4;
-	
+	ofParameter<float> slider_4;	
 
 	// sphere de mesh
 	ofMesh sphere_mesh;
