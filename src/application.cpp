@@ -26,8 +26,8 @@ void Application::setup() {
 	//curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
 	textureRenderer.setup("Textures");
-	courbeBezierRenderer.setup("Courbe de Bezier");
-	surfaceBezierRenderer.setup("Surface de Bezier");
+	courbeBezierRenderer.setup("Courbe parametrique");
+	surfaceBezierRenderer.setup("Surface parametrique");
 	illuminationRenderer.setup("Illumination");
 	illuminationRenderer.camera = cameraRenderer.camera;
 	tessellationRenderer.setup("Tessellation");

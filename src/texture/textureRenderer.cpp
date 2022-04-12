@@ -51,6 +51,9 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     map_mesh.add(slider_3.set("Vagues", 5.0f, 0.0f, 100.0f));
     map_mesh.add(slider_4.set("Rotation", 0.0f, 0.0f, 420.0f));  
    
+    // parametre pour set la position de la EasyCam 
+    cam_tex.setPosition(0, 0, 1050);
+
     // loader image de départ                                           
     image.load("images/earth.jpg"); 
 
