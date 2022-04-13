@@ -83,6 +83,10 @@ public:
 	ofxButton neptune_button;	
 	ofxButton pluton_button;	
 
+	// menu specular 
+	ofParameterGroup parameters_specular;
+	ofParameter<float> slider_specular;
+
 	// sphere de mesh
 	ofMesh sphere_mesh;
 	ofEasyCam cam_tex;

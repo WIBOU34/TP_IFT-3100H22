@@ -44,6 +44,10 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     parameters_planet.add(neptune_button.setup("Neptune")->getParameter());
     pluton_button.addListener(this, &TextureRenderer::buttonPlutonPicker);
     parameters_planet.add(pluton_button.setup("Pluton")->getParameter()); 
+    
+    // menu microfacettes
+    parameters_specular.setName("Microfacettes");
+    parameters_specular.add(slider_specular.set("Specularness", 40.0f, 0.0f, 40.0f));
       
     // parametre pour set la position de la EasyCam 
     cam_tex.setPosition(0, 0, 1050);
@@ -134,7 +138,7 @@ void TextureRenderer::render() {
 	    cam_tex.end();
     } 
 
-    // si on veut afficher le square mesh sur lequel l'image sera affiché
+    // si on veut afficher le plane sur lequel l'image sera affiché
     if (mesh_square_toggle) {  
         mesh_sphere_toggle = false; 
         ofSetBackgroundColor(0);
@@ -148,7 +152,7 @@ void TextureRenderer::render() {
         float x = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1);
         float y = ofMap(ofGetMouseY(), 0, ofGetHeight(), 0, 1);
         shader_normal_map.setUniform3f("lightpos", ofVec3f(x, y, 0.0));
-        shader_normal_map.setUniform1f("specularness", 40.0);
+        shader_normal_map.setUniform1f("specularness", slider_specular);
         plane.draw();
         shader_normal_map.end();
         cam_tex.end();
@@ -163,7 +167,7 @@ void TextureRenderer::render() {
 }
 
 void TextureRenderer::filter()
-{
+{    
     // résolution du kernel de convolution
     const int kernel_size = 3;
 
@@ -210,36 +214,26 @@ void TextureRenderer::filter()
     float sum[color_component_count];
 
     // itération sur les rangées des pixels de l'image source
-    for (y = 0; y < image_height; ++y)
-    {
+    for (y = 0; y < image_height; ++y) {
         // itération sur les colonnes des pixels de l'image source
-        for (x = 0; x < image_width; ++x)
-        {
+        for (x = 0; x < image_width; ++x) {
             // initialiser le tableau où les valeurs de filtrage sont accumulées
             for (c = 0; c < color_component_count; ++c)
                 sum[c] = 0;
-
             // déterminer l'index du pixel de l'image de destination
             pixel_index_img_dst = (image_width * y + x) * color_component_count;
-
             // itération sur les colonnes du kernel de convolution
-            for (j = -kernel_offset; j <= kernel_offset; ++j)
-            {
+            for (j = -kernel_offset; j <= kernel_offset; ++j) {
                 // itération sur les rangées du kernel de convolution
-                for (i = -kernel_offset; i <= kernel_offset; ++i)
-                {
+                for (i = -kernel_offset; i <= kernel_offset; ++i) {
                     // déterminer l'index du pixel de l'image source à lire
                     pixel_index_img_src = (image_width * (y - j) + (x - i)) * color_component_count;
-
                     // lire la couleur du pixel de l'image source
                     pixel_color_src = pixel_array_src.getColor(pixel_index_img_src);
-
                     // déterminer l'indice du facteur à lire dans le kernel de convolution
                     kernel_index = kernel_size * (j + kernel_offset) + (i + kernel_offset);
-
                     // extraction de la valeur à cet index du kernel
-                    switch (kernel_type)
-                    {
+                    switch (kernel_type) {
                     
                     case ConvolutionKernel::emboss:
                         kernel_value = convolution_kernel_emboss.at(kernel_index);
@@ -257,23 +251,18 @@ void TextureRenderer::filter()
                         kernel_value = convolution_kernel_identity.at(kernel_index);
                         break;
                     }
-
                     // itération sur les composantes de couleur
-                    for (c = 0; c < color_component_count; ++c)
-                    {
+                    for (c = 0; c < color_component_count; ++c) {
                         // accumuler les valeurs de filtrage en fonction du kernel de convolution
                         sum[c] = sum[c] + kernel_value * pixel_color_src[c];
                     }
                 }
             }
-
             // déterminer la couleur du pixel à partir des valeurs de filtrage accumulées pour chaque composante
-            for (c = 0; c < color_component_count; ++c)
-            {
+            for (c = 0; c < color_component_count; ++c) {
                 // conversion vers entier et validation des bornes de l'espace de couleur
                 pixel_color_dst[c] = (int)ofClamp(sum[c], 0, 255);
             }
-
             // écrire la couleur à l'index du pixel en cours de filtrage
             pixel_array_dst.setColor(pixel_index_img_dst, pixel_color_dst);
         }
@@ -281,8 +270,7 @@ void TextureRenderer::filter()
 
     // écrire les pixels dans l'image de destination
     image_destination.setFromPixels(pixel_array_dst);
-
-    //ofLog() << "<convolution filter done>";
+    
 }
 
 void TextureRenderer::buttonMarsPicker() {   
