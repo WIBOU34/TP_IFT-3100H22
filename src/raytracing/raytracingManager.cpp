@@ -5,10 +5,37 @@ void RaytracingManager::setupRenderer(const std::string& name) {
 	parameters.clear();
 	parameters.setName(name);
 
+	//sceneNames.at(0) = "cornell.scn";
+	//sceneNames.at(1) = "cornell_large.scn";
+	//sceneNames.at(2) = "cornell_boxes.scn";
+	//sceneNames.at(3) = "simple.scn";
+	//sceneNames.at(4) = "caustic.scn";
+	//sceneNames.at(5) = "caustic_boxes.scn";
+	//sceneNames.at(6) = "caustic3.scn";
+	//sceneNames.at(7) = "caustic3_boxes.scn";
+	//sceneNames.at(8) = "complex.scn";
+
+	//sceneNames.at(9) = "test.scn";
+	sceneNames.push_back("test.scn");
+	sceneNames.push_back("test_boxes.scn");
+	sceneNames.push_back("test_cylinders.scn");
+	sceneNames.push_back("test_spheres.scn");
+
+	sceneNames.push_back("cornell.scn");
+	sceneNames.push_back("cornell_large.scn");
+	sceneNames.push_back("cornell_boxes.scn");
+	sceneNames.push_back("simple.scn");
+	sceneNames.push_back("caustic.scn");
+	sceneNames.push_back("caustic_boxes.scn");
+	sceneNames.push_back("caustic3.scn");
+	sceneNames.push_back("caustic3_boxes.scn");
+	sceneNames.push_back("complex.scn");
+
+
 	warningNbrThreads.setFillColor(ofColor::yellow);
 	warningNbrThreads.setTextColor(ofColor::black);
 	warningNbrThreads.setBackgroundColor(ofColor::yellow);
-	parameters.add(sceneIndex.set("Nombre de rayons par pixel", 0, 0, nbrScenes - 1));
+	parameters.add(sceneIndex.set("Nombre de rayons par pixel", 0, 0, sceneNames.size() - 1));
 	parameters.add(lblSceneName.setup("Nom", "")->getParameter());
 	//parameters.add(btnSetupTestBox.setup("Setup Test Box")->getParameter());
 	//parameters.add(btnSetupCornellBox.setup("Setup Cornell Box")->getParameter());
@@ -23,17 +50,6 @@ void RaytracingManager::setupRenderer(const std::string& name) {
 	btnSetupCornellBox.addListener(this, &RaytracingManager::setupBoiteCornell);
 	btnSetupTestBox.addListener(this, &RaytracingManager::setupTestBoite);
 
-	sceneNames.at(0) = "cornell.scn";
-	sceneNames.at(1) = "cornell_large.scn";
-	sceneNames.at(2) = "cornell_boxes.scn";
-	sceneNames.at(3) = "simple.scn";
-	sceneNames.at(4) = "caustic.scn";
-	sceneNames.at(5) = "caustic_boxes.scn";
-	sceneNames.at(6) = "caustic3.scn";
-	sceneNames.at(7) = "caustic3_boxes.scn";
-	sceneNames.at(8) = "complex.scn";
-
-	sceneNames.at(9) = "test.scn";
 }
 
 void RaytracingManager::updateRenderer() {

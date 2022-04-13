@@ -118,7 +118,7 @@ static void PrintHelpAndDevices() {
 	glRasterPos2i(60, 300);
 	PrintString(GLUT_BITMAP_9_BY_15, "+ and - - to select next/previous object");
 	glRasterPos2i(60, 285);
-	PrintString(GLUT_BITMAP_9_BY_15, "2, 3, 4, 5, 6, 8, 9 - to move selected object");
+	PrintString(GLUT_BITMAP_9_BY_15, "2 (forward), 3 (down), 4 (left), 6 (right), 8 (back), 9 (up) - to move selected object (optimised for numpad)");
 	glRasterPos2i(60, 270);
 	PrintString(GLUT_BITMAP_9_BY_15, "l - reset load balancing procedure");
 	glRasterPos2i(60, 255);
@@ -127,6 +127,8 @@ static void PrintHelpAndDevices() {
 	PrintString(GLUT_BITMAP_9_BY_15, "n, m - select previous/next OpenCL device");
 	glRasterPos2i(60, 225);
 	PrintString(GLUT_BITMAP_9_BY_15, "v, b - increase/decrease the worload of the selected OpenCL device");
+	glRasterPos2i(60, 210);
+	PrintString(GLUT_BITMAP_9_BY_15, "p - create an image of the rendered scene");
 
 	// Devices
 	const std::vector<RenderDevice*> devices = config->GetRenderDevice();
@@ -284,10 +286,11 @@ void keyFunc(unsigned char key, int x, int y) {
 		break;
 	}
 	case 27: /* Escape key */
-		cerr << "Releasing resources" << endl;
-		delete config;
-		cerr << "Done." << endl;
-		exit(0);
+		//cerr << "Releasing resources" << endl;
+		//delete config;
+		//config = nullptr;
+		//cerr << "Done." << endl;
+		glutLeaveMainLoop();
 		break;
 	case ' ': /* Refresh display */
 		config->ReInit(1);
@@ -344,22 +347,6 @@ void keyFunc(unsigned char key, int x, int y) {
 		config->camera->target.y -= MOVE_STEP;
 		config->ReInit(0);
 		break;
-	case '+':
-		config->currentSphere = (config->currentSphere + 1) % config->sphereCount;
-		fprintf(stderr, "Selected sphere %d (%f %f %f)\n", config->currentSphere,
-			config->spheres[config->currentSphere].p.x,
-			config->spheres[config->currentSphere].p.y,
-			config->spheres[config->currentSphere].p.z);
-		config->ReInitScene();
-		break;
-	case '-':
-		config->currentSphere = (config->currentSphere + (config->sphereCount - 1)) % config->sphereCount;
-		fprintf(stderr, "Selected sphere %d (%f %f %f)\n", config->currentSphere,
-			config->spheres[config->currentSphere].p.x,
-			config->spheres[config->currentSphere].p.y,
-			config->spheres[config->currentSphere].p.z);
-		config->ReInitScene();
-		break;
 	case '4':
 		config->spheres[config->currentSphere].p.x -= 0.5f * MOVE_STEP;
 		config->ReInitScene();
@@ -411,6 +398,48 @@ void keyFunc(unsigned char key, int x, int y) {
 		break;
 	default:
 		break;
+	}
+	bool plusOuMoins = false;
+	if (key == '+') {
+		config->currentSphere = (config->currentSphere + 1) % config->sphereCount;
+		plusOuMoins = true;
+	} else if (key == '-') {
+		config->currentSphere = (config->currentSphere + (config->sphereCount - 1)) % config->sphereCount;
+		plusOuMoins = true;
+	}
+	if (plusOuMoins) {
+		string selectedType = "";
+		switch (config->spheres[config->currentSphere].type) {
+		case TypePrimitive::SPHERE:
+			selectedType = "sphere";
+			break;
+		case TypePrimitive::CUBE:
+			selectedType = "cube";
+			break;
+		case TypePrimitive::CYLINDER:
+			selectedType = "cylinder";
+		default:
+			break;
+		}
+		switch (config->spheres[config->currentSphere].refl) {
+		case Refl::DIFF:
+			selectedType += " diffuse";
+			break;
+		case Refl::REFR:
+			selectedType += " mirroir";
+			break;
+		case Refl::SPEC:
+			selectedType += " verre";
+			break;
+		default:
+			break;
+		}
+		fprintf(stderr, "Selected %s %d ( %4.1f  %4.1f  %4.1f)\n", selectedType.c_str(),
+			config->currentSphere,
+			config->spheres[config->currentSphere].p.x,
+			config->spheres[config->currentSphere].p.y,
+			config->spheres[config->currentSphere].p.z);
+		config->ReInitScene();
 	}
 }
 
@@ -505,5 +534,8 @@ void RunGlut() {
 
 	glutMainLoop();
 
+	cerr << "Releasing resources" << endl;
 	delete config;
+	config = nullptr;
+	cerr << "Done" << endl;
 }

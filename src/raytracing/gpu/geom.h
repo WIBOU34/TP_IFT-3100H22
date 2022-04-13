@@ -37,7 +37,7 @@ typedef struct {
 #define rassign(a, b) { vassign((a).o, (b).o); vassign((a).d, (b).d); }
 
 enum TypePrimitive {
-	SPHERE, CUBE
+	SPHERE, CUBE, CYLINDER
 };
 
 enum Refl {

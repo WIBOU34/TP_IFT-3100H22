@@ -69,22 +69,13 @@ typedef struct {
 
 typedef struct {
 	Vec o, d;
-	//Vector invDir;
-	//int sign[3];
-
-	//Ray(Vector o, Vector d) : origin(o), direction(d) {
-	//	this->invDir = Vector(1 / direction.x, 1 / direction.y, 1 / direction.z);
-	//	sign[0] = (invDir.x < 0);
-	//	sign[1] = (invDir.y < 0);
-	//	sign[2] = (invDir.z < 0);
-	//}
 } Ray;
 
 #define rinit(r, a, b) { vassign((r).o, a); vassign((r).d, b); }
 #define rassign(a, b) { vassign((a).o, (b).o); vassign((a).d, (b).d); }
 
 enum TypePrimitive {
-	SPHERE, CUBE
+	SPHERE, CUBE, CYLINDER
 };
 
 enum Refl {
@@ -98,14 +89,6 @@ typedef struct {
 	enum TypePrimitive type;
 	Vec dimensions;
 } Sphere; // Nom est juste pour eviter de tout changer
-
-//typedef struct Sphere {
-//	float rad; /* radius */
-//};
-
-//struct Cube : Primitive {
-//	Vec dimensions
-//};
 
 //------------------------------------------------------------------------------
 // simplernd.h
@@ -130,12 +113,13 @@ static float GetRandom(unsigned int *seed0, unsigned int *seed1) {
 
 static float SphereIntersect(
 	OCL_CONSTANT_BUFFER const Sphere *s,
-	const Ray *r) { /* returns distance, 0 if nohit */
+	const Ray *r,
+	Vec *normal) { /* returns distance, 0 if nohit */
 	if (s->type == SPHERE) {
 		Vec op; /* Solve t^2*d.d + 2*t*(o-p).d + (o-p).(o-p)-R^2 = 0 */
 		vsub(op, s->p, r->o);
 
-		float b = vdot(op, r->d);
+		const float b = vdot(op, r->d);
 		float det = b * b - vdot(op, op) + s->rad * s->rad;
 		if (det < 0.f)
 			return 0.f;
@@ -143,59 +127,183 @@ static float SphereIntersect(
 			det = sqrt(det);
 
 		float t = b - det;
+		float distance = 0.f;
 		if (t > EPSILON)
-			return t;
+			distance = t;
 		else {
 			t = b + det;
 
 			if (t > EPSILON)
-				return t;
+				distance = t;
 			else
 				return 0.f;
 		}
+
+		if (normal != NULL) {
+			Vec hitPoint;
+			vsmul(hitPoint, distance, r->d);
+			vadd(hitPoint, r->o, hitPoint);
+			vsub(*normal, hitPoint, s->p);
+			vnorm(*normal);
+		}
+		return distance;
 	} else if (s->type == CUBE) {
+		// source: https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
 		Vec bounds[2];
-		bounds[0] = s->p;
-		vinit(bounds[1], s->p.x + s->dimensions.x, s->p.y + s->dimensions.y, s->p.z + s->dimensions.z)
+		//bounds[0] = s->p;
+		vinit(bounds[0], s->p.x - s->dimensions.x / 2, s->p.y - s->dimensions.y / 2, s->p.z - s->dimensions.z / 2);
+		vinit(bounds[1], s->p.x + s->dimensions.x / 2, s->p.y + s->dimensions.y / 2, s->p.z + s->dimensions.z / 2);
+		//vinit(bounds[1], s->p.x + s->dimensions.x, s->p.y + s->dimensions.y, s->p.z + s->dimensions.z);
 
 		Vec invDir;
-		vinit(invDir, 1 / r->d.x, 1 / r->d.y, 1 / r->d.z);
+		vinit(invDir, 1.f / r->d.x, 1.f / r->d.y, 1.f / r->d.z);
 		int sign[3];
 		sign[0] = (invDir.x < 0);
 		sign[1] = (invDir.y < 0);
 		sign[2] = (invDir.z < 0);
 
-
 		float tmin = (bounds[sign[0]].x - r->o.x) * invDir.x;
 		float tmax = (bounds[1 - sign[0]].x - r->o.x) * invDir.x;
-		float tymin = (bounds[sign[1]].y - r->o.y) * invDir.y;
-		float tymax = (bounds[1 - sign[1]].y - r->o.y) * invDir.y;
+		const float tymin = (bounds[sign[1]].y - r->o.y) * invDir.y;
+		const float tymax = (bounds[1 - sign[1]].y - r->o.y) * invDir.y;
 
 		if ((tmin > tymax) || (tymin > tmax))
-			return 0;
+			return 0.f;
 
 		if (tymin > tmin)
 			tmin = tymin;
 		if (tymax < tmax)
 			tmax = tymax;
 
-		float tzmin = (bounds[sign[2]].z - r->o.z) * invDir.z;
-		float tzmax = (bounds[1 - sign[2]].z - r->o.z) * invDir.z;
+		const float tzmin = (bounds[sign[2]].z - r->o.z) * invDir.z;
+		const float tzmax = (bounds[1 - sign[2]].z - r->o.z) * invDir.z;
 
 		if ((tmin > tzmax) || (tzmin > tmax))
-			return 0;
+			return 0.f;
 
 		if (tzmin > tmin)
 			tmin = tzmin;
 		if (tzmax < tmax)
 			tmax = tzmax;
 
-		float distance = tmin;
-		if (distance < 0) {
+		float distance;
+		if (tmin > tmax)
 			distance = tmax;
-			if (distance < 0) return 0;
+		else
+			distance = tmin;
+
+		if (distance < EPSILON)
+			return 0.f;
+
+		// source: https://blog.johnnovak.net/2016/10/22/the-nim-ray-tracer-project-part-4-calculating-box-normals/
+		if (normal != NULL) {
+			Vec hitPoint;
+			vsmul(hitPoint, distance, r->d);
+			vadd(hitPoint, r->o, hitPoint);
+
+			Vec p, d;
+			vsub(p, hitPoint, s->p);
+			vsub(d, bounds[0], bounds[1]);
+			vsmul(d, .5f, d);
+			const float bias = 1.000001;
+
+			vinit(*normal,
+				(float)(int)(p.x / fabs(d.x) * bias),
+				(float)(int)(p.y / fabs(d.y) * bias),
+				(float)(int)(p.z / fabs(d.z) * bias));
+			vnorm(*normal);
 		}
 
+		return distance;
+	} else if (s->type == CYLINDER) {
+		// source: https://gamedev.stackexchange.com/questions/191328/how-to-perform-a-fast-ray-cylinder-intersection-test
+		// source: https://www.cl.cam.ac.uk/teaching/1999/AGraphHCI/SMAG/node2.html
+		// source: https://github.com/iceman201/RayTracing/blob/master/Ray%20tracing/Cylinder.cpp#L20
+		// s->p est le centre du cylindre
+		// s->dimension.x = rayon
+		// s->dimension.y = hauteur
+
+		float distance = 0.f;
+		// Vec (x, 0, z)
+		const float rOriX = r->o.x - s->p.x; // aligner la scene sur l'axis y
+		const float rOriZ = r->o.z - s->p.z;
+
+		const float yMin = s->p.y - s->dimensions.y / 2;
+		const float yMax = s->p.y + s->dimensions.y / 2;
+
+		float t;
+		const float t3 = (yMin - r->o.y) / r->d.y;
+		const float t4 = (yMax - r->o.y) / r->d.y;
+
+		if (t3 > t4)
+			t = t4;
+		else
+			t = t3;
+
+		if (t > EPSILON) {
+
+			const float pointX = rOriX + t * r->d.x;
+			const float pointZ = rOriZ + t * r->d.z;
+			if (pointX * pointX + pointZ * pointZ <= s->dimensions.x * s->dimensions.x) {
+				if (distance == 0.f || distance > t) {
+					distance = t;
+
+					if (normal != NULL) {
+						// Calcul normale
+						const float pointY = r->o.y + t * r->d.y;
+						if (pointY == yMin) {
+							vinit(*normal, 0, -1, 0); // plane yMin
+						} else {
+							vinit(*normal, 0, 1, 0); // plane yMin
+						}
+						if (s->dimensions.y < 0.f) { // si hauteur est négative
+							vsmul(*normal, -1.f, *normal);
+						}
+					}
+				}
+			}
+		}
+
+		// a = Dx^2 + Dz^2
+		// b = 2 * (Dx * rOrigineX + Dz * rOrigineZ)
+		// c = rOrigineX^2 + rOrigineZ^2 - rayon^2
+		const float a = r->d.x * r->d.x + r->d.z * r->d.z;
+		const float b = 2 * (r->d.x * rOriX + r->d.z * rOriZ);
+		const float c = rOriX * rOriX + rOriZ * rOriZ - (s->dimensions.x * s->dimensions.x);
+
+		float delta = b * b - 4 * (a * c);
+		if (delta < 0.f)
+			return distance;
+		else
+			delta = sqrt(delta);
+
+		const float t1 = (-b - delta) / (2 * a);
+		const float t2 = (-b + delta) / (2 * a);
+
+		if (t1 > t2)
+			t = t2;
+		else
+			t = t1;
+
+		if (t > EPSILON) {
+
+			const float pointY = r->o.y + t * r->d.y;
+
+			if (pointY > yMin && pointY < yMax) { // verifier que le point est entre les cap
+				if (distance == 0.f || distance > t) {
+					distance = t;
+
+					if (normal != NULL) {
+						// Calcul normale
+						Vec hitPoint;
+						vsmul(hitPoint, distance, r->d);
+						vadd(hitPoint, r->o, hitPoint);
+						vinit(*normal, hitPoint.x - s->p.x, 0, hitPoint.z - s->p.z); // contour rond
+						vnorm(*normal);
+					}
+				}
+			}
+		}
 		return distance;
 	}
 }
@@ -215,15 +323,18 @@ static int Intersect(
 	const unsigned int sphereCount,
 	const Ray* r,
 	float* t,
-	unsigned int* id) {
+	unsigned int* id,
+	Vec *normal) {
 	float inf = (*t) = 1e20f;
 
+	Vec normalTemp;
 	unsigned int i = sphereCount;
 	for (; i--;) {
-		const float d = SphereIntersect(&spheres[i], r);
+		const float d = SphereIntersect(&spheres[i], r, &normalTemp);
 		if ((d != 0.f) && (d < *t)) {
 			*t = d;
 			*id = i;
+			vassign(*normal, normalTemp);
 		}
 	}
 
@@ -236,8 +347,9 @@ static int IntersectP(
 	const Ray* r,
 	const float maxt) {
 	unsigned int i = sphereCount;
+	const Vec* normal = NULL;
 	for (; i--;) {
-		const float d = SphereIntersect(&spheres[i], r);
+		const float d = SphereIntersect(&spheres[i], r, normal);
 		if ((d != 0.f) && (d < maxt))
 			return 1;
 	}
@@ -283,7 +395,7 @@ static void SampleLights(
 				wo = -wo;
 
 			/* Check if the light is visible */
-			const float wi = vdot(shadowRay.d, *normal);
+			float wi = vdot(shadowRay.d, *normal);
 			if ((wi > 0.f) && (!IntersectP(spheres, sphereCount, &shadowRay, len - EPSILON))) {
 				Vec c; vassign(c, light->e);
 				const float s = (4.f * FLOAT_PI * light->rad * light->rad) * wi * wo / (len *len);
@@ -308,14 +420,16 @@ static void Radiance(
 	int specularBounce = 1;
 	for (;; ++depth) {
 		// Removed Russian Roulette in order to improve execution on SIMT
-		if (depth > 6) {
+		//if (depth > 6) {
+		if (depth > 10) {
 			*result = rad;
 			return;
 		}
 
 		float t; /* distance to intersection */
 		unsigned int id = 0; /* id of intersected object */
-		if (!Intersect(spheres, sphereCount, &currentRay, &t, &id)) {
+		Vec normal;
+		if (!Intersect(spheres, sphereCount, &currentRay, &t, &id, &normal)) {
 			*result = rad; /* if miss, return */
 			return;
 		}
@@ -325,10 +439,6 @@ static void Radiance(
 		Vec hitPoint;
 		vsmul(hitPoint, t, currentRay.d);
 		vadd(hitPoint, currentRay.o, hitPoint);
-
-		Vec normal;
-		vsub(normal, hitPoint, obj->p);
-		vnorm(normal);
 
 		const float dp = vdot(normal, currentRay.d);
 		Vec nl;
@@ -363,6 +473,7 @@ static void Radiance(
 			// Check if we have to stop
 
 			/* Diffuse component */
+
 
 			float r1 = 2.f * FLOAT_PI * GetRandom(seed0, seed1);
 			float r2 = GetRandom(seed0, seed1);

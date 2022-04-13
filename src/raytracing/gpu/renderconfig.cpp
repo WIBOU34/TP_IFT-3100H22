@@ -116,6 +116,11 @@ void RenderConfig::ReadScene(const char* fileName) {
 		} else if (strcmp(typePrimitive, "cube") == 0) {
 			s->type = TypePrimitive::CUBE;
 			s->dimensions = dimensionsOuRadius;
+		} else if (strcmp(typePrimitive, "cylinder") == 0) {
+			s->type = TypePrimitive::CYLINDER;
+			s->dimensions = dimensionsOuRadius;
+		} else {
+			fprintf(stderr, "Failed to read primitiveType #%d: %d\n", i, typePrimitive);
 		}
 		if (c != 14) {
 			fprintf(stderr, "Failed to read sphere #%d: %d\n", i, c);

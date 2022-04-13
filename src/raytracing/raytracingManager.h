@@ -34,12 +34,13 @@ protected:
 	void render();
 
 private:
-	const unsigned int nbrScenes = 10;
+	//const unsigned int nbrScenes = 10;
 	void generateRaytracedImage();
 	void setupBoiteCornell();
 	void setupTestBoite();
 	void transfer3DObjectsForRaytracing();
 	std::vector<CubeCpu> cubeVector = std::vector<CubeCpu>();
 	std::vector<SphereCpu> sphereVector = std::vector<SphereCpu>();
-	std::vector<std::string> sceneNames = std::vector<std::string>(nbrScenes);
+	std::vector<std::string> sceneNames = std::vector<std::string>();
+	//std::vector<std::string> sceneNames = std::vector<std::string>(nbrScenes);
 };
