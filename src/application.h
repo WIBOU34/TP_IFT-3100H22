@@ -1,5 +1,13 @@
-// IFT3100H21_AlmostEmptyProject/application.h
-// Classe principale de l'application.
+/**
+ * \IFT3100H21
+ * \file application.h
+ * \authors William Boudreault
+ *          Stéphane Boulanger
+ * \brief Classe principale de l'application
+ * \version 0.1
+ * \date 2022-03-27
+ */
+
 
 #pragma once
 
@@ -14,6 +22,9 @@
 #include "raytracing/raytracingManager.h"
 #include "ofxGui.h"
 #include "texture/textureRenderer.h"
+#include "courbeBezier/courbeBezierRenderer.h"
+#include "surfaceBezier/surfaceBezierRenderer.h"
+#include "tessellation/tessellationRenderer.h"
 
 class Application : public ofBaseApp {
 public:
@@ -26,6 +37,9 @@ public:
 	TextureRenderer textureRenderer;
 	IlluminationRenderer illuminationRenderer;
 	RaytracingManager raytracingManager;
+	CourbeBezierRenderer courbeBezierRenderer;
+	SurfaceBezierRenderer surfaceBezierRenderer;
+	TessellationRenderer tessellationRenderer;
 
 	shared_ptr<ofAppBaseWindow> mainWindow;
 
@@ -67,6 +81,9 @@ public:
 
 	ofxPanel gui;
 	ofxPanel gui_planet;
+	ofxPanel gui_surface_bezier;
+	ofxPanel gui_tessellation;
+	ofxPanel gui_specular;
 
 private:
 	//void createNewWindow(const Camera& type);

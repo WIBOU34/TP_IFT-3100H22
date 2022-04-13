@@ -1,8 +1,12 @@
-// IFT3100H21_AlmostEmptyProject/main.cpp
-// Exemple d'un projet relativement vide, mais avec une bonne structure de base.
-// Un bon point de départ pour commencer un nouveau projet avec une scène vide.
-// Animation de la couleur d'arrière-plan par interpolation de niveaux de gris en fonction du numéro du frame courant.
-// Trace des données temporelles dans la console à chaque frame.
+/**
+ * \IFT3100H21
+ * \file main.cpp
+ * \authors William Boudreault
+ *          Stéphane Boulanger
+ * \brief classe main de l'application
+ * \version 0.1
+ * \date 2022-03-27
+ */
 
 #include "ofMain.h"
 #include "application.h"
@@ -12,8 +16,7 @@ int main() {
 	// création du contexte de rendu (OpenGL 4.5)
 	// OpenGL 3+ ne supporte pas lineWidth avec openFramework malgré ce que dit la doc openGL
 	ofGLFWWindowSettings settings;
-	settings.setGLVersion(3, 3);
-	//settings.setGLVersion(2, 1);
+	settings.setGLVersion(4, 3);
 	settings.windowMode = OF_WINDOW;
 	shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
 	//ofSetupOpenGL(1024, 768, OF_WINDOW);

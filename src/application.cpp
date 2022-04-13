@@ -1,5 +1,12 @@
-// IFT3100H21_AlmostEmptyProject/application.cpp
-// Classe principale de l'application.
+/**
+ * \IFT3100H21
+ * \file application.cpp
+ * \authors William Boudreault
+ *          Stéphane Boulanger
+ * \brief Classe principale de l'application
+ * \version 0.1
+ * \date 2022-03-27
+ */
 
 #include "application.h"
 
@@ -10,6 +17,8 @@ void Application::setup() {
 	ofSetWindowTitle("Travail Pratique");
 
 	ofSetWindowShape(1280, 728);
+	ofBackground(31);
+	ofSetFrameRate(60);
 
 	imageRenderer.setup("Images");
 	dessinRenderer.setup("Dessin");
@@ -17,11 +26,14 @@ void Application::setup() {
 	//curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
 	textureRenderer.setup("Textures");
+	courbeBezierRenderer.setup("Courbe parametrique");
+	surfaceBezierRenderer.setup("Surface parametrique");
 	illuminationRenderer.setup("Illumination");
 	illuminationRenderer.camera = cameraRenderer.camera;
 	raytracingManager.setup("Lancer de rayons");
 	raytracingManager.obj3Drenderer = &objects3DRenderer;
 	raytracingManager.camera = cameraRenderer.camera;
+	tessellationRenderer.setup("Tessellation");
 	ofSetVerticalSync(true);
 
 	// setup crée un nouvel objet en mémoire qui n'est pas supprimé par le gui.clear()
@@ -35,7 +47,7 @@ void Application::setup() {
 void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	ofLog() << "<app::GUISetup>";
 	mainWindow = window;
-	btnExportImgSetup = btnExportImg.setup("Exporter en image 'e'");
+	btnExportImgSetup = btnExportImg.setup("Exporter une image");
 	btnImportImgSetup = btnImportImg.setup("Importer une image");
 
 	btnExportImg.addListener(this, &Application::exportImage);
@@ -45,7 +57,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	parameters.setName("Menu 'h'");
 	gui.setup(parameters);
 
-	gui.add(bSelection.set("Mode Selection 's'", bSelection));
+	gui.add(bSelection.set("Mode Selection 'm'", bSelection));
 	gui.add(btnExportImgSetup);
 	gui.add(btnImportImgSetup);
 	//gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
@@ -59,6 +71,9 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(&objects3DRenderer.parameters3D);
 	gui.add(textureRenderer.parameters);
 	gui.add(&illuminationRenderer.parameters);
+	gui.add(courbeBezierRenderer.parameters);
+	gui.add(surfaceBezierRenderer.parameters);
+	gui.add(tessellationRenderer.parameters);
 
 	gui.minimizeAll();
 	bHide = false;
@@ -68,8 +83,24 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui_planet.setDefaultWidth(300);
 	gui_planet.setPosition(ofGetWindowWidth() - 310, 10);
 	gui_planet.add(textureRenderer.parameters_planet);
-	
 
+	// gui pour régler les microfacettes
+	gui_specular.setup("Rugosite de la surface");
+	gui_specular.setDefaultWidth(300);
+	gui_specular.setPosition(ofGetWindowWidth() - 310, 250);
+	gui_specular.add(textureRenderer.parameters_specular);
+		
+	// gui pour sélectionner un point de controle pour la surface de bezier 
+	gui_surface_bezier.setup("Selection point controle");
+	gui_surface_bezier.setDefaultWidth(300);
+	gui_surface_bezier.setPosition(ofGetWindowWidth() - 310, 10);
+	gui_surface_bezier.add(surfaceBezierRenderer.parameters_point_controle);
+	
+	// gui pour la tessellation 
+	gui_tessellation.setup("Tessellation");
+	gui_tessellation.setDefaultWidth(300);
+	gui_tessellation.setPosition(ofGetWindowWidth() - 310, 10);
+	gui_tessellation.add(tessellationRenderer.parameters_tessellation);
 }
 
 // fonction de mise à jour de la logique de l'application
@@ -80,6 +111,9 @@ void Application::update() {
 	objects3DRenderer.update();
 	textureRenderer.update();
 	illuminationRenderer.update();
+	courbeBezierRenderer.update();
+	surfaceBezierRenderer.update();
+	tessellationRenderer.update();
 	raytracingManager.update();
 
 
@@ -91,6 +125,9 @@ void Application::draw() {
 	imageRenderer.draw();
 	dessinRenderer.draw();
 	textureRenderer.draw();
+	courbeBezierRenderer.draw();
+	surfaceBezierRenderer.draw();
+	tessellationRenderer.draw();
 	//illuminationRenderer.draw();
 	drawCamera();
 
@@ -100,7 +137,17 @@ void Application::draw() {
 	}
 
 	//curseurRenderer.draw();
-	gui_planet.draw();
+	if (textureRenderer.mesh_sphere_toggle || textureRenderer.mesh_square_toggle) {
+		gui_planet.draw();
+	}
+
+	if (textureRenderer.mesh_square_toggle) gui_specular.draw();
+	
+	if (tessellationRenderer.tessellation_toggle) gui_tessellation.draw();
+	
+	if (surfaceBezierRenderer.surface_bezier_toggle) gui_surface_bezier.draw();
+
+
 }
 
 // fonction pour dessiner les éléments qui seront affectés par la caméra
@@ -121,26 +168,22 @@ void Application::exit() {
 void Application::keyPressed(int key) {
 	if (key == 'h') {
 		bHide = !bHide;
-	} else if (key == 'e') {
-		this->exportImage();
-	} else if (key == 's') {
+	} else if (key == 'm') {
 		bSelection = !bSelection;
-	} else if (key == 'c') {
-		bShowCursor = !bShowCursor;
-		if (bShowCursor) {
-			ofShowCursor();
-		} else
-			ofHideCursor();
 	} else if (key == 'r' && illuminationRenderer.drawObjetcs) {
 		illuminationRenderer.reset();
 	}
 	cameraRenderer.keyPressed(key);
+	courbeBezierRenderer.keyPressed(key);
+	surfaceBezierRenderer.keyPressed(key);
 }
 
 //--------------------------------------------------------------
 void Application::keyReleased(int key) {
 	cameraRenderer.keyReleased(key);
-	//textureRenderer.keyReleased(key);
+	textureRenderer.keyReleased(key);
+	courbeBezierRenderer.keyReleased(key);
+	surfaceBezierRenderer.keyReleased(key);
 }
 
 //--------------------------------------------------------------
