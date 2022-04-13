@@ -47,7 +47,9 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     
     // menu microfacettes
     parameters_specular.setName("Microfacettes");
-    parameters_specular.add(slider_specular.set("Specularness", 40.0f, 0.0f, 40.0f));
+    parameters_specular.add(slider_specular.set("Reflexivite speculaire", 40.0f, 0.0f, 40.0f));
+    parameters_specular.add(slider_diffuse.set("Reflexivite diffuse", 0.7f, 0.0f, 2.0f));
+    parameters_specular.add(slider_elevation.set("Elevation", 50.0f, 0.0f, 400.0f));
       
     // parametre pour set la position de la EasyCam 
     cam_tex.setPosition(0, 0, 1050);
@@ -153,6 +155,8 @@ void TextureRenderer::render() {
         float y = ofMap(ofGetMouseY(), 0, ofGetHeight(), 0, 1);
         shader_normal_map.setUniform3f("lightpos", ofVec3f(x, y, 0.0));
         shader_normal_map.setUniform1f("specularness", slider_specular);
+        shader_normal_map.setUniform1f("diffuseness", slider_diffuse);
+        shader_normal_map.setUniform1f("elevation", slider_elevation);
         plane.draw();
         shader_normal_map.end();
         cam_tex.end();

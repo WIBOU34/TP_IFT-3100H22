@@ -86,6 +86,8 @@ public:
 	// menu specular 
 	ofParameterGroup parameters_specular;
 	ofParameter<float> slider_specular;
+	ofParameter<float> slider_diffuse;
+	ofParameter<float> slider_elevation;
 
 	// sphere de mesh
 	ofMesh sphere_mesh;
