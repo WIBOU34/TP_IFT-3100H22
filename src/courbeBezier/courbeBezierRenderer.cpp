@@ -14,6 +14,7 @@ void CourbeBezierRenderer::setupRenderer(const std::string& name) {
 
 	parameters.clear();
 	parameters.setName(name);
+    ofSetBackgroundColor(31);
 
    // position de la caméra 
     cam.setPosition(ofPoint(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2, 1500));
@@ -96,7 +97,7 @@ void CourbeBezierRenderer::render() {
 
 
     if (bezier_toggle) {
-       
+        ofSetBackgroundColor(31);
         cam.begin();
         cam.setVFlip(true);
 

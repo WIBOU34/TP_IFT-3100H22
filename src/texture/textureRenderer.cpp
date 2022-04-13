@@ -7,7 +7,6 @@
  * \date 2022-03-27
  */
 
-
 #include "textureRenderer.h"
 
 void TextureRenderer::setupRenderer(const std::string& name) {
@@ -44,18 +43,15 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     neptune_button.addListener(this, &TextureRenderer::buttonNeptunePicker);
     parameters_planet.add(neptune_button.setup("Neptune")->getParameter());
     pluton_button.addListener(this, &TextureRenderer::buttonPlutonPicker);
-    parameters_planet.add(pluton_button.setup("Pluton")->getParameter());    
-
-    // slider pour le square mesh 
-    map_mesh.setName("Effet de relief");   
-    map_mesh.add(slider_3.set("Vagues", 5.0f, 0.0f, 100.0f));
-    map_mesh.add(slider_4.set("Rotation", 0.0f, 0.0f, 420.0f));  
-   
+    parameters_planet.add(pluton_button.setup("Pluton")->getParameter()); 
+      
     // parametre pour set la position de la EasyCam 
     cam_tex.setPosition(0, 0, 1050);
 
-    // loader image de départ                                           
+    // charger les images de départ                                           
     image.load("images/earth.jpg"); 
+    heightmap.load("images/perlin_noise.png");
+    
 
     // assigner l'image originale a une variable pour conserver son état d'origine
     image_selection = image; 
@@ -73,65 +69,33 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     
 	// creer un mesh a partir d'une sphere 
 	sphere_mesh = ofSpherePrimitive(200, 40).getMesh();
+    // faire le mapping de l'image sur la sphere
 	for (int i = 0; i < sphere_mesh.getVertices().size(); i++) {
 		ofVec2f texCoord = sphere_mesh.getTexCoord(i);
 		texCoord.x *= image.getWidth();
 		texCoord.y = (1.0 - texCoord.y) * image.getHeight();
 		sphere_mesh.setTexCoord(i, texCoord);
 	}	
-
-    // creer et initialiser un mesh square a partir de vertex 
-    grid_width = 100;
-    grid_height = 100; 
-    mesh_size = 6; 
- 
-    // initialiser et assigner les vertices
-    for (int y = 0; y < grid_height; y++) {
-        for (int x = 0; x < grid_width; x++) {
-            square_mesh.addVertex(ofPoint((x - grid_width / 2) * mesh_size, (y - grid_width / 2) * mesh_size, 0)); 
-            square_mesh.addTexCoord(glm::vec2(x * (image_width / grid_width), y * (image_height / grid_height)));
-            square_mesh.addColor(ofColor(255, 255, 255));
-        }
-    }
-
-    // setup des triangles 
-    for (int y = 0; y < grid_height - 1; y++) {
-        for (int x = 0; x < grid_width - 1; x++) {
-            int i1 = x + grid_width * y;
-            int i2 = x + 1 + grid_width * y;
-            int i3 = x + grid_width * (y + 1);
-            int i4 = x + 1 + grid_width * (y + 1);
-
-            square_mesh.addTriangle(i1, i2, i3);
-            square_mesh.addTriangle(i2, i4, i3);
-        }
-    }
-
-    // load du shader pour le tone mapping
+  
+    // initialiser ofPlanePrimitive pour le normal map
+    plane_width = heightmap.getWidth();
+    plane_height = heightmap.getHeight();
+    plane_grid_size = 1;
+    plane_columns = plane_width / plane_grid_size;
+    plane_rows = plane_height / plane_grid_size;
+    plane.set(plane_width, plane_height, plane_columns, plane_rows, OF_PRIMITIVE_TRIANGLES);
+    plane.mapTexCoords(0, 0, heightmap.getWidth(), heightmap.getHeight());
+  
+    // chargement des shaders pour le tone mapping
     shader_tone_map.load("shader/tone_mapping_330_vs.glsl", "shader/tone_mapping_330_fs.glsl");
+
+    // chargement des shaders pour le normal mapping 
+    shader_normal_map.load("shader/normalmap_330_vert.glsl", "shader/normalmap_330_frag.glsl");
 
    
 }
 
-void TextureRenderer::updateRenderer() {
-
-    // change vertices pour le square mesh
-    for (int y = 0; y < grid_width; y++) {
-        for (int x = 0; x < grid_height; x++) {
-
-            // vertex index
-            int i = x + grid_width * y;
-            ofPoint p = square_mesh.getVertex(i);
-
-            // change z-coordinate pour vertex
-            p.z = ofNoise(x * 0.05, y * 0.05, ofGetElapsedTimef() * 0.5) * slider_3;
-            square_mesh.setVertex(i, p);
-
-            // change color pour vertex
-            square_mesh.setColor(i, ofColor(255, 255, 255));
-        }
-    }   
-}
+void TextureRenderer::updateRenderer() { }
 
 void TextureRenderer::generateDraw() { }
 
@@ -143,6 +107,7 @@ void TextureRenderer::render() {
           
     // si on veut afficher la sphere sur laquelle les textures sont appliquées 
     if (mesh_sphere_toggle) {
+        mesh_square_toggle = false; 
         // pour sélectionner le type de tone-mapping
         if (tone_map_toggle) tone_map_toggle.setup("aces filmic", true)->getParameter();       
         else tone_map_toggle.setup("reinhard", false)->getParameter();    
@@ -170,13 +135,22 @@ void TextureRenderer::render() {
     } 
 
     // si on veut afficher le square mesh sur lequel l'image sera affiché
-    if (mesh_square_toggle) {        
+    if (mesh_square_toggle) {  
+        mesh_sphere_toggle = false; 
+        ofSetBackgroundColor(0);
+
+        image.resize(500, 500);
         cam_tex.begin();
-        ofPushMatrix();
-        ofRotate(slider_4);
-        image.bind();
-        square_mesh.draw();
-        ofPopMatrix();
+        shader_normal_map.begin();
+        shader_normal_map.setUniformTexture("grayTex", heightmap.getTextureReference(), 0);
+        shader_normal_map.setUniformTexture("colorTex", image.getTextureReference(), 1);
+
+        float x = ofMap(ofGetMouseX(), 0, ofGetWidth(), 0, 1);
+        float y = ofMap(ofGetMouseY(), 0, ofGetHeight(), 0, 1);
+        shader_normal_map.setUniform3f("lightpos", ofVec3f(x, y, 0.0));
+        shader_normal_map.setUniform1f("specularness", 40.0);
+        plane.draw();
+        shader_normal_map.end();
         cam_tex.end();
     }
     
@@ -313,69 +287,56 @@ void TextureRenderer::filter()
 
 void TextureRenderer::buttonMarsPicker() {   
 
-    image.load("images/mars.jpg");   
-    image.update();    
-    image_selection = image; 
-    image_selection.update();
+    image.load("images/mars.jpg"); 
+    image.resize(500, 250);
+    image_selection = image;
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();       
     filter();
 }
 
 void TextureRenderer::buttonVenusPicker() {
 
     image.load("images/venus.jpg");  
-    image.resize(500, 300);
-    image.update();
+    image.resize(500, 250);
     image_selection = image;
-    image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();
     filter();
 }
 
 void TextureRenderer::buttonTerrePicker() {
 
     image.load("images/earth.jpg"); 
-    image.update();
+    image.resize(500, 250);
     image_selection = image;
-    image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();
     filter();
 }
 
 void TextureRenderer::buttonJupiterPicker() {
 
     image.load("images/jupiter.jpg");
-    image.resize(500, 300);
-    image.update();
+    image.resize(500, 250);
     image_selection = image;
-    image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();
     filter();
 }
 
 void TextureRenderer::buttonSaturnPicker() {
 
     image.load("images/saturn.jpg");
-    image.resize(500, 300);
-    image.update();
+    image.resize(500, 250);
     image_selection = image;
-    image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();
     filter();
 }
 
@@ -383,13 +344,10 @@ void TextureRenderer::buttonMercurePicker() {
 
     image.load("images/mercure.jpg");
     image.resize(500, 250);
-    image.update();
     image_selection = image;
-    image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();
     filter();
 }
 
@@ -397,13 +355,10 @@ void TextureRenderer::buttonUranusPicker() {
 
     image.load("images/uranus.jpg");
     image.resize(500, 250);
-    image.update();
     image_selection = image;
-    image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();
     filter();
 
 }
@@ -412,27 +367,21 @@ void TextureRenderer::buttonNeptunePicker() {
 
     image.load("images/neptune.jpg");
     image.resize(500, 250);
-    image.update();
     image_selection = image;
-    image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();
     filter();
 }
 
 void TextureRenderer::buttonPlutonPicker() {
 
     image.load("images/pluton.jpg");
-    image.resize(504, 252);
-    image.update();
+    image.resize(500, 250);
     image_selection = image;
-    image_selection.update();
     image_width = image.getWidth();
     image_height = image.getHeight();
     image_destination.allocate(image_width, image_height, OF_IMAGE_COLOR);
-    image_destination.update();
     filter();
 }
 

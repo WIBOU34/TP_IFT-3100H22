@@ -82,9 +82,6 @@ public:
 	ofxButton uranus_button;	
 	ofxButton neptune_button;	
 	ofxButton pluton_button;	
-	ofParameterGroup map_mesh;	
-	ofParameter<float> slider_3;
-	ofParameter<float> slider_4;	
 
 	// sphere de mesh
 	ofMesh sphere_mesh;
@@ -106,12 +103,16 @@ public:
 	// mappage tonal 
 	ofShader shader_tone_map;
 
-	// square de mesh 
-	ofMesh square_mesh;
-	int grid_width;
-	int grid_height;
-	int mesh_size;		
-	
+	// normal map 
+	ofShader shader_normal_map;
+	ofImage heightmap;
+	ofPlanePrimitive plane;	
+	int plane_width;
+	int plane_height;
+	int plane_grid_size;
+	int plane_columns;
+	int plane_rows;
+		
 	void keyReleased(int key);
 	void buttonMarsPicker();
 	void buttonVenusPicker();
@@ -122,7 +123,6 @@ public:
 	void buttonUranusPicker();
 	void buttonNeptunePicker();
 	void buttonPlutonPicker();
-	
 	
 
 protected:

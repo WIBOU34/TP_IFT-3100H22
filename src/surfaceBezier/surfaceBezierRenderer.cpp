@@ -274,7 +274,7 @@ void SurfaceBezierRenderer::generateDraw() { }
 void SurfaceBezierRenderer::render() {
 
     if (surface_bezier_toggle) {
-       
+        ofSetBackgroundColor(31);
         ofFill();
         ofEnableDepthTest();
         mainCam.begin();

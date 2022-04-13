@@ -80,8 +80,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui_planet.setDefaultWidth(300);
 	gui_planet.setPosition(ofGetWindowWidth() - 310, 10);
 	gui_planet.add(textureRenderer.parameters_planet);
-	gui_planet.add(textureRenderer.map_mesh);
-	
+		
 	// gui pour sélectionner un point de controle pour la surface de bezier 
 	gui_surface_bezier.setup("Selection point controle");
 	gui_surface_bezier.setDefaultWidth(300);
