@@ -37,10 +37,10 @@
 #define __NO_STD_VECTOR
 #define __NO_STD_STRING
 
-//#if defined(__APPLE__)
-//#include <OpenCL/cl.hpp>
+//#if defined(__APPLE__) || defined(MACOSX)
+	//#include <OpenCL/cl.hpp>
 //#else
-#include <CL/cl.hpp>
+#include <CL/cl.hpp> //Gere les plateformes
 //#endif
 
 #include <oclUtils.h>

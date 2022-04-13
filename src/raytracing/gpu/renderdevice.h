@@ -37,7 +37,7 @@
 //#else
 #include <CL/cl.hpp>
 //#endif
-#include <oclUtils.h>
+//#include <oclUtils.h>
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/barrier.hpp>

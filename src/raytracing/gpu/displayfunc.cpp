@@ -61,9 +61,10 @@ static void UpdateRendering() {
 	const int samples = config->currentSample - startSampleCount;
 	const double sampleSec = samples * config->height * config->width / elapsedTime;
 	if (config->currentSample >= nbrPassesVoulues && nbrPassesVoulues > 10) {
-		FILE* f = fopen("image.ppm", "w"); // Write image to PPM file.
+		const string fileName = "image_" + std::to_string(config->width) + "x" + std::to_string(config->height) + "_" + std::to_string(config->currentSample) + "passes.ppm";
+		FILE* f = fopen(fileName.c_str(), "w"); // Write image to PPM file.
 		if (!f) {
-			fprintf(stderr, "Failed to open image file: image.ppm\n");
+			fprintf(stderr, "Failed to open image file: %s\n", fileName);
 		} else {
 			fprintf(f, "P3\n%d %d\n%d\n", config->width, config->height, 255);
 
@@ -171,7 +172,7 @@ static void PrintCaptions() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4f(0.f, 0.f, 0.f, 0.8f);
-	glRecti(0, config->height - 15,
+	glRecti(0, config->height - 25,
 		config->width - 1, config->height - 1);
 	glRecti(0, 0, config->width - 1, 20);
 	glDisable(GL_BLEND);
@@ -191,8 +192,8 @@ static void PrintCaptions() {
 	}
 
 	// Title
-	glRasterPos2i(4, config->height - 10);
-	PrintString(GLUT_BITMAP_8_BY_13, "SmallptGPU V2.0 (Written by David Bucciarelli)");
+	glRasterPos2i(4, config->height - 20);
+	PrintString(GLUT_BITMAP_8_BY_13, "[Raytracer] Original: SmallptGPU V2.0 (Written by David Bucciarelli)");
 }
 
 void displayFunc(void) {
@@ -269,9 +270,10 @@ void keyFunc(unsigned char key, int x, int y) {
 	switch (key) {
 	case 'p':
 	{
-		FILE* f = fopen("image.ppm", "w"); // Write image to PPM file.
+		const string fileName = "image_" + std::to_string(config->width) + "x" + std::to_string(config->height) + "_" + std::to_string(config->currentSample) + "passes.ppm";
+		FILE* f = fopen(fileName.c_str(), "w"); // Write image to PPM file.
 		if (!f) {
-			fprintf(stderr, "Failed to open image file: image.ppm\n");
+			fprintf(stderr, "Failed to open image file: %s\n", fileName);
 		} else {
 			fprintf(f, "P3\n%d %d\n%d\n", config->width, config->height, 255);
 
@@ -517,7 +519,7 @@ void InitGlut(int argc, char* argv[], unsigned int width, unsigned int height, u
 
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 
-	glutCreateWindow("SmallptGPU V2.0 (Written by David Bucciarelli)");
+	glutCreateWindow("GPU Raytracer");
 }
 
 void RunGlut() {

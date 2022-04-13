@@ -34,33 +34,12 @@ using namespace std;
 //int main(int argc, char *argv[]) {
 int RaytracerGpu::executeGPURaytracer(const unsigned int& width, const unsigned int& height, const unsigned int& rayPerPixel, const string& sceneName) {
 	try {
-		//cerr << "Usage: " << argv[0] << endl;
-		//cerr << "Usage: " << argv[0] << " <use CPU devices (0 or 1)> <use GPU devices (0 or 1)> <GPU workgroup size (0=default value or anything > 0 and power of 2)> <window width> <window height> <scene file>" << endl;
-
-		// It is important to initialize OpenGL before OpenCL
-		//unsigned int width;
-		//unsigned int height;
-		////if (argc == 7) {
-		////	width = atoi(argv[4]);
-		////	height = atoi(argv[5]);
-		////} else if (argc == 1) {
-		//width = 1024;
-		//height = 768;
-		//} else
-		//	exit(-1);
 		char* myargv[1];
 		int myargc = 1;
 		myargv[0] = strdup("GPU renderer");
 		InitGlut(myargc, myargv, width, height, rayPerPixel);
 
-		//if (argc == 7)
-		//	config = new RenderConfig(argv[6], width, height,
-		//			(atoi(argv[1]) == 1), (atoi(argv[2]) == 1), atoi(argv[3]));
-		//else if (argc == 1)
-		//config = new RenderConfig("data/scenes/test.scn", width, height, true, true, 0);
 		config = new RenderConfig("data/scenes/" + sceneName, width, height, true, true, 0);
-		//else
-		//	exit(-1);
 
 		RunGlut();
 	} catch (cl::Error err) {

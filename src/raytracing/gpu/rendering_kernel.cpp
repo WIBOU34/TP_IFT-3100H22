@@ -420,8 +420,8 @@ static void Radiance(
 	int specularBounce = 1;
 	for (;; ++depth) {
 		// Removed Russian Roulette in order to improve execution on SIMT
-		//if (depth > 6) {
-		if (depth > 10) {
+		if (depth > 6) {
+		//if (depth > 10) {
 			*result = rad;
 			return;
 		}

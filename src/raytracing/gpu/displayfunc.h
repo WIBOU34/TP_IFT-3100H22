@@ -25,19 +25,21 @@
 #define	_DISPLAYFUNC_H
 
 #if defined(__linux__) || defined(__APPLE__)
-#include <sys/time.h>
+	#include <sys/time.h>
 #elif defined (WIN32)
-#include <windows.h>
+	#include <windows.h>
 #else
         Unsupported Platform !!!
 #endif
 
 // Jens's patch for MacOS
-#if defined(__APPLE__)
-#include <GLut/glut.h>
+#if defined(__APPLE__) || defined(MACOSX)
+	#include <GLut/glut.h>
 #else
-//#include <GL/glut.h>
-#include <GL/freeglut.h>
+	#include <GL/freeglut.h>
+	#ifdef UNIX
+		#include <GL/glx.h>
+	#endif
 #endif
 
 #include "renderconfig.h"
