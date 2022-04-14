@@ -62,7 +62,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(btnImportImgSetup);
 	//gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
 	//gui.add(sliderCurseur.set("Differents curseurs", 1, 0, 4));
-	gui.add(screenSize.setup("screenSize", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
+	gui.add(screenSize.setup("Screen size", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
 	//gui.add(mousePosition.setup("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
 	gui.add(cameraRenderer.parameters);
 	gui.add(imageRenderer.parameters);
