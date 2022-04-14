@@ -60,7 +60,7 @@ class RenderConfig {
 public:
 	RenderConfig(const string &sceneFileName, const unsigned int w,
 		const unsigned int h, const bool useCPUs, const bool useGPUs,
-		const unsigned int forceGPUWorkSize);
+		const unsigned int forceGPUWorkSize, const unsigned int depthMax);
 	~RenderConfig();
 
 	void ReInitScene() {
@@ -249,7 +249,7 @@ private:
 	void ReadScene(const char *fileName);
 
 	void SetUpOpenCL(const bool useCPUs, const bool useGPUs,
-		const unsigned int forceGPUWorkSize);
+		const unsigned int forceGPUWorkSize, const unsigned int depthMax);
 
 	// OpenCL fields
 	std::vector<RenderDevice *> renderDevices;

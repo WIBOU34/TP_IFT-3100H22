@@ -25,14 +25,14 @@
 
 RenderConfig::RenderConfig(const string& sceneFileName, const unsigned int w,
 	const unsigned int h, const bool useCPUs, const bool useGPUs,
-	const unsigned int forceGPUWorkSize) :
+	const unsigned int forceGPUWorkSize, const unsigned int depthMax) :
 	selectedDevice(0), width(w), height(h), currentSample(0),
 	threadStartBarrier(NULL), threadEndBarrier(NULL) {
 	captionBuffer[0] = 0;
 	renderDevicesPerfIndex.resize(renderDevices.size(), 1.f);
 
 	ReadScene(sceneFileName.c_str());
-	SetUpOpenCL(useCPUs, useGPUs, forceGPUWorkSize);
+	SetUpOpenCL(useCPUs, useGPUs, forceGPUWorkSize, depthMax);
 
 	// Do the profiling only if there is more than 1 device
 	workLoadProfiling = (renderDevices.size() > 1);
@@ -132,7 +132,7 @@ void RenderConfig::ReadScene(const char* fileName) {
 }
 
 void RenderConfig::SetUpOpenCL(const bool useCPUs, const bool useGPUs,
-	const unsigned int forceGPUWorkSize) {
+	const unsigned int forceGPUWorkSize, const unsigned int depthMax) {
 	// Platform info
 	VECTOR_CLASS<cl::Platform> platforms;
 	cl::Platform::get(&platforms);
@@ -196,7 +196,7 @@ void RenderConfig::SetUpOpenCL(const bool useCPUs, const bool useGPUs,
 			renderDevices.push_back(new RenderDevice(
 				selectedDevices[i], "rendering_kernel.cl", forceGPUWorkSize,
 				camera, spheres, sphereCount,
-				threadStartBarrier, threadEndBarrier));
+				threadStartBarrier, threadEndBarrier, depthMax));
 		}
 
 		cerr << "OpenCL Device used: ";

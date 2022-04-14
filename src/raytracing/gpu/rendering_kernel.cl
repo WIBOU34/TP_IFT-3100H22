@@ -150,10 +150,8 @@ static float SphereIntersect(
 	} else if (s->type == CUBE) {
 		// source: https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
 		Vec bounds[2];
-		//bounds[0] = s->p;
 		vinit(bounds[0], s->p.x - s->dimensions.x / 2, s->p.y - s->dimensions.y / 2, s->p.z - s->dimensions.z / 2);
 		vinit(bounds[1], s->p.x + s->dimensions.x / 2, s->p.y + s->dimensions.y / 2, s->p.z + s->dimensions.z / 2);
-		//vinit(bounds[1], s->p.x + s->dimensions.x, s->p.y + s->dimensions.y, s->p.z + s->dimensions.z);
 
 		Vec invDir;
 		vinit(invDir, 1.f / r->d.x, 1.f / r->d.y, 1.f / r->d.z);
@@ -420,8 +418,7 @@ static void Radiance(
 	int specularBounce = 1;
 	for (;; ++depth) {
 		// Removed Russian Roulette in order to improve execution on SIMT
-		if (depth > 6) {
-		//if (depth > 10) {
+		if (depth > DEPTH_MAX) {
 			*result = rad;
 			return;
 		}
@@ -455,8 +452,10 @@ static void Radiance(
 				vadd(rad, rad, eCol);
 			}
 
-			*result = rad;
-			return;
+			if (obj->refl == DIFF) {
+				*result = rad;
+				return;
+			}
 		}
 
 		if (obj->refl == DIFF) { /* Ideal DIFFUSE reflection */

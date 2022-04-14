@@ -14,12 +14,11 @@ public:
 	ofCamera* camera;
 	ofParameterGroup parameters;
 	ofxButton btnGenerateRaytracedImage;
-	ofxButton btnSetupCornellBox;
-	ofxButton btnSetupTestBox;
 	ofxLabel warningNbrThreads;
 	ofxLabel lblSceneName;
 	ofParameter<int> nbThreads;
 	ofParameter<int> rayPerPixel;
+	ofParameter<int> depthMax;
 	ofParameter<int> imageWidth;
 	ofParameter<int> imageHeight;
 	ofParameter<int> sceneIndex;
@@ -34,8 +33,6 @@ protected:
 
 private:
 	void generateRaytracedImage();
-	void setupBoiteCornell();
-	void setupTestBoite();
 	std::vector<CubeCpu> cubeVector = std::vector<CubeCpu>();
 	std::vector<SphereCpu> sphereVector = std::vector<SphereCpu>();
 	std::vector<std::string> sceneNames = std::vector<std::string>();

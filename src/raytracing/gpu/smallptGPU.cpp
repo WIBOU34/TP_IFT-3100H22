@@ -32,14 +32,14 @@
 using namespace std;
 
 //int main(int argc, char *argv[]) {
-int RaytracerGpu::executeGPURaytracer(const unsigned int& width, const unsigned int& height, const unsigned int& rayPerPixel, const string& sceneName) {
+int RaytracerGpu::executeGPURaytracer(const unsigned int& width, const unsigned int& height, const unsigned int& rayPerPixel, const string& sceneName, const unsigned int depthMax) {
 	try {
 		char* myargv[1];
 		int myargc = 1;
 		myargv[0] = strdup("GPU renderer");
 		InitGlut(myargc, myargv, width, height, rayPerPixel);
 
-		config = new RenderConfig("data/scenes/" + sceneName, width, height, true, true, 0);
+		config = new RenderConfig("data/scenes/" + sceneName, width, height, true, true, 0, depthMax);
 
 		RunGlut();
 	} catch (cl::Error err) {

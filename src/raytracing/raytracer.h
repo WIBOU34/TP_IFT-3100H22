@@ -33,16 +33,16 @@ enum class SurfaceType { diffuse, specular, refraction };
 
 // type vecteur 3D
 struct Vector {
-	double x, y, z;
+	float x, y, z;
 
 	// construction
 	constexpr Vector() : x(0.0), y(0.0), z(0.0) {}
-	constexpr Vector(double x) : x(x), y(0.0), z(0.0) {}
-	constexpr Vector(double x, double y) : x(x), y(y), z(0.0) {}
-	constexpr Vector(double x, double y, double z) : x(x), y(y), z(z) {}
+	constexpr Vector(float x) : x(x), y(0.0), z(0.0) {}
+	constexpr Vector(float x, float y) : x(x), y(y), z(0.0) {}
+	constexpr Vector(float x, float y, float z) : x(x), y(y), z(z) {}
 
 	// produit scalaire (dot product)
-	double dot(const Vector& v) const {
+	float dot(const Vector& v) const {
 		return x * v.x + y * v.y + z * v.z;
 	}
 
@@ -63,7 +63,7 @@ struct Vector {
 	}
 
 	// multiplication scalaire
-	Vector operator*(double s) const {
+	Vector operator*(float s) const {
 		return Vector(
 			x * s,
 			y * s,

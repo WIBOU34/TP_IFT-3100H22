@@ -328,6 +328,9 @@ void keyFunc(unsigned char key, int x, int y) {
 		vadd(config->camera->orig, config->camera->orig, dir);
 		vadd(config->camera->target, config->camera->target, dir);
 		config->ReInit(0);
+		fprintf(stderr, "camera position origine( %4.5f  %4.5f  %4.5f), target( %4.5f  %4.5f  %4.5f)\n",
+			config->camera->orig.x, config->camera->orig.y, config->camera->orig.z,
+			config->camera->target.x, config->camera->target.y, config->camera->target.z);
 		break;
 	}
 	case 's':

@@ -33,5 +33,5 @@ using namespace std;
 
 class RaytracerGpu {
 public:
-	int executeGPURaytracer(const unsigned int& width, const unsigned int& height, const unsigned int& rayPerPixel, const string& sceneName);
+	int executeGPURaytracer(const unsigned int& width, const unsigned int& height, const unsigned int& rayPerPixel, const string& sceneName, const unsigned int depthMax);
 };

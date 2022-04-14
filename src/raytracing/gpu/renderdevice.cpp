@@ -28,7 +28,7 @@
 RenderDevice::RenderDevice(const cl::Device &device, const string &kernelFileName,
 		const unsigned int forceGPUWorkSize,
 		CameraGpu *camera, Sphere *spheres, const unsigned int sceneSphereCount,
-		boost::barrier *startBarrier, boost::barrier *endBarrier) :
+		boost::barrier *startBarrier, boost::barrier *endBarrier, const unsigned int depthMax) :
 	renderThread(NULL), threadStartBarrier(startBarrier), threadEndBarrier(endBarrier),
 	sphereCount(sceneSphereCount), colorBuffer(NULL), pixelBuffer(NULL), seedBuffer(NULL),
 	pixels(NULL), colors(NULL), seeds(NULL), exeUnitCount(0.0), exeTime(0.0) {
@@ -56,10 +56,11 @@ RenderDevice::RenderDevice(const cl::Device &device, const string &kernelFileNam
 	try {
 		VECTOR_CLASS<cl::Device> buildDevice;
 		buildDevice.push_back(device);
+		const unsigned int depth = depthMax < 6 ? 6 : depthMax;
 #if defined(__APPLE__)
-		program.build(buildDevice, "-I. -D__APPLE__");
+		program.build(buildDevice, ("-I. -D__APPLE__ DEPTH_MAX=" + std::to_string(depth)).c_str());
 #else
-		program.build(buildDevice, "-I.");
+		program.build(buildDevice, ("-I. -D DEPTH_MAX=" + std::to_string(depth)).c_str());
 #endif
 		cl::string result = program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(device);
 		cerr << "[Device::" << deviceName << "]" << " Compilation result: " << result.c_str() << endl;

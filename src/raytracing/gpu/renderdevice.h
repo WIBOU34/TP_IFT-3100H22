@@ -53,7 +53,7 @@ public:
 			const unsigned int forceGPUWorkSize,
 			CameraGpu *camera, Sphere *spheres,
 			const unsigned int sceneSphereCount,
-			boost::barrier *startBarrier, boost::barrier *endBarrier);
+			boost::barrier *startBarrier, boost::barrier *endBarrier, const unsigned int depthMax);
 	~RenderDevice();
 
 	void SetWorkLoad(const unsigned int offset, const unsigned int amount,
