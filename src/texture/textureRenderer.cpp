@@ -48,7 +48,7 @@ void TextureRenderer::setupRenderer(const std::string& name) {
     // menu microfacettes
     parameters_specular.setName("Microfacettes");
     parameters_specular.add(slider_specular.set("Reflexivite speculaire", 40.0f, 0.0f, 40.0f));
-    parameters_specular.add(slider_diffuse.set("Reflexivite diffuse", 0.7f, 0.0f, 2.0f));
+    parameters_specular.add(slider_diffuse.set("Intensite", 0.7f, 0.0f, 2.0f));
     parameters_specular.add(slider_elevation.set("Elevation", 50.0f, 0.0f, 400.0f));
       
     // parametre pour set la position de la EasyCam 

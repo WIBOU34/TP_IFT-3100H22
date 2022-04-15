@@ -85,7 +85,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui_planet.add(textureRenderer.parameters_planet);
 
 	// gui pour régler les microfacettes
-	gui_specular.setup("Rugosite de la surface");
+	gui_specular.setup("Parametre de la surface");
 	gui_specular.setDefaultWidth(300);
 	gui_specular.setPosition(ofGetWindowWidth() - 310, 250);
 	gui_specular.add(textureRenderer.parameters_specular);

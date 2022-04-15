@@ -56,11 +56,7 @@ void TessellationRenderer::updateRenderer() {
     box.setResolution(tess_resolution_slider);
     boxMesh = box.getMesh();
     boxVbo.setMesh(boxMesh, GL_DYNAMIC_DRAW);
-
-    plane.set(300, 300, 10, 10);
-    plane.setResolution(tess_resolution_slider, tess_resolution_slider);
-    planeMesh = plane.getMesh();
-    planeVbo.setMesh(planeMesh, GL_DYNAMIC_DRAW);
+    
 }
 
 void TessellationRenderer::generateDraw() {}
@@ -83,7 +79,6 @@ void TessellationRenderer::render() {
         ofRotate(ofGetElapsedTimef() * 10, 0, 1, 0);
         if(sphere_active)sphereVbo.drawElements(GL_PATCHES, sphereVbo.getNumIndices());
         if(box_active)boxVbo.drawElements(GL_PATCHES, boxVbo.getNumIndices());   
-        //planeVbo.drawElements(GL_PATCHES, boxVbo.getNumIndices());
         ofPopMatrix();
 
         shader_tess.end();
