@@ -14,7 +14,7 @@
 void TessellationRenderer::setupRenderer(const std::string& name) {
 	parameters.clear();
 	parameters.setName(name);
-    parameters.add(tessellation_toggle.setup("Tessellation", false)->getParameter()); 
+    parameters.add(tessellation_toggle.setup("Activer la tessellation", false)->getParameter()); 
     
     // panel pour modifier la tesselation     
     parameters_tessellation.setName("Parametres");
