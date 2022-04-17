@@ -178,7 +178,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies);assimp64.lib;libxml2.lib;svgtiny.lib;OpenCL.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);assimp64.lib;libxml2.lib;svgtiny.lib;freeglut.lib;OpenCL.lib;oclUtils64.lib;oclUtils64D.lib;glew64.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxSvg\libs\libxml2\lib\vs\x64;..\..\..\addons\ofxSvg\libs\svgtiny\lib\vs\x64;lib\x64;lib\boost\lib\x64</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />

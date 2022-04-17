@@ -48,7 +48,8 @@ RenderDevice::RenderDevice(const cl::Device &device, const string &kernelFileNam
 	queue = new cl::CommandQueue(*context, device, prop);
 
 	// Create the kernel
-	string src = ReadSources("../src/raytracing/gpu/" + kernelFileName);
+	//string src = ReadSources("../src/raytracing/gpu/" + kernelFileName);
+	string src = ReadSources("data/kernel/" + kernelFileName);
 
 	// Compile sources
 	cl::Program::Sources source(1, make_pair(src.c_str(), src.length()));
