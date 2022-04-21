@@ -23,8 +23,8 @@ void TessellationRenderer::setupRenderer(const std::string& name) {
     sphere_tess_button.addListener(this, &TessellationRenderer::buttonSphereTessellation);
     parameters_tessellation.add(sphere_tess_button.setup("Sphere")->getParameter());
     parameters_tessellation.add(tess_level_slider.set("Niveau tessellation", 1.0, 1.0, 5.0));
-    parameters_tessellation.add(tess_resolution_slider.set("Resolution", 4.0, 2.0, 10.0));
-    parameters_tessellation.add(patch_vertice_slider.set("Vertices", 2.0, 0.0, 8.0));
+    parameters_tessellation.add(tess_resolution_slider.set("Resolution", 6.0, 2.0, 10.0));
+    parameters_tessellation.add(patch_vertice_slider.set("Vertices", 4.0, 0.0, 8.0));
 
     // setup de la tessellation
     shader_tess.setGeometryInputType(GL_TRIANGLES);

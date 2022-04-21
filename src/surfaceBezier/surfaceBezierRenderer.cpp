@@ -125,14 +125,14 @@ void SurfaceBezierRenderer::updateRenderer() {
     ctrl_point6 = ctrl_point20;
     ctrl_point3 = ctrl_point21;
     ctrl_point7 = ctrl_point24;
-    ctrl_point11 = ctrl_point25;
+    ctrl_point25 = ctrl_point11;//
     ctrl_point19 = ctrl_point26;
     ctrl_point23 = ctrl_point27;
     ctrl_point15 = ctrl_point28;
     ctrl_point10 = ctrl_point29;
     ctrl_point18 = ctrl_point30;
     ctrl_point22 = ctrl_point31;
-    ctrl_point14 = ctrl_point32;   
+    ctrl_point32 = ctrl_point14;   
 
     // assignation des key pours le mouvement des courbes 
     if (is_key_press_up) selected_ctrl_point->z += delta_y * time_elapsed; 
@@ -619,11 +619,11 @@ void SurfaceBezierRenderer::buttonSelectionPointControle_9() {
 }
 
 void SurfaceBezierRenderer::buttonSelectionPointControle_10() {
-    selected_ctrl_point = &ctrl_point25;
+    selected_ctrl_point = &ctrl_point11;////
 }
 
 void SurfaceBezierRenderer::buttonSelectionPointControle_11() {
-    selected_ctrl_point = &ctrl_point32;
+    selected_ctrl_point = &ctrl_point14;
 }
 
 void SurfaceBezierRenderer::buttonSelectionPointControle_12() {
