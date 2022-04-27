@@ -30,12 +30,12 @@ void IlluminationRenderer::setupRenderer(const std::string& name) {
 	gPoint.minimizeAll();
 
 	gSpot.setName("Spot");
-	gSpot.add(diffuseColorSpot.set("Couleur diffuse spot", ofColor(255, 255, 255)));
-	gSpot.add(specularColorSpot.set("Couleur speculaire spot", ofColor(191, 191, 191)));
-	gSpot.add(pPositionSpot.set("Position lumiere spot", ofVec3f(0, 0, 0), ofVec3f(-1000, -1000, -1000), ofVec3f(1000, 1000, 1000)));
 	gSpot.add(constantSpot.set("constant: normalement 1", 1, 0, 1));
 	gSpot.add(linearSpot.set("linear: reduit intensite", 0, 0, 0.05));
 	gSpot.add(quadraticSpot.set("quadratic: generalement tres petit", 0, 0, 0.0001));
+	gSpot.add(diffuseColorSpot.set("Couleur diffuse spot", ofColor(255, 255, 255)));
+	gSpot.add(specularColorSpot.set("Couleur speculaire spot", ofColor(191, 191, 191)));
+	gSpot.add(pPositionSpot.set("Position lumiere spot", ofVec3f(0, 0, 0), ofVec3f(-1000, -1000, -1000), ofVec3f(1000, 1000, 1000)));
 	parameters.add(&gSpot);
 	gSpot.minimizeAll();
 
@@ -519,28 +519,6 @@ void IlluminationRenderer::updateLight() {
 		shader->setUniform3f("light_directional.diffuse", 0, 0, 0);
 		shader->setUniform3f("light_directional.specular", 0, 0, 0);
 	}
-
-	// light_spot
-	//ofVec4f lightSpotDir = ofQuaternion(light_spot.getGlobalOrientation()).asVec4();
-	//shader->setUniform3f("light_spot.direction", glm::vec4(lightSpotDir[0], lightSpotDir[1], lightSpotDir[2], lightSpotDir[3]));// *ofGetCurrentMatrix(OF_MATRIX_MODELVIEW));
-	////shader->setUniform3f("light_spot.direction", glm::vec4(light_spot.getLookAtDir(), 0.0f) * ofGetCurrentMatrix(OF_MATRIX_MODELVIEW));
-	//shader->setUniform3f("light_spot.position", glm::vec4(light_spot.getGlobalPosition(), 0.0f));// *ofGetCurrentMatrix(OF_MATRIX_MODELVIEW));
-	//shader->setUniform1f("light_spot.cutOff", light_spot.getSpotlightCutOff());
-	//shader->setUniform1f("light_spot.outerCutOff", light_spot.getSpotlightCutOff() + 50);
-	//if (lightSpotEnabled) {
-	//	//light_spot.enable();
-	//	shader->setUniform3f("light_spot.ambiant", light_spot.getAmbientColor().r, light_spot.getAmbientColor().g, light_spot.getAmbientColor().b);
-	//	shader->setUniform3f("light_spot.diffuse", light_spot.getDiffuseColor().r, light_spot.getDiffuseColor().g, light_spot.getDiffuseColor().b);
-	//	shader->setUniform3f("light_spot.specular", light_spot.getSpecularColor().r, light_spot.getSpecularColor().g, light_spot.getSpecularColor().b);
-	//} else {
-	//	//light_spot.disable();
-	//	shader->setUniform3f("light_spot.ambiant", 0, 0, 0);
-	//	shader->setUniform3f("light_spot.diffuse", 0, 0, 0);
-	//	shader->setUniform3f("light_spot.specular", 0, 0, 0);
-	//}
-	//shader->setUniform1f("light_spot.constant", constant);
-	//shader->setUniform1f("light_spot.linear", linear);
-	//shader->setUniform1f("light_spot.quadratic", quadratic);
 	shader->end();
 }
 

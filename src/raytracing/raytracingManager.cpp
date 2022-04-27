@@ -10,6 +10,7 @@ void RaytracingManager::setupRenderer(const std::string& name) {
 	sceneNames.push_back("test_cylinders.scn");
 	sceneNames.push_back("test_spheres.scn");
 
+	sceneNames.push_back("all_primitives.scn");
 	sceneNames.push_back("cornell.scn");
 	sceneNames.push_back("cornell_boxes.scn");
 	sceneNames.push_back("cornell_cylinders.scn");
