@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "renderer.h"
 #include "../renderer.h"
 #include "../objectBase.h"
 #include <list>

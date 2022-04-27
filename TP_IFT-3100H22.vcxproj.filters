@@ -10,9 +10,6 @@
     <ClCompile Include="src\camera\cameraRenderer.cpp">
       <Filter>src\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\curseur\curseurRenderer.cpp">
-      <Filter>src\curseur</Filter>
-    </ClCompile>
     <ClCompile Include="src\dessin\dessinRenderer.cpp">
       <Filter>src\dessin</Filter>
     </ClCompile>
@@ -91,9 +88,6 @@
     <ClCompile Include="src\illuminationClassique\illuminationRenderer.cpp">
       <Filter>src\illuminationClassique</Filter>
     </ClCompile>
-    <ClCompile Include="src\raytracing\raytracer.cpp">
-      <Filter>src\raytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\raytracing\raytracingManager.cpp">
       <Filter>src\raytracing</Filter>
     </ClCompile>
@@ -125,9 +119,6 @@
     </Filter>
     <Filter Include="src\camera">
       <UniqueIdentifier>{8BF399F1-AE24-2FFA-F0CC-EA38}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\curseur">
-      <UniqueIdentifier>{588E0087-548E-9A81-5B2B-8B2E}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\dessin">
       <UniqueIdentifier>{E271C6E9-7315-986B-559C-EFF4}</UniqueIdentifier>
@@ -241,9 +232,6 @@
     </ClInclude>
     <ClInclude Include="src\camera\cameraRenderer.h">
       <Filter>src\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\curseur\curseurRenderer.h">
-      <Filter>src\curseur</Filter>
     </ClInclude>
     <ClInclude Include="src\dessin\dessinRenderer.h">
       <Filter>src\dessin</Filter>
@@ -603,9 +591,6 @@
       <Filter>src\illuminationClassique</Filter>
     </ClInclude>
     <ClInclude Include="src\raytracing\raytracingManager.h">
-      <Filter>src\raytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\raytracing\raytracer.h">
       <Filter>src\raytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\raytracing\gpu\camera.h">

@@ -42,18 +42,12 @@ public:
 	ofParameter<ofColor> strokeColorSelected;
 	ofParameter<ofColor> fillColorSelected;
 
-	//ofEventListener listenerDelete;
-
 	void point(float x, float y);
 	void square(float x1, float y1, float x2, float y2);
 	void rect(float x1, float y1, float x2, float y2);
-	//void triangle(float x1, float y1, float x2, float y2, float x3, float y3);
 	void circle(float xc, float yc, float x2, float y2);
 	void ellipse(float x1, float y1, float w, float h);
 	void line(float x1, float y1, float x2, float y2);
-	//void arc(float x, float y, float radius, float offsetAngleDegrees, float internalAngleDegrees);
-	//void bezier(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4);
-	//void curve(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4);
 
 	void selectPrimitive();
 	void beginShapeDraw();

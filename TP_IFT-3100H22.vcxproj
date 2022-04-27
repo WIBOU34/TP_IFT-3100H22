@@ -131,7 +131,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies);assimp64.lib;libxml2.lib;svgtiny.lib;OpenCL.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);assimp64.lib;libxml2.lib;svgtiny.lib;freeglut.lib;OpenCL.lib;oclUtils64.lib;oclUtils64D.lib;glew64.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs\x64;..\..\..\addons\ofxSvg\libs\libxml2\lib\vs\x64;..\..\..\addons\ofxSvg\libs\svgtiny\lib\vs\x64;lib\x64;lib\boost\lib\x64</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
@@ -189,7 +189,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\application.cpp" />
     <ClCompile Include="src\camera\cameraRenderer.cpp" />
-    <ClCompile Include="src\curseur\curseurRenderer.cpp" />
     <ClCompile Include="src\dessin\dessinRenderer.cpp" />
     <ClCompile Include="src\image\imageRenderer.cpp" />
     <ClCompile Include="src\objectBase.cpp" />
@@ -199,7 +198,6 @@
     <ClCompile Include="src\raytracing\gpu\renderconfig.cpp" />
     <ClCompile Include="src\raytracing\gpu\renderdevice.cpp" />
     <ClCompile Include="src\raytracing\gpu\smallptGPU.cpp" />
-    <ClCompile Include="src\raytracing\raytracer.cpp" />
     <ClCompile Include="src\raytracing\raytracingManager.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.cpp" />
@@ -227,7 +225,6 @@
     <ClInclude Include="src\application.h" />
     <ClInclude Include="src\camera\cameraRenderer.h" />
     <ClInclude Include="src\courbeBezier\courbeBezierRenderer.h" />
-    <ClInclude Include="src\curseur\curseurRenderer.h" />
     <ClInclude Include="src\dessin\dessinRenderer.h" />
     <ClInclude Include="src\illuminationClassique\illuminationRenderer.h" />
     <ClInclude Include="src\image\imageRenderer.h" />
@@ -241,7 +238,6 @@
     <ClInclude Include="src\raytracing\gpu\renderdevice.h" />
     <ClInclude Include="src\raytracing\gpu\smallptGPU.h" />
     <ClInclude Include="src\raytracing\gpu\vec.h" />
-    <ClInclude Include="src\raytracing\raytracer.h" />
     <ClInclude Include="src\raytracing\raytracingManager.h" />
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h" />

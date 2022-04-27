@@ -31,7 +31,6 @@
 
 using namespace std;
 
-//int main(int argc, char *argv[]) {
 int RaytracerGpu::executeGPURaytracer(const unsigned int& width, const unsigned int& height, const unsigned int& rayPerPixel, const string& sceneName, const unsigned int depthMax) {
 	try {
 		char* myargv[1];

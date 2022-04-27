@@ -4,7 +4,6 @@
 #include "ofMaterial.h"
 #include "ofMatrix3x3.h" // required for #include ofMaterial.h
 #include "ofVec3f.h"
-//#include "ofMain.h"
 #include <string>
 #include <raytracing/raytracer.h>
 

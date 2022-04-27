@@ -2,8 +2,6 @@
 // Classe responsable du rendu de l'application.
 
 #include "illuminationRenderer.h"
-//#define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
-//#define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 
 void IlluminationRenderer::setupRenderer(const std::string& name) {
 	ofSetSphereResolution(32);
@@ -63,7 +61,6 @@ void IlluminationRenderer::setupRenderer(const std::string& name) {
 
 	// paramètres
 	camera_offset = 0;
-	//camera_offset = 350.0f;
 	speed_motion = 150.0f;
 	oscillation_frequency = 7500.0f;
 	oscillation_amplitude = 45.0;
@@ -81,10 +78,6 @@ void IlluminationRenderer::setupRenderer(const std::string& name) {
 	teapot.disableMaterials();
 
 	// charger, compiler et linker les sources des shaders
-	//shader_color_fill.load(
-		//"shader/color_fill_330_vs.glsl",
-		//"shader/color_fill_330_fs.glsl");
-
 	shader_lambert.load(
 		"shader/lambert_330_vs.glsl",
 		"shader/lambert_330_fs.glsl");
@@ -202,11 +195,8 @@ void IlluminationRenderer::reset() {
 	light_spot.setSpotlight();
 
 	pPositionDirectional = ofVec3f(center_x, center_y + 60, camera_offset * 0.75f);
-	//pLookAtDirectional = ofVec3f(9, -30, 0);
 	pLookAtDirectional = ofVec3f(-4, 4, 0);
 	pPositionSpot = ofVec3f(center_x, center_y - scale_sphere * 1.5f, camera_offset * 0.75f);
-	//pLookAtDirectional = ofVec3f(4, -4, 0);
-	//pLookAtDirectional = orientation_directional.asVec3();
 	ofLog() << "<IlluminationRenderer::reset>";
 }
 
@@ -352,7 +342,6 @@ void IlluminationRenderer::render() {
 
 	// rotation locale
 	ofRotateDeg(ofGetFrameNum() * 1.0f, 0, 1, 0);
-	//vecObjets.at(0).objet.rotateDeg(ofGetFrameNum() * 1.0f, 0, 1, 0);
 
 	setMaterialObject(vecObjets.at(0).material);
 	// activer le matériau
@@ -380,7 +369,6 @@ void IlluminationRenderer::render() {
 
 	// rotation locale
 	ofRotateDeg(ofGetFrameNum() * 1.0f, 0, 1, 0);
-	//vecObjets.at(1).objet.rotateDeg(ofGetFrameNum() * 1.0f, 0, 1, 0);
 
 	setMaterialObject(vecObjets.at(1).material);
 	// activer le matériau
@@ -509,12 +497,10 @@ void IlluminationRenderer::updateLight() {
 	const ofVec3f lightDirDir = ofVec3f(pLookAtDirectional.get().x, pLookAtDirectional.get().y, pLookAtDirectional.get().z);
 	shader->setUniform3f("light_directional.direction", (glm::vec4(lightDirDir.x, lightDirDir.y, lightDirDir.z, 0.0f) * camera->getGlobalTransformMatrix()) * ofGetCurrentMatrix(OF_MATRIX_MODELVIEW));
 	if (lightDirEnabled) {
-		//light_directional.enable();
 		shader->setUniform3f("light_directional.ambiant", light_directional.getAmbientColor().r, light_directional.getAmbientColor().g, light_directional.getAmbientColor().b);
 		shader->setUniform3f("light_directional.diffuse", light_directional.getDiffuseColor().r, light_directional.getDiffuseColor().g, light_directional.getDiffuseColor().b);
 		shader->setUniform3f("light_directional.specular", light_directional.getSpecularColor().r, light_directional.getSpecularColor().g, light_directional.getSpecularColor().b);
 	} else {
-		//light_directional.disable();
 		shader->setUniform3f("light_directional.ambiant", 0, 0, 0);
 		shader->setUniform3f("light_directional.diffuse", 0, 0, 0);
 		shader->setUniform3f("light_directional.specular", 0, 0, 0);

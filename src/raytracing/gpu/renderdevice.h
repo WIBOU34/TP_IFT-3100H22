@@ -32,12 +32,7 @@
 #define __NO_STD_VECTOR
 #define __NO_STD_STRING
 
-//#if defined(__APPLE__)
-//#include <OpenCL/cl.hpp>
-//#else
 #include <CL/cl.hpp>
-//#endif
-//#include <oclUtils.h>
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/barrier.hpp>

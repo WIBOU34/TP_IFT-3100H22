@@ -6,7 +6,6 @@
 #include "ofMath.h"
 #include "ofxGui.h"
 #include "gpu/smallptGPU.h"
-#include "raytracer.h"
 
 class RaytracingManager : public RendererBase {
 public:
@@ -22,7 +21,6 @@ public:
 	ofParameter<int> imageWidth;
 	ofParameter<int> imageHeight;
 	ofParameter<int> sceneIndex;
-	Raytracer raytracer;
 	RaytracerGpu raytracerGpu;
 
 protected:

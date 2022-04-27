@@ -6,10 +6,6 @@
 #include <vector>
 //#include "../application.h"
 
-//#include <glm/vec3.hpp>
-//#include <glm/mat4x4.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-
 enum class Camera { front = 0, back = 1, left = 2, right = 3, top = 4, down = 5 };
 
 class CameraRenderer : public RendererBase {

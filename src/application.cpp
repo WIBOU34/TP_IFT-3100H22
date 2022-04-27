@@ -23,7 +23,6 @@ void Application::setup() {
 	imageRenderer.setup("Images");
 	dessinRenderer.setup("Dessin");
 	objects3DRenderer.setup("Objets 3D");
-	//curseurRenderer.setup("Curseur");
 	cameraRenderer.setup("Camera - Frustum de vision");
 	textureRenderer.setup("Textures");
 	courbeBezierRenderer.setup("Courbe parametrique");
@@ -60,10 +59,7 @@ void Application::setupGui(const shared_ptr<ofAppBaseWindow>& window) {
 	gui.add(bSelection.set("Mode Selection 'm'", bSelection));
 	gui.add(btnExportImgSetup);
 	gui.add(btnImportImgSetup);
-	//gui.add(bShowCursor.set("Afficher le curseur 'c'", bShowCursor));
-	//gui.add(sliderCurseur.set("Differents curseurs", 1, 0, 4));
 	gui.add(screenSize.setup("Screen size", ofToString(ofGetWindowWidth()) + "x" + ofToString(ofGetWindowHeight())));
-	//gui.add(mousePosition.setup("mousePos", "X:" + ofToString(ofGetMouseX()) + " Y:" + ofToString(ofGetMouseY())));
 	gui.add(cameraRenderer.parameters);
 	gui.add(imageRenderer.parameters);
 	gui.add(dessinRenderer.parameters);
@@ -115,9 +111,6 @@ void Application::update() {
 	surfaceBezierRenderer.update();
 	tessellationRenderer.update();
 	raytracingManager.update();
-
-
-	//curseurRenderer.valCurseurSlider = sliderCurseur;
 }
 
 // fonction de mise à jour du rendu de la fenêtre d'affichage de l'application
@@ -128,7 +121,6 @@ void Application::draw() {
 	courbeBezierRenderer.draw();
 	surfaceBezierRenderer.draw();
 	tessellationRenderer.draw();
-	//illuminationRenderer.draw();
 	drawCamera();
 
 	if (!bHide) {
@@ -136,7 +128,6 @@ void Application::draw() {
 		gui.draw();
 	}
 
-	//curseurRenderer.draw();
 	if (textureRenderer.mesh_sphere_toggle || textureRenderer.mesh_square_toggle) {
 		gui_planet.draw();
 	}
@@ -192,7 +183,6 @@ void Application::mouseMoved(int x, int y) {
 }
 
 void Application::customMouseMoved(ofMouseEventArgs& mouse) {
-	//curseurRenderer.setMousePos(mouse.x, mouse.y);
 	dessinRenderer.setMousePos(mouse.x, mouse.y);
 	imageRenderer.setMousePos(mouse.x, mouse.y);
 	mousePosition = "X:" + ofToString(mouse.x) + " Y:" + ofToString(mouse.y);
@@ -200,7 +190,6 @@ void Application::customMouseMoved(ofMouseEventArgs& mouse) {
 
 //--------------------------------------------------------------
 void Application::mouseDragged(int x, int y, int button) {
-	//curseurRenderer.setMousePos(x, y);
 	dessinRenderer.setMousePos(x, y);
 	imageRenderer.setMousePos(x, y);
 	mousePosition = "X:" + ofToString(x) + " Y:" + ofToString(y);
@@ -208,7 +197,6 @@ void Application::mouseDragged(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void Application::mousePressed(int x, int y, int button) {
-	//curseurRenderer.mousButtonPressed(x, y);
 	dessinRenderer.mousButtonPressed(x, y);
 	imageRenderer.mousButtonPressed(x, y);
 
@@ -222,7 +210,6 @@ void Application::mousePressed(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void Application::mouseReleased(int x, int y, int button) {
-	//curseurRenderer.mouseButtonReleased(x, y);
 	dessinRenderer.mouseButtonReleased(x, y);
 	imageRenderer.mouseButtonReleased(x, y);
 
@@ -233,9 +220,6 @@ void Application::mouseReleased(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void Application::mouseEntered(int x, int y) {
-	//if (!bShowCursor) {
-	//	ofHideCursor();
-	//}
 }
 
 //--------------------------------------------------------------

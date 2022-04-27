@@ -14,7 +14,6 @@
 #include "ofMain.h"
 #include "renderer.h"
 #include "image/imageRenderer.h"
-#include "curseur/curseurRenderer.h"
 #include "dessin/dessinRenderer.h"
 #include "objects3D/objects3DRenderer.h"
 #include "camera/cameraRenderer.h"
@@ -30,7 +29,6 @@ class Application : public ofBaseApp {
 public:
 
 	ImageRenderer imageRenderer;
-	CurseurRenderer curseurRenderer;
 	DessinRenderer dessinRenderer;
 	CameraRenderer cameraRenderer;
 	Objects3DRenderer objects3DRenderer;
@@ -86,12 +84,4 @@ public:
 	ofxPanel gui_specular;
 
 private:
-	//void createNewWindow(const Camera& type);
-	//void drawFront(ofEventArgs& args);
-	//void drawBack(ofEventArgs& args);
-	//void drawLeft(ofEventArgs& args);
-	//void drawRight(ofEventArgs& args);
-	//void drawTop(ofEventArgs& args);
-	//void drawDown(ofEventArgs& args);
-	//void drawCamera(const Camera& camera);
 };

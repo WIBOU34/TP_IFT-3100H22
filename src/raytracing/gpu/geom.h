@@ -44,11 +44,6 @@ enum Refl {
 	DIFF, SPEC, REFR
 }; /* material types, used in radiance() */
 
-//typedef struct {
-//	float rad; /* radius */
-//	Vec p, e, c; /* position, emission, color */
-//	enum Refl refl; /* reflection type (DIFFuse, SPECular, REFRactive) */
-//} Sphere;
 typedef struct {
 	float rad; /* radius */
 	Vec p, e, c; /* position, emission, color */

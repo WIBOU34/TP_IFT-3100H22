@@ -17,13 +17,11 @@ public:
 class Objects3DRenderer : public RendererBase {
 public:
 	std::list<ObjectBase3D<VectorObjSettings>> lstObjSettings;
-	//ObjectBase3D<VectorObjSettings> objTemporaire;
 	ObjectBase3D<VectorObjSettings>* selectedObj;
 	ObjectBase3D<ofxAssimpModelLoaderExtended*>* selectedModelObj;
 	ofLight light;
 
 	// import 3D model
-	//ofxAssimpModelLoader tempObj;
 	std::list<ObjectBase3D<ofxAssimpModelLoaderExtended*>> listObjImport;
 	std::list<ofxAssimpModelLoaderExtended> listModelImport;
 	ofxButton importObjButton;
@@ -86,9 +84,6 @@ private:
 	void updateCone(VectorObj& obj, float x, float y, float z, float r, float height);
 	VectorObj createCylinder(float x, float y, float z, float r, float height);
 	void updateCylinder(VectorObj& obj, float x, float y, float z, float r, float height);
-	//VectorOutline createOutline(float x, float y, float z, float width, float height, float length);
-	//VectorOutline createOutline(float x, float y, float z, float r, float height);
-	//VectorOutline createOutline(float x, float y, float z, float r);
 	void updateOutline(VectorOutline& outline, float x, float y, float z, float width, float height, float length);
 
 	void buttonCubePressed();
@@ -97,8 +92,6 @@ private:
 	void buttonCylinderPressed();
 	void deleteSelected();
 
-	//bool isPointOnLine(const ofVec2f& start, const ofVec2f& end, const ofVec2f& find) const;
-	//bool isPointOnEllipse(const ofVec2f& center, const ofVec2f& radiusXY, const ofVec2f& find) const;
 	void getBoundingBox(ofxAssimpModelLoaderExtended& model, glm::vec3& cornerMin, glm::vec3& cornerMax);
 	void getBoundingBox(ofxAssimpModelLoaderExtended& model, glm::vec4& cornerMin, glm::vec4& cornerMax);
 };

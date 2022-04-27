@@ -1,10 +1,7 @@
-// IFT3100H21_AlmostEmptyProject/renderer.cpp
+// IFT3100H22/renderer.cpp
 // Classe responsable du rendu de l'application.
 
 #include "renderer.h"
-
-//RendererBase::RendererBase() {
-//}
 
 // fonction d'initialisation
 void RendererBase::setup(const std::string& name) {

@@ -68,10 +68,6 @@ public:
 	ofVec3f position_sphere;
 	ofVec3f position_teapot;
 
-	//ofParameterGroup gPoint;
-	//ofParameterGroup gDirectional;
-	//ofParameterGroup gSpot;
-	//ofParameterGroup gMaterial;
 	ofxGuiGroup gPoint;
 	ofxGuiGroup gDirectional;
 	ofxGuiGroup gSpot;
